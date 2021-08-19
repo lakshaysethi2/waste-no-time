@@ -59,7 +59,10 @@ def get_activities_for_awareness(to_time,from_time):
     
     unique_activities = sorted(unique_activities, key=itemgetter('totalTime'), reverse=True)
     for index,ua in enumerate(unique_activities):
-        interval_str += f'''{ ua["totalTime"] }  -  {ua["name"] }\n'''
+        if index < 5:
+            interval_str += f'''{ ua["totalTime"] }  -  {ua["name"] }\n'''
+        
+            
     return interval_str 
 
 
@@ -83,3 +86,25 @@ def get_manictime_today(bot,message):
     # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
 
 
+
+
+
+
+def get_report(tag,message,bot):
+    to_time = datetime.now()
+    from_time = to_time -timedelta(days=7)
+    res_json = getactivities_json(to_time,from_time)
+
+    for activity in res_json['activities']:
+        if activity['displayName'].lower() == tag.lower():
+            starttime = datetime.fromisoformat(activity['startTime'])
+            endtime= datetime.fromisoformat(activity['endTime'])
+            duration = endtime - starttime
+            # date = starttime.date
+            try: 
+                notes = activity['textData'].split('Notes')[1]
+            except Exception as e:
+                notes =""
+            text = f"""on: {starttime.date()}\nduration:{duration}\nNotes:\n {notes}"""
+            #  notes: {activity['notes']} 
+            bot.send_message(message.chat.id,text)

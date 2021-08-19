@@ -20,13 +20,22 @@ def new_goals(message):
 
 	bot.send_message(message.chat.id,text = 'sweet lets set some new goals')#,reply_markup=rm)
 
-@bot.message_handler(commands=["manictime"])
+@bot.message_handler(commands=["mtc"])
 def manictime(message):
 	goal = f'''Goal \n7:30:00  -  sleep\n4:00:00  -  Programming\n3:30:30  -  Job Apply\n3:00:00  -  Uber    '''
 	bot.send_message(message.chat.id,text =goal)
 	get_manictime_yesterday(bot,message)
 	get_manictime_today(bot,message)
-	
+@bot.message_handler(commands=["mt"])
+def mt(message):
+	try:
+		tag = message.text.split('/mt ')[1]
+		get_report(tag,message,bot)
+	except Exception as e:
+		bot.send_message(message.chat.id,text=e)
+		
+
+
 
 @bot.message_handler(commands=["at"])
 def authtoken(message):
