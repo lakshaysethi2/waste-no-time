@@ -18,7 +18,15 @@ def send_welcome(message):
 def new_goals(message):
 	
 
-	bot.send_message(message.chat.id,text = 'sweet lets set some new goals')#,reply_markup=rm)
+	bot.send_message(message.chat.id,text = 'sweet lets set some new goals http://goals.lak.nz')#,reply_markup=rm)
+
+@bot.message_handler(commands=["l"])
+def new_goals(message):
+	bot.send_message(message.chat.id,text = 'here is a list of your goals')#,reply_markup=rm)
+	bot.send_message(message.chat.id,text = 'http://goals.lak.nz')#,reply_markup=rm)
+	bot.send_message(message.chat.id,text = 'which goal do you want to work on?')#,reply_markup=rm)
+
+
 
 @bot.message_handler(commands=["mtc"])
 def manictime(message):
