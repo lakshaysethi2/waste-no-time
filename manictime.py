@@ -68,7 +68,7 @@ def get_manictime_yesterday(bot,message):
     today_started = now - timedelta(hours=now.hour) - timedelta(minutes=now.minute) -timedelta(seconds=61)
     to_time = today_started
     from_time = today_started -timedelta(days=1)
-    text =  get_activities_for_awareness(to_time,from_time)
+    text = "yesterday\n"+  get_activities_for_awareness(to_time,from_time)
     bot.send_message(message.chat.id,text=text)
     # return f""" yesterday: \n8.2   sleep \n3.2   programming \n3.2   food \n2.3   doing phone """
 
@@ -78,7 +78,7 @@ def get_manictime_today(bot,message):
     to_time = now
     from_time = today_started
     
-    text =  get_activities_for_awareness(to_time,from_time)
+    text = 'today\n'+ get_activities_for_awareness(to_time,from_time)
     bot.send_message(message.chat.id,text=text)
     # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
 

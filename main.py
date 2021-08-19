@@ -22,6 +22,8 @@ def new_goals(message):
 
 @bot.message_handler(commands=["manictime"])
 def manictime(message):
+	goal = f'''Goal \n7:30:00  -  sleep\n4:00:00  -  Programming\n3:30:30  -  Job Apply\n3:00:00  -  Uber    '''
+	bot.send_message(message.chat.id,text =goal)
 	get_manictime_yesterday(bot,message)
 	get_manictime_today(bot,message)
 	
