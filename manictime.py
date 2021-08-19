@@ -59,7 +59,7 @@ def get_activities_for_awareness(to_time,from_time):
     
     unique_activities = sorted(unique_activities, key=itemgetter('totalTime'), reverse=True)
     for index,ua in enumerate(unique_activities):
-        interval_str += f'''{ ua["totalTime"] }  -  {ua["name"] }'''
+        interval_str += f'''{ ua["totalTime"] }  -  {ua["name"] }\n'''
     return interval_str 
 
 
