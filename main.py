@@ -54,10 +54,23 @@ def authtoken(message):
 
 
 @bot.message_handler()
-def didnotrecognize(message):
-	text = "I did not recognize that - please select from the following options"
-	
-	bot.send_message(message.chat.id,text=text)
+def conversation(message):
+	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
+	if 'hi' in message.text.lower() or message.text.lower() == 'hi':  
+		text = 'Hi! :)'
+		rm.add('how are you ?')
+	elif 'how are you' in  message.text.lower() :
+		text = 'Im good how about you?'
+		rm.add('im good thanks','not good')
+	elif 'thanks' in  message.text.lower() :
+		text = ':)'
+		# rm.add('im good thanks','not good')
+	else:
+		pass
+	 	#text = "I did not recognize that - please select from the following options"
+	import time 
+	time.sleep(1)
+	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
 
 
