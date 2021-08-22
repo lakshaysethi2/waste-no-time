@@ -78,6 +78,15 @@ def new_tag(message):
 	except Exception as e:
 		bot.send_message(message.chat.id,text= f"{e} tn nte ago durmin")
 		
+@bot.message_handler(content_types=['photo'])
+def imgur_link(message):
+	pass
+	return
+	m = message
+	photo = m.photo[3]
+
+	print (message)
+	return
 
 
 
