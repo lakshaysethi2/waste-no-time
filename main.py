@@ -69,10 +69,10 @@ def x_days(message):
 def new_tag(message):
 	
 	try:
-		tag_name = message.text.split(" ")[1]
-		notes = message.text.split(" ")[2]	
-		dto = datetime.now() - timedelta(minutes=int(message.text.split(" ")[3]))
-		duration = int(message.text.split(" ")[4]) *60
+		tag_name = message.text.split("/new")[1].strip().split(",")[0]
+		notes = message.text.split(",")[1]	
+		dto = datetime.now() - timedelta(minutes=int(message.text.split(",")[2]))
+		duration = int(message.text.split(",")[3]) *60
 		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
 		bot.send_message(message.chat.id,text=f"{tag_name} tag made")
 	except Exception as e:
