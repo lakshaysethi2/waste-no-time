@@ -63,6 +63,27 @@ def x_days(message):
 		bot.send_message(message.chat.id,text= e)
 
 
+
+
+@bot.message_handler(commands=['new'])
+def new_tag(message):
+	
+	try:
+		tag_name = message.text.split(" ")[1]
+		notes = message.text.split(" ")[2]	
+		dto = datetime.now() - timedelta(minutes=int(message.text.split(" ")[3]))
+		duration = int(message.text.split(" ")[4]) *60
+		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
+		bot.send_message(message.chat.id,text=f"{tag_name} tag made")
+	except Exception as e:
+		bot.send_message(message.chat.id,text= f"{e} tn nte ago durmin")
+		
+
+
+
+
+
+
 @bot.message_handler()
 def conversation(message):
 	# text = ""
@@ -76,6 +97,8 @@ def conversation(message):
 	elif 'thanks' in  message.text.lower() :
 		text = ':)'
 	elif 'not good' in  message.text.lower() :
+		dto = datetime.now()-timedelta(seconds=30)
+		create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'humm why ? what happened?'
 	else:
 		return

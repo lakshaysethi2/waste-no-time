@@ -114,4 +114,32 @@ def get_report(tag,message,bot):
                 notes =""
             text += f"""on: {starttime.date()}\nduration:{duration}\nNotes:\n {notes} \n\n\n"""
             #  notes: {activity['notes']} 
-            bot.send_message(message.chat.id,text)
+    bot.send_message(message.chat.id,text)
+
+
+
+
+
+def create_activity_tag(user_tag="tag from telegram",notes="",datetimeObj=datetime.now(),duration=10):
+    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
+    timelines = json.loads(response.text)
+    for timeline in timelines['timelines']:
+        if timeline['timelineType']['typeName'] =="ManicTime/Tags":
+            tags_timeline_id = timeline['timelineId']
+    post_json = json.dumps({
+        "values":{
+            "name": user_tag,
+            "notes":notes,
+            "timeInterval": {
+                "start": f"{datetimeObj.isoformat()}"+"+12:00",
+                "duration": duration
+            }
+        }
+    })
+    headers1 = {
+        'Accept': 'application/vnd.manictime.v3+json',
+        'Content-Type': 'application/vnd.manictime.v3+json',
+        'Authorization': f'Bearer {AUTH_TOKEN}',
+    }
+    response = requests.post(url=f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities',data=post_json,headers=headers1)
+    print(response.text)
