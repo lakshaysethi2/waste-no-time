@@ -85,16 +85,23 @@ def get_manictime_today(bot,message):
     bot.send_message(message.chat.id,text=text)
     # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
 
-
-
-
+def get_manictime_last_x_days(bot,message,x):
+    text = ""
+    now = datetime.now()
+    for a in range (0,x):
+        day_start = datetime(now.year,now.month,now.day,0,0) - timedelta(days=a)
+        day_end = day_start+timedelta(hours=24)
+        from_time = day_start
+        to_time = day_end
+        text += f'{day_start.day}-{day_start.month}\n'+ get_activities_for_awareness(to_time,from_time)
+    bot.send_message(message.chat.id,text = text)
 
 
 def get_report(tag,message,bot):
     to_time = datetime.now()
     from_time = to_time -timedelta(days=7)
     res_json = getactivities_json(to_time,from_time)
-
+    text = ""
     for activity in res_json['activities']:
         if activity['displayName'].lower() == tag.lower():
             starttime = datetime.fromisoformat(activity['startTime'])
@@ -105,6 +112,6 @@ def get_report(tag,message,bot):
                 notes = activity['textData'].split('Notes')[1]
             except Exception as e:
                 notes =""
-            text = f"""on: {starttime.date()}\nduration:{duration}\nNotes:\n {notes}"""
+            text += f"""on: {starttime.date()}\nduration:{duration}\nNotes:\n {notes} \n\n\n"""
             #  notes: {activity['notes']} 
             bot.send_message(message.chat.id,text)
