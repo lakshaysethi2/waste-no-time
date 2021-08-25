@@ -34,6 +34,14 @@ def manictime(message):
 	bot.send_message(message.chat.id,text =goal)
 	get_manictime_yesterday(bot,message)
 	get_manictime_today(bot,message)
+
+@bot.message_handler(commands=["mtc7"])
+def manictime(message):
+	goal = f'''Goal \n 56h -  sleep\n 40hr  -  Programming\n 20hr - Job Apply/marketing to get money from programming\n   '''
+	
+	get_manictime_7days_total(bot,message,goal)
+
+
 @bot.message_handler(commands=["mt"])
 def mt(message):
 	try:

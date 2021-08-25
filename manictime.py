@@ -87,6 +87,21 @@ def get_manictime_today(bot,message):
     bot.send_message(message.chat.id,text=text)
     # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
 
+
+
+def get_manictime_7days_total(bot,message,goal):
+    now = datetime.now()
+    
+    to_time = now
+    from_time = now - timedelta(hours=168)
+    text = goal
+    text += '\nlast 7 days \n'+ get_activities_for_awareness(to_time,from_time)
+    bot.send_message(message.chat.id,text=text)
+    # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
+
+
+
+
 def get_manictime_last_x_days(bot,message,x):
     text = ""
     now = datetime.now()
@@ -114,7 +129,7 @@ def get_report(tag,message,bot):
                 notes = activity['textData'].split('Notes')[1]
             except Exception as e:
                 notes =""
-            text += f"""on: {starttime.date()}\nduration:{duration}\nNotes:\n {notes} \n\n\n"""
+            text += f"""on: {starttime.date()} {starttime.hour}:{starttime.minute} \nduration:{duration}\nNotes:\n {notes} \n\n\n"""
             #  notes: {activity['notes']} 
     bot.send_message(message.chat.id,text)
 
