@@ -79,7 +79,7 @@ def new_tag(message):
 	try:
 		tag_name = message.text.split("/new")[1].strip().split(",")[0]
 		notes = message.text.split(",")[1]	
-		dto = datetime.now() - timedelta(minutes=int(message.text.split(",")[2]))
+		dto = datetime.now()+timedelta(hours=12) - timedelta(minutes=int(message.text.split(",")[2]))
 		duration = int(message.text.split(",")[3]) *60
 		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
 		bot.send_message(message.chat.id,text=f"{tag_name} tag made")
@@ -114,7 +114,7 @@ def conversation(message):
 	elif 'thanks' in  message.text.lower() :
 		text = ':)'
 	elif 'not good' in  message.text.lower() :
-		dto = datetime.now()-timedelta(seconds=30)
+		dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
 		create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'humm why ? what happened?'
 	else:
@@ -123,6 +123,12 @@ def conversation(message):
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
 
+def stsrt():
+	try:
+		bot.polling()
+	except Exception as e :
+		print(e)
+		stsrt()
 
 
-bot.polling()
+stsrt()

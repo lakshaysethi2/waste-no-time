@@ -69,7 +69,7 @@ def get_activities_for_awareness(to_time,from_time):
 
 
 def get_manictime_yesterday(bot,message):
-    now = datetime.now()
+    now = datetime.now() + timedelta(hours=12)
     today_started = now - timedelta(hours=now.hour) - timedelta(minutes=now.minute) -timedelta(seconds=61)
     to_time = today_started
     from_time = today_started -timedelta(days=1)
@@ -78,7 +78,7 @@ def get_manictime_yesterday(bot,message):
     # return f""" yesterday: \n8.2   sleep \n3.2   programming \n3.2   food \n2.3   doing phone """
 
 def get_manictime_today(bot,message):
-    now = datetime.now()
+    now = datetime.now() + timedelta(hours=12)
     today_started = now - timedelta(hours=now.hour) - timedelta(minutes=now.minute)
     to_time = now
     from_time = today_started
@@ -90,7 +90,7 @@ def get_manictime_today(bot,message):
 
 
 def get_manictime_7days_total(bot,message,goal):
-    now = datetime.now()
+    now = datetime.now() + timedelta(hours=12)
     
     to_time = now
     from_time = now - timedelta(hours=168)
@@ -104,7 +104,7 @@ def get_manictime_7days_total(bot,message,goal):
 
 def get_manictime_last_x_days(bot,message,x):
     text = ""
-    now = datetime.now()
+    now = datetime.now() + timedelta(hours=12)
     for a in range (0,x):
         day_start = datetime(now.year,now.month,now.day,0,0) - timedelta(days=a)
         day_end = day_start+timedelta(hours=24)
@@ -115,7 +115,7 @@ def get_manictime_last_x_days(bot,message,x):
 
 
 def get_report(tag,message,bot):
-    to_time = datetime.now()
+    to_time = datetime.now() + timedelta(hours=12)
     from_time = to_time -timedelta(days=7)
     res_json = getactivities_json(to_time,from_time)
     text = ""
@@ -137,7 +137,7 @@ def get_report(tag,message,bot):
 
 
 
-def create_activity_tag(user_tag="tag from telegram",notes="",datetimeObj=datetime.now(),duration=10):
+def create_activity_tag(user_tag="tag from telegram",notes="",datetimeObj=datetime.now() + timedelta(hours=12),duration=10):
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
