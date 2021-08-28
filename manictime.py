@@ -46,25 +46,29 @@ def get_activities_for_awareness(to_time,from_time):
     res_json = getactivities_json(to_time,from_time)
     unique_activities = []
     interval_str =""
-    total =timedelta(hours=0)
+    
     for activity in res_json['activities']:
+        duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
+        # durationStr = f"{duration.hours}h {duration.minutes}m"
         if activity['displayName'] not in str(unique_activities):
             ua = {'name':activity['displayName'],
-            'totalTime':datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])}
+            'totalTime':duration}
             unique_activities.append(ua)
         elif activity['displayName'] in str(unique_activities):
             for ua in unique_activities:
                 if ua['name'] == activity['displayName']:
-                    ua['totalTime'] += datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
+                    ua['totalTime'] += duration
         
-        total += (datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime']))
+        
     
     unique_activities = sorted(unique_activities, key=itemgetter('totalTime'), reverse=True)
+    total = timedelta(hours=0)
     for index,ua in enumerate(unique_activities):
-        if index < 5:
-            interval_str += f'''{ ua["totalTime"] }  -  {ua["name"] }\n'''
+        if index < 6:
+            total += ua["totalTime"]
+            interval_str += f'''{str(ua["totalTime"]).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
         
-            
+    interval_str += f'total: {total}\n'
     return interval_str 
 
 
