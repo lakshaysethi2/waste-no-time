@@ -141,7 +141,7 @@ def get_report(tag,message,bot):
 
 
 
-def create_activity_tag(user_tag="tag from telegram",notes="",datetimeObj=datetime.now() + timedelta(hours=12),duration=10):
+def create_activity_tag(user_tag,notes,datetimeObj,duration):
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
