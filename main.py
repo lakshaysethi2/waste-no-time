@@ -117,8 +117,9 @@ def new_tag(message):
 		bot.send_message(message.chat.id,text= f"{e} ")
 		
 
-
-
+@bot.message_handler(commands='say')
+def say_this(message):
+	bot.send_message(message.chat.id,text=message.text.split('say')[1])
 
 # @bot.message_handler(content_types=['photo'])
 # def imgur_link(message):
