@@ -1,5 +1,6 @@
 import telebot
 from manictime import *
+from datetime import datetime,timedelta,timezone
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
@@ -86,15 +87,48 @@ def new_tag(message):
 	except Exception as e:
 		bot.send_message(message.chat.id,text= f"{e} tn nte ago durmin")
 		
-@bot.message_handler(content_types=['photo'])
-def imgur_link(message):
-	pass
-	return
-	m = message
-	photo = m.photo[3]
 
-	print (message)
-	return
+@bot.message_handler(commands=['stats'])
+def new_tag(message):
+	try:
+		tag_name = message.text.split()[1]
+	except Exception as e:
+		tag_name = 'Programming'
+		print(e)
+	try:
+		# tzinfo = timezone(timedelta(hours=12))
+		now = datetime.now() +timedelta(hours=12)
+		text = "stats:\n"
+		text += "Today:\n"
+		today = datetime(year=now.year,month=now.month,day=now.day,hour=0,minute=0,second=0) + timedelta(hours=12)
+		text += f'{tag_name}: ' +str( round(get_report_for_tag(f'{tag_name}',today,now)[0].seconds/3600,2))
+		text += "\n"
+		text += "Yesterday:\n"
+		
+		text += f'{tag_name}: ' + str(round(get_report_for_tag(f'{tag_name}',today-timedelta(days=1),today)[0].seconds/3600,2))
+		text += "\n"
+		text += "last 7 days :\n"
+		
+		text += f'{tag_name}: ' + str(round(get_report_for_tag(f'{tag_name}',today-timedelta(days=7),now)[0].seconds/3600,2))
+		
+		
+		bot.send_message(message.chat.id,text=text)
+	except Exception as e:
+		bot.send_message(message.chat.id,text= f"{e} ")
+		
+
+
+
+
+# @bot.message_handler(content_types=['photo'])
+# def imgur_link(message):
+# 	pass
+# 	return
+# 	m = message
+# 	photo = m.photo[3]
+
+# 	print (message)
+# 	return
 
 
 
@@ -129,6 +163,12 @@ def stsrt():
 	except Exception as e :
 		print(e)
 		stsrt()
+
+
+
+
+
+
 
 
 stsrt()

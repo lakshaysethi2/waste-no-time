@@ -133,11 +133,31 @@ def get_report(tag,message,bot):
                 notes = activity['textData'].split('Notes')[1]
             except Exception as e:
                 notes =""
-            text += f"""on: {starttime.date()} {starttime.hour}:{starttime.minute} \nduration:{duration}\nNotes:\n {notes} \n\n\n"""
+            text += f"""on: {starttime.date()} \n{starttime.hour}:{starttime.minute} \nduration:{duration}\nNotes:\n {notes} \n\n\n"""
             #  notes: {activity['notes']} 
     bot.send_message(message.chat.id,text)
 
 
+def get_report_for_tag(tag_name,start,end):
+    to_time = end
+    from_time = start
+    res_json = getactivities_json(to_time,from_time)
+    text = ""
+    dur = timedelta(hours=0)
+    for activity in res_json['activities']:
+        if activity['displayName'].lower() == tag_name.lower():
+            starttime = datetime.fromisoformat(activity['startTime'])
+            endtime= datetime.fromisoformat(activity['endTime'])
+            duration = endtime - starttime
+            # date = starttime.date
+            try: 
+                notes = activity['textData'].split('Notes')[1]
+            except Exception as e:
+                notes =""
+            text += f"""on: {starttime.date()} \n{starttime.hour}:{starttime.minute} \nduration:{duration}\nNotes:\n {notes} \n\n\n"""
+            dur +=duration
+    return (dur, text)
+        
 
 
 
