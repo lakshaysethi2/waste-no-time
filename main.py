@@ -117,7 +117,7 @@ def new_tag(message):
 		bot.send_message(message.chat.id,text= f"{e} ")
 		
 
-@bot.message_handler(commands='say')
+@bot.message_handler(commands='s')
 def say_this(message):
 	bot.send_message(message.chat.id,text=message.text.split('say')[1])
 
