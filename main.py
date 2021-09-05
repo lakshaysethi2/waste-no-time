@@ -119,24 +119,15 @@ def new_tag(message):
 
 @bot.message_handler(commands='s')
 def say_this(message):
-	bot.send_message(message.chat.id,text=message.text.split('say')[1])
-
-# @bot.message_handler(content_types=['photo'])
-# def imgur_link(message):
-# 	pass
-# 	return
-# 	m = message
-# 	photo = m.photo[3]
-
-# 	print (message)
-# 	return
+	bot.send_message(message.chat.id,text=message.text.split('s')[1])
 
 
 
 
 
 
-@bot.message_handler()
+
+@bot.message_handler(content_types= ['text'] )
 def conversation(message):
 	# text = ""
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
@@ -162,6 +153,7 @@ def stsrt():
 	try:
 		bot.polling()
 	except Exception as e :
+		bot.send_message(1040271347,text=str(e))
 		print(e)
 		stsrt()
 

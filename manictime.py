@@ -1,7 +1,7 @@
 
 from datetime import timezone
 from operator import itemgetter
-SERVER_LINK = 'http://manictime.lak.nz:55447'
+SERVER_LINK = 'https://manictime.lak.nz'
 AUTH_TOKEN = "5989585dc24846a6aaf2febe48e37879"
 tags_timeline_id = ''
 import requests
