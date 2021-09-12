@@ -66,11 +66,11 @@ def get_activities_for_awareness(to_time,from_time):
     for index,ua in enumerate(unique_activities):
         if index < 6:
             total += ua["totalTime"]
-            interval_str += f'''{str(ua["totalTime"]).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
-        
+            interval_str += f'''{str(round(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
+    total= round(total.total_seconds()/3600 ,2)  
     interval_str += f'total: {total}\n'
     return interval_str 
-
+ 
 
 def get_manictime_yesterday(bot,message):
     now = datetime.now() + timedelta(hours=12)
