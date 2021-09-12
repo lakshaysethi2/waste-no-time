@@ -127,7 +127,7 @@ def say_this(message):
 
 
 
-@bot.message_handler(content_types= ['text'] )
+@bot.message_handler()
 def conversation(message):
 	text = ""
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
