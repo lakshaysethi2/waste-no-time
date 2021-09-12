@@ -129,7 +129,9 @@ def say_this(message):
 
 @bot.message_handler()
 def conversation(message):
-	text = ""
+	text = "test"
+        bot.send_message(message.chat.id,text=text,reply_markup= rm)
+
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
@@ -143,8 +145,7 @@ def conversation(message):
 		dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
 		create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'humm why ? what happened?'
-	else:
-		return 1
+	
 
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
