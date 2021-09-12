@@ -152,9 +152,12 @@ def conversation(message):
 def stsrt():
 	try:
 		bot.polling()
+		#bot.send_message(1040271347,text='restarted')
+
 	except Exception as e :
 		bot.send_message(1040271347,text=str(e))
 		print(e)
+		#time.sleep(5)
 		stsrt()
 
 
