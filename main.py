@@ -117,22 +117,33 @@ def new_tag(message):
 		bot.send_message(message.chat.id,text= f"{e} ")
 		
 
-@bot.message_handler(commands='s')
+@bot.message_handler(commands=['s'])
 def say_this(message):
 	bot.send_message(message.chat.id,text=message.text.split('s')[1])
 
 
+@bot.message_handler(commands=['now'])
+def say_this(message):
+	tag = message.text.split('now')[1]
+	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
+	if message.chat.id == 1040271347:
+		create_activity_tag(tag,"from telegram",datetimeObj=dto,duration=60)
+		bot.send_message(message.chat.id,text=f'{tag} tag made')
 
 
 
 
 
-@bot.message_handler()
+
+
+@bot.message_handler(func=lambda m: True)
 def conversation(message):
-	text = "test"
-        bot.send_message(message.chat.id,text=text,reply_markup= rm)
+	text = "no handled"
 
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
+	#bot.send_message(message.chat.id,text=text,reply_markup= rm)
+		
+	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
 		rm.add('how are you ?')
@@ -140,23 +151,33 @@ def conversation(message):
 		text = 'Im good how about you?'
 		rm.add('im good thanks','not good')
 	elif 'thanks' in  message.text.lower() :
-		text = ':)'
+		text = 'what have you been up to ?'
+		rm.add('programming','doing phone')
+	elif 'programming' ==  message.text.lower() :
+		if message.chat.id == 1040271347:
+			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
+		text = "programming tag made for now"
+	elif 'doing phone' ==  message.text.lower() :
+		if message.chat.id == 1040271347:
+			create_activity_tag("doing phone","from telegram",datetimeObj=dto,duration=60)
+		text = "programming tag made for now"
+
 	elif 'not good' in  message.text.lower() :
-		dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
-		create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
+		if message.chat.id == 1040271347:
+			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'humm why ? what happened?'
 	
 
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
-
+ 
 def stsrt():
 	try:
 		bot.polling()
-		#bot.send_message(1040271347,text='restarted')
 
 	except Exception as e :
 		bot.send_message(1040271347,text=str(e))
+		bot.send_message(1040271347,text='restarted')
 		print(e)
 		#time.sleep(5)
 		stsrt()
