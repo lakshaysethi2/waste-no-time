@@ -5,6 +5,10 @@ import schedule
 import time
 import threading
 CHECKINTERVAL=5
+activities_markup = [
+    '/now Trying or setting up',
+     '/now fliss',
+]
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
@@ -187,6 +191,8 @@ def conversation(message):
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
 		rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
+                for activity in activities_markup:
+                    rm.add(activity)
 	elif 'programming' ==  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
