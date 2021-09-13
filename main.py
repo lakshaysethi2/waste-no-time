@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
-
+LAKSHAY_CID =1040271347
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
