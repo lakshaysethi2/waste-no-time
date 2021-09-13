@@ -4,6 +4,7 @@ from datetime import datetime,timedelta,timezone
 import schedule
 import time
 import threading
+CHECKINTERVAL=5
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
@@ -41,6 +42,8 @@ def manictime(message):
 
 @bot.message_handler(commands=["mtc7"])
 def manictime(message):
+	#days= message.text.split('/mtc')[1]	
+
 	goal = f'''Goal \n 56h -  sleep\n 40hr  -  Programming\n 20hr - Job Apply/marketing to get money from programming\n   '''
 	
 	get_manictime_7days_total(bot,message,goal)
@@ -128,13 +131,16 @@ def say_this(message):
 @bot.message_handler(commands=['now'])
 def now(message):
 	tag = message.text.split('now')[1].split(',')[0]
-	notes = message.text.split('now')[1].split(',')[1]
-	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
+	a=message.text.split('now')[1].split(',')
+	notes=''
+	if len(a)>1:
+		notes = a[1]
+	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=5)
 	if message.chat.id == 1040271347:
 		if notes !='':
-			create_activity_tag(tag,notes,datetimeObj=dto,duration=60)
+			create_activity_tag(tag,notes,datetimeObj=dto,duration=4)
 		else:
-			create_activity_tag(tag,"made with /now ",datetimeObj=dto,duration=60)
+			create_activity_tag(tag,"made with /now ",datetimeObj=dto,duration=4)
 		bot.send_message(message.chat.id,text=f'{tag} tag made')
 
 
@@ -154,7 +160,7 @@ def check(message = 'hi'):
 	rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
 	now = datetime.utcnow() + timedelta(hours =12)
 	to_time = now
-	from_time = to_time - timedelta(minutes=15)
+	from_time = to_time - timedelta(minutes=CHECKINTERVAL)
 	if there_is_no_tag(from_time, to_time):
 		
 		from_time_str = str(from_time).split(' ')[1].split(".")[0]
@@ -220,7 +226,7 @@ def stsrt():
 	try:
 		stop_run_continuously = run_continuously()# Start the background thread
 		# stop_run_continuously.set()# Stop the background thread
-		schedule.every(15).minutes.do(check)
+		schedule.every(1).minutes.do(check)
 		bot.polling()
 	except Exception as e :
 		bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
