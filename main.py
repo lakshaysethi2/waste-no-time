@@ -3,6 +3,7 @@ from manictime import *
 from datetime import datetime,timedelta,timezone
 import schedule
 import time
+import threading
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
@@ -145,10 +146,7 @@ def now(message):
 @bot.message_handler(func=lambda m: True)
 def conversation(message):
 	text = "no handled"
-
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
-	#bot.send_message(message.chat.id,text=text,reply_markup= rm)
-		
 	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
@@ -160,22 +158,19 @@ def conversation(message):
 		text = 'what have you been up to ?'
 		rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
 	elif 'programming' ==  message.text.lower() :
-		if message.chat.id == 1040271347:
+		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
 			text = "progamming tag made for now"
 	elif 'doing phone' ==  message.text.lower() :
-		if message.chat.id == 1040271347:
+		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("doing phone","from telegram",datetimeObj=dto,duration=60)
 			text = "doing phone tag made for now"
-
 	elif 'not good' in  message.text.lower() :
-		if message.chat.id == 1040271347:
+		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'humm why ? what happened?'
-	
-
+	# rm.add(':)')
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
-
 
 
 
@@ -205,37 +200,32 @@ def check():
 		
 
 
-# schedule.every(10).minutes.do(job)
-# schedule.every().hour.do(job)
-# schedule.every().day.at("10:30").do(job)
-# schedule.every(5).to(10).minutes.do(job)
-# schedule.every().monday.do(job)
-# schedule.every().wednesday.at("13:15").do(job)
-# schedule.every().minute.at(":17").do(job)
+
+def run_continuously(interval=1):
+    cease_continuous_run = threading.Event()
+    class ScheduleThread(threading.Thread):
+        @classmethod
+        def run(cls):
+            while not cease_continuous_run.is_set():
+                schedule.run_pending()
+                time.sleep(interval)
+    continuous_thread = ScheduleThread()
+    continuous_thread.start()
+    return cease_continuous_run
 
 
- 
 def stsrt():
 	try:
+		stop_run_continuously = run_continuously()# Start the background thread
+		# stop_run_continuously.set()# Stop the background thread
 		schedule.every(15).minutes.do(check)
-		# schedule.every(3).seconds.do(check)
-
-		while True:
-			schedule.run_pending()
 		bot.polling()
-
 	except Exception as e :
-		bot.send_message(1040271347,text=str(e))
-		bot.send_message(1040271347,text='restarted')
+		bot.send_message(LAKSHAY_CID,text=str(e)+'restarting..')
 		print(e)
-		#time.sleep(5)
 		stsrt()
 
 
-
-
-
-
-
-
 stsrt()
+
+ 
