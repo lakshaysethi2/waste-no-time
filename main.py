@@ -152,11 +152,11 @@ def conversation(message):
 		rm.add('im good thanks','not good')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
-		rm.add('programming','doing phone')
+		rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
 	elif 'programming' ==  message.text.lower() :
 		if message.chat.id == 1040271347:
 			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
-		text = "programming tag made for now"
+		text ="progamming tag made for now"
 	elif 'doing phone' ==  message.text.lower() :
 		if message.chat.id == 1040271347:
 			create_activity_tag("doing phone","from telegram",datetimeObj=dto,duration=60)
