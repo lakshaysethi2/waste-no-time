@@ -138,6 +138,30 @@ def now(message):
 		bot.send_message(message.chat.id,text=f'{tag} tag made')
 
 
+def there_is_no_tag(from_time,to_time)->bool:
+	"""returns true if thre is no tag in from time, to time , if tag is found returns false
+	so can be used like if there_is_no_tag"""
+	res_json  = getactivities_json(to_time,from_time)
+	activities = res_json['activities']
+	if len(activities)<1:
+		return True
+	return False
+
+
+@bot.message_handler(commands=['check'])
+def check(message = 'hi'):
+	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
+	rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
+	now = datetime.utcnow() + timedelta(hours =12)
+	to_time = now
+	from_time = to_time - timedelta(minutes=15)
+	if there_is_no_tag(from_time, to_time):
+		
+		from_time_str = str(from_time).split(' ')[1].split(".")[0]
+		to_time_str = str(to_time).split(' ')[1].split(".")[0]
+		text = f'{from_time_str} to {to_time_str} \nno tag mate!\n what have you been up to?'
+		bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
+	
 
 
 
@@ -175,33 +199,11 @@ def conversation(message):
 
 
 
-def there_is_no_tag(from_time,to_time)->bool:
-	"""returns true if thre is no tag in from time, to time , if tag is found returns false
-	so can be used like if there_is_no_tag"""
-	res_json  = getactivities_json(from_time,to_time)
-	activities = res_json['activities']
-	if len(activities)<1:
-		return True
-	return False
-
-def check():
-	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
-	rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
-	now = datetime.utcnow() + timedelta(hours =12)
-	to_time = now
-	from_time = to_time - timedelta(minutes=15)
-	# if there_is_no_tag(from_time, to_time):
-	cid = LAKSHAY_CID
-	from_time_str = str(from_time).split(' ')[1].split(".")[0]
-	to_time_str = str(to_time).split(' ')[1].split(".")[0]
-	text = f'{from_time_str} to {to_time_str} \nno tag mate!\n what have you been up to?'
-	bot.send_message(cid,text=text,reply_markup=rm)
-
 		
 
 
 
-def run_continuously(interval=1):
+def run_continuously(interval=5):
     cease_continuous_run = threading.Event()
     class ScheduleThread(threading.Thread):
         @classmethod
@@ -221,7 +223,7 @@ def stsrt():
 		schedule.every(15).minutes.do(check)
 		bot.polling()
 	except Exception as e :
-		bot.send_message(LAKSHAY_CID,text=str(e)+'restarting..')
+		bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 		print(e)
 		stsrt()
 
