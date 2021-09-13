@@ -1,6 +1,8 @@
 import telebot
 from manictime import *
 from datetime import datetime,timedelta,timezone
+import schedule
+import time
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
@@ -160,11 +162,11 @@ def conversation(message):
 	elif 'programming' ==  message.text.lower() :
 		if message.chat.id == 1040271347:
 			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
-		text ="progamming tag made for now"
+			text = "progamming tag made for now"
 	elif 'doing phone' ==  message.text.lower() :
 		if message.chat.id == 1040271347:
 			create_activity_tag("doing phone","from telegram",datetimeObj=dto,duration=60)
-		text = "programming tag made for now"
+			text = "doing phone tag made for now"
 
 	elif 'not good' in  message.text.lower() :
 		if message.chat.id == 1040271347:
@@ -174,9 +176,52 @@ def conversation(message):
 
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
+
+
+
+
+def there_is_no_tag(from_time,to_time)->bool:
+	"""returns true if thre is no tag in from time, to time , if tag is found returns false
+	so can be used like if there_is_no_tag"""
+	res_json  = getactivities_json(from_time,to_time)
+	activities = res_json['activities']
+	if len(activities)<1:
+		return True
+	return False
+
+def check():
+	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
+	rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
+	now = datetime.utcnow() + timedelta(hours =12)
+	to_time = now
+	from_time = to_time - timedelta(minutes=15)
+	# if there_is_no_tag(from_time, to_time):
+	cid = LAKSHAY_CID
+	from_time_str = str(from_time).split(' ')[1].split(".")[0]
+	to_time_str = str(to_time).split(' ')[1].split(".")[0]
+	text = f'{from_time_str} to {to_time_str} \nno tag mate!\n what have you been up to?'
+	bot.send_message(cid,text=text,reply_markup=rm)
+
+		
+
+
+# schedule.every(10).minutes.do(job)
+# schedule.every().hour.do(job)
+# schedule.every().day.at("10:30").do(job)
+# schedule.every(5).to(10).minutes.do(job)
+# schedule.every().monday.do(job)
+# schedule.every().wednesday.at("13:15").do(job)
+# schedule.every().minute.at(":17").do(job)
+
+
  
 def stsrt():
 	try:
+		schedule.every(15).minutes.do(check)
+		# schedule.every(3).seconds.do(check)
+
+		while True:
+			schedule.run_pending()
 		bot.polling()
 
 	except Exception as e :
