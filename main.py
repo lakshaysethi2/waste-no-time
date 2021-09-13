@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 import schedule
 import time
 import threading
-CHECKINTERVAL=4
+CHECKINTERVAL=5
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
@@ -199,6 +199,13 @@ def conversation(message):
 		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'humm why ? what happened?'
+		rm.add('i feel like shit :(')
+	
+	elif 'shit' in  message.text.lower() :
+		if message.chat.id == LAKSHAY_CID:
+			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
+		text = 'why ?'
+		#rm.add('i feel like shit :(')
 	# rm.add(':)')
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
@@ -226,7 +233,7 @@ def stsrt():
 	try:
 		stop_run_continuously = run_continuously()# Start the background thread
 		# stop_run_continuously.set()# Stop the background thread
-		schedule.every(1).minutes.do(check)
+		schedule.every(CHECKINTERVAL).minutes.do(check)
 		bot.polling()
 	except Exception as e :
 		bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
