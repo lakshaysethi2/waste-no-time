@@ -123,11 +123,15 @@ def say_this(message):
 
 
 @bot.message_handler(commands=['now'])
-def say_this(message):
-	tag = message.text.split('now')[1]
+def now(message):
+	tag = message.text.split('now')[1].split(',')[0]
+	notes = message.text.split('now')[1].split(',')[1]
 	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
 	if message.chat.id == 1040271347:
-		create_activity_tag(tag,"from telegram",datetimeObj=dto,duration=60)
+		if notes !='':
+			create_activity_tag(tag,notes,datetimeObj=dto,duration=60)
+		else:
+			create_activity_tag(tag,"made with /now ",datetimeObj=dto,duration=60)
 		bot.send_message(message.chat.id,text=f'{tag} tag made')
 
 
