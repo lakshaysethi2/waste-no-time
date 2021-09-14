@@ -238,6 +238,13 @@ def conversation(message):
 
 
 
+def dailynotification():
+	h = getNow().hour 
+	m = getNow().minute
+	if h == 21 and m == 00:
+		bot.send_message(LAKSHAY_CID,text='shave bro')
+		
+	return
 
 		
 
@@ -261,9 +268,11 @@ def stsrt():
 		stop_run_continuously = run_continuously()# Start the background thread
 		# stop_run_continuously.set()# Stop the background thread
 		schedule.every(CHECKINTERVAL).minutes.do(check)
+		schedule.every(5).seconds.do(dailynotification)
 		bot.polling()
 	except Exception as e :
 		bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
+		time.sleep(5)
 		print(e)
 		stsrt()
 
