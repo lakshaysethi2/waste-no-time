@@ -4,15 +4,19 @@ from datetime import datetime,timedelta,timezone
 import schedule
 import time
 import threading
-CHECKINTERVAL=4
+CHECKINTERVAL=1
 activities_markup = [
-    '/now Trying or setting up',
-     '/now fliss',
-	 '/now writing',
-	 '/now bio',
-	 '/now manictime',
-	 '/now thinking',
-
+	'programming',
+	'doing phone',
+	"/now sleep",
+	"/now pre sleep",
+	"/now food",
+	'/now Trying or setting up',
+	'/now fliss',
+	'/now writing',
+	'/now bio',
+	'/now manictime',
+	'/now thinking',
 
 
 ]
@@ -203,11 +207,9 @@ def conversation(message):
 		rm.add('im good thanks','not good')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
-		rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food",)
 		for activity in activities_markup:
 			rm.add(activity)
-		#for activity in activities_markup:
-        #	rm.add(activity)
+
 	elif 'programming' ==  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
