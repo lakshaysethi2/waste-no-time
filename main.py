@@ -102,8 +102,10 @@ def keyvalue(message):
 		value = message.text.split('/key')[1].split(',')[1]
 		text = str(set_value(key, value))
 	except Exception as e:
-		text = str(get_value(key))
-
+		try:
+			text = str(get_value(key))
+		except KeyError:
+			text = 'not found'
 	bot.send_message(LAKSHAY_CID,text=text)
 
 
