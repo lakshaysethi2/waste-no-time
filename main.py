@@ -322,8 +322,8 @@ def stsrt():
 		bot.polling()
 	except Exception as e :
 		bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
-		time.sleep(5)
 		print(e)
+		time.sleep(5)
 		stsrt()
 
 
