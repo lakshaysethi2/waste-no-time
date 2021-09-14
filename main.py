@@ -80,6 +80,49 @@ def mt(message):
 
 
 
+database = {}
+
+def get_value(key):
+
+    return database[f'{key}']
+     
+
+
+def set_value(key,value):
+    database[f'{key}'] = value
+    return (f'{key}',database[f'{key}'])
+
+
+
+@bot.message_handler(commands=['key'])
+def keyvalue(message):
+	key = message.text.split('/key')[1].split(',')[0]
+	text = ":P"
+	try:
+		value = message.text.split('/key')[1].split(',')[1]
+		text = str(set_value(key, value))
+	except Exception as e:
+		text = str(get_value(key))
+
+	bot.send_message(LAKSHAY_CID,text=text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @bot.message_handler(commands=["at"])
 def authtoken(message):
 	AUTH_TOKEN = message.text.split()[1]
@@ -245,10 +288,6 @@ def dailynotification():
 		bot.send_message(LAKSHAY_CID,text='shave bro')
 		
 	return
-
-		
-
-
 
 def run_continuously(interval=5):
     cease_continuous_run = threading.Event()
