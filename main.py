@@ -200,7 +200,7 @@ def check(message = 'hi'):
 def conversation(message):
 	text = "no handled"
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
-	dto = getNow() -timedelta(seconds=30)
+	now = getNow() -timedelta(seconds=3)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
 		rm.add('how are you ?')
@@ -214,21 +214,21 @@ def conversation(message):
 
 	elif 'programming' ==  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
-			create_activity_tag("programming","from telegram",datetimeObj=dto,duration=60)
+			create_activity_tag("programming","from telegram",datetimeObj=now,duration=6)
 			text = "progamming tag made for now"
 	elif 'doing phone' ==  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
-			create_activity_tag("doing phone","from telegram",datetimeObj=dto,duration=60)
+			create_activity_tag("doing phone","from telegram",datetimeObj=now,duration=6)
 			text = "doing phone tag made for now"
 	elif 'not good' in  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
-			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
+			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
 		text = 'humm why ? what happened?'
 		rm.add('i feel like shit :(')
 	
 	elif 'shit' in  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
-			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
+			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
 		text = 'why ?'	
 	else:
 		return	
