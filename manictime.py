@@ -51,7 +51,6 @@ def get_activities_for_awareness(to_time,from_time):
     
     for activity in res_json['activities']:
         duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
-        # durationStr = f"{duration.hours}h {duration.minutes}m"
         if activity['displayName'] not in str(unique_activities):
             ua = {'name':activity['displayName'],
             'totalTime':duration}
@@ -81,7 +80,7 @@ def get_manictime_yesterday(bot,message):
     from_time = today_started -timedelta(days=1)
     text = "yesterday\n"+  get_activities_for_awareness(to_time,from_time)
     bot.send_message(message.chat.id,text=text)
-    # return f""" yesterday: \n8.2   sleep \n3.2   programming \n3.2   food \n2.3   doing phone """
+    
 
 def get_manictime_today(bot,message):
     now = getNow()
@@ -91,7 +90,7 @@ def get_manictime_today(bot,message):
     
     text = 'today\n'+ get_activities_for_awareness(to_time,from_time)
     bot.send_message(message.chat.id,text=text)
-    # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
+   
 
 
 
@@ -103,7 +102,7 @@ def get_manictime_7days_total(bot,message,goal):
     text = goal
     text += '\nlast 7 days \n'+ get_activities_for_awareness(to_time,from_time)
     bot.send_message(message.chat.id,text=text)
-    # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
+   
 
 def get_top_for_days(bot,days):
     now = getNow()
