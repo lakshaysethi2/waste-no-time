@@ -4,10 +4,15 @@ from datetime import datetime,timedelta,timezone
 import schedule
 import time
 import threading
-CHECKINTERVAL=5
+CHECKINTERVAL=4
 activities_markup = [
     '/now Trying or setting up',
      '/now fliss',
+	 '/now writing',
+	 '/now bio',
+	 '/now manictime',
+
+
 ]
 # import os
 # TOKEN = os.getenv('TOKEN')
