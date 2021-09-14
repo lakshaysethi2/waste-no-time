@@ -105,8 +105,9 @@ def new_tag(message):
 	
 	try:
 		tag_name = message.text.split("/new")[1].strip().split(",")[0]
-		notes = message.text.split(",")[1]	
-		dto = datetime.now()+timedelta(hours=12) - timedelta(minutes=int(message.text.split(",")[2]))
+		notes = message.text.split(",")[1]
+		now = getNow()	
+		dto = now - timedelta(minutes=int(message.text.split(",")[2]))
 		duration = int(message.text.split(",")[3]) *60
 		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
 		bot.send_message(message.chat.id,text=f"{tag_name} tag made")
@@ -122,8 +123,8 @@ def new_tag(message):
 		tag_name = 'Programming'
 		print(e)
 	try:
-		# tzinfo = timezone(timedelta(hours=12))
-		now = datetime.now() +timedelta(hours=12)
+		
+		now = getNow()
 		text = "stats:\n"
 		text += "Today:\n"
 		today = datetime(year=now.year,month=now.month,day=now.day,hour=0,minute=0,second=0) + timedelta(hours=12)
@@ -156,7 +157,7 @@ def now(message):
 	notes=''
 	if len(a)>1:
 		notes = a[1]
-	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=5)
+	dto = getNow() -timedelta(seconds=5)
 	if message.chat.id == 1040271347:
 		if notes !='':
 			create_activity_tag(tag,notes,datetimeObj=dto,duration=4)
@@ -178,7 +179,8 @@ def there_is_no_tag(from_time,to_time)->bool:
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
-	rm.add('programming','doing phone',"/now sleep","/now pre sleep","/now food")
+	for act in activities_markup:
+		rm.add(act)
 	now = datetime.utcnow() + timedelta(hours =12)
 	to_time = now
 	from_time = to_time - timedelta(minutes=CHECKINTERVAL)
@@ -198,7 +200,7 @@ def check(message = 'hi'):
 def conversation(message):
 	text = "no handled"
 	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
-	dto = datetime.now() +timedelta(hours=12) -timedelta(seconds=30)
+	dto = getNow() -timedelta(seconds=30)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
 		rm.add('how are you ?')
