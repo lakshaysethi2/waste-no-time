@@ -123,6 +123,7 @@ def get_manictime_last_x_days(bot,message,x):
         from_time = day_start
         to_time = day_end
         text += f'{day_start.day}-{day_start.month}\n'+ get_activities_for_awareness(to_time,from_time)
+    text += f'\n{24-getNow().hour}h{60-getNow().minute}m \n'
     bot.send_message(message.chat.id,text = text)
 
 
