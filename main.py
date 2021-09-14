@@ -26,9 +26,11 @@ TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
-rm.add("/n add new goal(s)","/l list out my goals", "/manictime today vs yesterday manictime" )
 @bot.message_handler(commands=['start'])
-def send_welcome(message):	
+def send_welcome(message):
+	
+	rm.__init__()
+	rm.add("/n add new goal(s)","/l list out my goals", "/manictime today vs yesterday manictime" )
 	
 	
 	print(message.text)
@@ -96,6 +98,7 @@ def set_value(key,value):
 
 @bot.message_handler(commands=['key'])
 def keyvalue(message):
+	
 	key = message.text.split('/key')[1].split(',')[0]
 	text = ":P"
 	try:
@@ -223,7 +226,8 @@ def there_is_no_tag(from_time,to_time)->bool:
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
-	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
+	
+	rm.__init__()
 	for act in activities_markup:
 		rm.add(act)
 	now = datetime.utcnow() + timedelta(hours =12)
@@ -244,16 +248,19 @@ def check(message = 'hi'):
 @bot.message_handler(func=lambda m: True)
 def conversation(message):
 	text = "no handled"
-	rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=False,row_width=1)
+	
 	now = getNow() -timedelta(seconds=3)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
+		rm.__init__()
 		rm.add('how are you ?')
 	elif 'how are you' in  message.text.lower() :
 		text = 'Im good how about you?'
+		rm.__init__()
 		rm.add('im good thanks','not good')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
+		rm.__init__()
 		for activity in activities_markup:
 			rm.add(activity)
 
@@ -269,6 +276,7 @@ def conversation(message):
 		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
 		text = 'humm why ? what happened?'
+		rm.__init__()
 		rm.add('i feel like shit :(')
 	
 	elif 'shit' in  message.text.lower() :
@@ -277,8 +285,7 @@ def conversation(message):
 		text = 'why ?'	
 	else:
 		return	
-		#rm.add('i feel like shit :(')
-	# rm.add(':)')
+	
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
 
 
