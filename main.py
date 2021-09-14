@@ -4,7 +4,7 @@ from datetime import datetime,timedelta,timezone
 import schedule
 import time
 import threading
-CHECKINTERVAL=1
+CHECKINTERVAL=2
 activities_markup = [
 	'programming',
 	'doing phone',
