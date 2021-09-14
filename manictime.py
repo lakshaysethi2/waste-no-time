@@ -1,12 +1,14 @@
 
 from datetime import timezone
 from operator import itemgetter
+import math
 SERVER_LINK = 'https://manictime.lak.nz'
 AUTH_TOKEN = "5989585dc24846a6aaf2febe48e37879"
 tags_timeline_id = ''
 import requests
 import json
 from datetime import datetime,timedelta,timezone
+LAKSHAY_CID =1040271347
 
 headers = {
     'Accept': 'application/vnd.manictime.v2+json',
@@ -66,14 +68,14 @@ def get_activities_for_awareness(to_time,from_time):
     for index,ua in enumerate(unique_activities):
         if index < 6:
             total += ua["totalTime"]
-            interval_str += f'''{str(round(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
+            interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
     total= round(total.total_seconds()/3600 ,2)  
     interval_str += f'total: {total}\n'
     return interval_str 
  
 
 def get_manictime_yesterday(bot,message):
-    now = datetime.now() + timedelta(hours=12)
+    now = getNow()
     today_started = now - timedelta(hours=now.hour) - timedelta(minutes=now.minute) -timedelta(seconds=61)
     to_time = today_started
     from_time = today_started -timedelta(days=1)
@@ -82,7 +84,7 @@ def get_manictime_yesterday(bot,message):
     # return f""" yesterday: \n8.2   sleep \n3.2   programming \n3.2   food \n2.3   doing phone """
 
 def get_manictime_today(bot,message):
-    now = datetime.now() + timedelta(hours=12)
+    now = getNow()
     today_started = now - timedelta(hours=now.hour) - timedelta(minutes=now.minute)
     to_time = now
     from_time = today_started
@@ -94,7 +96,7 @@ def get_manictime_today(bot,message):
 
 
 def get_manictime_7days_total(bot,message,goal):
-    now = datetime.now() + timedelta(hours=12)
+    now = getNow()
     
     to_time = now
     from_time = now - timedelta(hours=168)
@@ -103,12 +105,19 @@ def get_manictime_7days_total(bot,message,goal):
     bot.send_message(message.chat.id,text=text)
     # return f""" today:\n    9.5   sleep \n     3.2   programming \n    2.0   food \n    1.3   doing phone """
 
-
+def get_top_for_days(bot,days):
+    now = getNow()
+    to_time = now
+    text = ""
+    from_time = now - timedelta(days=days)
+    text += f'\nlast {days} days top activities\n'+ get_activities_for_awareness(to_time,from_time)
+    bot.send_message(LAKSHAY_CID,text=text)
+    
 
 
 def get_manictime_last_x_days(bot,message,x):
     text = ""
-    now = datetime.now() + timedelta(hours=12)
+    now = getNow()
     for a in range (0,x):
         day_start = datetime(now.year,now.month,now.day,0,0) - timedelta(days=a)
         day_end = day_start+timedelta(hours=24)
@@ -184,3 +193,10 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration):
     }
     response = requests.post(url=f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities',data=post_json,headers=headers1)
     print(response.text)
+
+
+
+
+
+def getNow():
+    return datetime.now()+ timedelta(hours=12)

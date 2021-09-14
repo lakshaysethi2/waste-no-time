@@ -19,7 +19,6 @@ activities_markup = [
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4"
-LAKSHAY_CID =1040271347
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -43,6 +42,13 @@ def new_goals(message):
 	bot.send_message(message.chat.id,text = 'which goal do you want to work on?')#,reply_markup=rm)
 
 
+@bot.message_handler(commands=["top"])
+def manictime(message):
+	days= int(message.text.split('/top')[1])
+	get_top_for_days(bot,days)
+	
+	
+	
 
 @bot.message_handler(commands=["mtc"])
 def manictime(message):
@@ -53,7 +59,6 @@ def manictime(message):
 
 @bot.message_handler(commands=["mtc7"])
 def manictime(message):
-	#days= message.text.split('/mtc')[1]	
 
 	goal = f'''Goal \n 56h -  sleep\n 40hr  -  Programming\n 20hr - Job Apply/marketing to get money from programming\n   '''
 	
@@ -136,7 +141,7 @@ def new_tag(message):
 
 @bot.message_handler(commands=['s'])
 def say_this(message):
-	bot.send_message(message.chat.id,text=message.text.split('s')[1])
+	bot.send_message(message.chat.id,text=message.text.split('/s')[1])
 	bot.delete_message(message.chat.id, message.id)
 
 
@@ -221,6 +226,8 @@ def conversation(message):
 		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
 		text = 'why ?'	
+	else:
+		return	
 		#rm.add('i feel like shit :(')
 	# rm.add(':)')
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
