@@ -98,10 +98,12 @@ def set_value(key,value):
 
 @bot.message_handler(commands=['key'])
 def keyvalue(message):
-	
-	key = message.text.split('/key')[1].split(',')[0]
+	rm.__init__()
+	for key in database.keys():
+		rm.add('/key'+str(key))
 	text = ":P"
 	try:
+		key = message.text.split('/key')[1].split(',')[0]
 		value = message.text.split('/key')[1].split(',')[1]
 		text = str(set_value(key, value))
 	except Exception as e:
@@ -109,7 +111,7 @@ def keyvalue(message):
 			text = str(get_value(key))
 		except KeyError:
 			text = 'not found'
-	bot.send_message(LAKSHAY_CID,text=text)
+	bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 
 
 
