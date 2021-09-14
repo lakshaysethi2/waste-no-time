@@ -11,6 +11,8 @@ activities_markup = [
 	 '/now writing',
 	 '/now bio',
 	 '/now manictime',
+	 '/now thinking',
+
 
 
 ]
@@ -135,6 +137,7 @@ def new_tag(message):
 @bot.message_handler(commands=['s'])
 def say_this(message):
 	bot.send_message(message.chat.id,text=message.text.split('s')[1])
+	bot.delete_message(message.chat.id, message.id)
 
 
 @bot.message_handler(commands=['now'])
@@ -217,7 +220,7 @@ def conversation(message):
 	elif 'shit' in  message.text.lower() :
 		if message.chat.id == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=dto,duration=60)
-		text = 'why ?'
+		text = 'why ?'	
 		#rm.add('i feel like shit :(')
 	# rm.add(':)')
 	bot.send_message(message.chat.id,text=text,reply_markup= rm)
