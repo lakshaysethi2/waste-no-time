@@ -90,6 +90,7 @@ def updateDatabase(database=database):
 	for pair in KeyValuePair.select():
 		database[f'{pair.key}']=pair.value
 	
+updateDatabase()
 
 
 
@@ -266,23 +267,20 @@ def there_is_no_tag(from_time,to_time)->bool:
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
+	if database['mt'] == 'on':
+		rm.__init__()
+		for act in activities_markup:
+			rm.add(act)
+		now = datetime.utcnow() + timedelta(hours =12)
+		to_time = now
+		from_time = to_time - timedelta(minutes=CHECKINTERVAL)
+		if there_is_no_tag(from_time, to_time):
+			
+			from_time_str = str(from_time).split(' ')[1].split(".")[0]
+			to_time_str = str(to_time).split(' ')[1].split(".")[0]
+			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been VOTING for?'
+			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
-	try:
-		if database['mt'] == 'on':
-			rm.__init__()
-			for act in activities_markup:
-				rm.add(act)
-			now = datetime.utcnow() + timedelta(hours =12)
-			to_time = now
-			from_time = to_time - timedelta(minutes=CHECKINTERVAL)
-			if there_is_no_tag(from_time, to_time):
-				
-				from_time_str = str(from_time).split(' ')[1].split(".")[0]
-				to_time_str = str(to_time).split(' ')[1].split(".")[0]
-				text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been VOTING for?'
-				bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
-	except KeyError:
-		set_value('mt', 'off')
 
 
 
@@ -358,8 +356,7 @@ def stsrt():
 	bot.send_message(LAKSHAY_CID,text='starting..')
 
 	try:
-		stop_run_continuously = run_continuously()# Start the background thread
-		# stop_run_continuously.set()# Stop the background thread
+		stop_run_continuously = run_continuously()
 		schedule.every(CHECKINTERVAL).minutes.do(check)
 		schedule.every(5).seconds.do(dailynotification)
 		bot.polling()
