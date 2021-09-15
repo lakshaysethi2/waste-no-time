@@ -12,8 +12,10 @@ def send_welcome(message):
 
 @bot2.message_handler(commands=['s'])
 def say_this(message):
-	bot2.send_message(message.chat.id,text=message.text.split('/s')[1])
-	bot2.delete_message(message.chat.id, message.id)
+    text = message.text.split('/s')[1]
+    bot2.delete_message(message.chat.id, message.id)
+    if text !='':
+        bot2.send_message(message.chat.id,text=text )
 
 
 def start_convo_bot():
@@ -25,12 +27,14 @@ def start_convo_bot():
         print(e)
         print('restarting')
         time.sleep(5)
-        start_convo_bot()
+        # start_convo_bot()
 
-
-
-try: 
+while 1:
     start_convo_bot()
-except Exception as e:
-    print(type(e))
-    start_convo_bot()
+
+
+# try: 
+#     start_convo_bot()
+# except Exception as e:
+#     print(type(e))
+#     start_convo_bot()
