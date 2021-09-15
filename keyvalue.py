@@ -1,7 +1,7 @@
 from peewee import *
 
 
-db = SqliteDatabase('keyval.db')
+db = SqliteDatabase('/home/ls/Downloads/keyval.db')
 
 class KeyValuePair(Model):
     key = CharField()

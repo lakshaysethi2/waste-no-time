@@ -266,6 +266,7 @@ def there_is_no_tag(from_time,to_time)->bool:
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
+	
 	try:
 		if database['mt'] == 'on':
 			rm.__init__()
