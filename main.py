@@ -85,7 +85,7 @@ def mt(message):
 database = {}
 db.connect()
 
-def updatedatabase(database=database):
+def updateDatabase(database=database):
 	for pair in KeyValuePair.select():
 		database[f'{pair.key}']=pair.value
 	
@@ -94,7 +94,7 @@ def updatedatabase(database=database):
 
 
 def get_value(key):
-	updatedatabase()
+	updateDatabase()
 	return database[f'{key}']
      
 
@@ -109,9 +109,9 @@ def set_value(key,value):
 	except Exception as e:
 		kvp= KeyValuePair(key=key,value=value) 
 		kvp.save()
-	finally:
-		updatedatabase()
-		return (f'{text} {key}',database[f'{key}'])
+	
+	updateDatabase()
+	return (f'{text} {key}',database[f'{key}'])
 
 
 
@@ -136,7 +136,24 @@ def keyvalue(message):
 
 
 
+@bot.message_handler(commands=['del'])
+def delkeyvalue(message):
+	if message.chat.id == LAKSHAY_CID:
+		text = 'deleating...'
+		key = message.text.split('/del')[1].strip()
+		try:
+			to_del = KeyValuePair.get(key=key)
+			to_del.delete_instance()
+			text = 'deleated '+ key
 
+		except Exception as e:
+			text = str(e)+'can not delete what does not exist!\n duh!'
+		updateDatabase()
+		rm.__init__()
+		for key in database.keys():
+			rm.add('/key '+str(key))
+		bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
+	
 
 
 
