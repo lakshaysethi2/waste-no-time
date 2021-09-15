@@ -83,34 +83,54 @@ def mt(message):
 
 
 database = {}
+db.connect()
+
+def updatedatabase(database=database):
+	for pair in KeyValuePair.select():
+		database[f'{pair.key}']=pair.value
+	
+
+
+
 
 def get_value(key):
-
-    return database[f'{key}']
+	updatedatabase()
+	return database[f'{key}']
      
 
 
 def set_value(key,value):
-    database[f'{key}'] = value
-    return (f'{key}',database[f'{key}'])
+	text = "new created"
+	try:
+		kvp= KeyValuePair.get(key = key)
+		kvp.value = value
+		kvp.save()
+		text = "updated"
+	except Exception as e:
+		kvp= KeyValuePair(key=key,value=value) 
+		kvp.save()
+	finally:
+		updatedatabase()
+		return (f'{text} {key}',database[f'{key}'])
 
 
 
 @bot.message_handler(commands=['key'])
 def keyvalue(message):
-	rm.__init__()
-	for key in database.keys():
-		rm.add('/key'+str(key))
+	
 	text = ":P"
 	try:
-		key = message.text.split('/key')[1].split(',')[0]
-		value = message.text.split('/key')[1].split(',')[1]
+		key = message.text.split('/key')[1].split(',')[0].strip()
+		value = message.text.split('/key')[1].split(',')[1].strip()
 		text = str(set_value(key, value))
-	except Exception as e:
+	except IndexError as e:
 		try:
 			text = str(get_value(key))
 		except KeyError:
 			text = 'not found'
+	rm.__init__()
+	for key in database.keys():
+		rm.add('/key '+str(key))
 	bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 
 
