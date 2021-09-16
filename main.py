@@ -82,14 +82,17 @@ def mt(message):
 		
 
 
-
 database = {}
-db.connect()
 
+db.connect()
 def updateDatabase(database=database):
-	for pair in KeyValuePair.select():
-		database[f'{pair.key}']=pair.value
-	
+	try:
+		for pair in KeyValuePair.select():
+			database[f'{pair.key}']=pair.value
+	except OperationalError:
+		db.create_tables([KeyValuePair])
+		for pair in KeyValuePair.select():
+			database[f'{pair.key}']=pair.value
 updateDatabase()
 
 

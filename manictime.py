@@ -201,4 +201,4 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration):
 
 
 def getNow():
-    return datetime.now()+ timedelta(hours=12)
+    return datetime.utcnow()+ timedelta(hours=12)
