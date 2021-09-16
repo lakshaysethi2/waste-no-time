@@ -354,17 +354,15 @@ def run_continuously(interval=5):
 
 def stsrt():
 	bot.send_message(LAKSHAY_CID,text='starting..')
-
-	try:
-		stop_run_continuously = run_continuously()
-		schedule.every(CHECKINTERVAL).minutes.do(check)
-		schedule.every(5).seconds.do(dailynotification)
-		bot.polling()
-	except Exception as e :
-		bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
-		print(e)
-		time.sleep(5)
-		stsrt()
+	rc = run_continuously()
+	schedule.every(CHECKINTERVAL).minutes.do(check)
+	schedule.every(5).seconds.do(dailynotification)
+	while 1:
+		try:
+			bot.polling()
+		except Exception as e:
+			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
+			print(e)
 
 
 
