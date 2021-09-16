@@ -359,10 +359,13 @@ def stsrt():
 	schedule.every(5).seconds.do(dailynotification)
 	while 1:
 		try:
+			telebot.apihelper.RETRY_ON_ERROR = True
+
 			bot.polling()
 		except Exception as e:
 			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 			print(e)
+			time.sleep(5)
 
 
 
