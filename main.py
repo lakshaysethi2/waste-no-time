@@ -270,6 +270,8 @@ def there_is_no_tag(from_time,to_time)->bool:
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
+	CHECKINTERVAL = int(database['ci'])
+
 	if database['mt'] == 'on':
 		rm.__init__()
 		for act in activities_markup:
