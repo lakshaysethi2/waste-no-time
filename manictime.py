@@ -31,7 +31,7 @@ def get_token():
     }
 
     resp=  requests.post(f'{SERVER_LINK}/api/token', headers=headers,data=data)
-    print (resp.text)
+   # print (resp.text)
 
 def getactivities_json(to_time,from_time):
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
@@ -194,7 +194,7 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration):
         'Authorization': f'Bearer {AUTH_TOKEN}',
     }
     response = requests.post(url=f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities',data=post_json,headers=headers1)
-    print(response.text)
+    #print(response.text)
 
 
 
