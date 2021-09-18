@@ -1,4 +1,5 @@
 venv/
+tvenv/
 .env
 *.pyc
 *.db
