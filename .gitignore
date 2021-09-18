@@ -5,3 +5,4 @@ tvenv/
 *.db
 __pycache__/
 .vscode/
+sa.json

@@ -1,5 +1,6 @@
 import telebot
 from manictime import *
+from goals import *
 
 from datetime import datetime,timedelta,timezone
 import schedule
@@ -332,7 +333,8 @@ def conversation(message):
 			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
 		text = 'why ?'	
 	elif 'what are my goals' in message.text.lower() :
-		text = 'here is a list of your goals'	
+		goals_list = get_goals_list()
+		text = 'here is a list of your goals \n' + goals_list 	
 	
 	else:
 		return	
