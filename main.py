@@ -1,6 +1,7 @@
 import telebot
 from manictime import *
 from goals import *
+import logging
 
 from datetime import datetime,timedelta,timezone
 import schedule
@@ -79,6 +80,7 @@ def mt(message):
 		tag = message.text.split('/mt ')[1]
 		get_report(tag,message,bot)
 	except Exception as e:
+		logging.exception('Caught an error')
 		bot.send_message(message.chat.id,text=e)
 		
 
@@ -113,6 +115,7 @@ def set_value(key,value):
 		kvp.save()
 		text = "updated"
 	except Exception as e:
+		logging.exception('Caught an error')
 		kvp= KeyValuePair(key=key,value=value) 
 		kvp.save()
 	
@@ -188,6 +191,7 @@ def x_days(message):
 		x = int(x)
 		get_manictime_last_x_days(bot,message,x)
 	except Exception as e:
+		logging.exception('Caught an error')
 		bot.send_message(message.chat.id,text= e)
 
 
@@ -205,6 +209,7 @@ def new_tag(message):
 		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
 		bot.send_message(message.chat.id,text=f"{tag_name} tag made")
 	except Exception as e:
+		logging.exception('Caught an error')
 		bot.send_message(message.chat.id,text= f"{e} tn nte ago durmin")
 		
 
@@ -234,6 +239,7 @@ def new_tag(message):
 		
 		bot.send_message(message.chat.id,text=text)
 	except Exception as e:
+		logging.exception('Caught an error')
 		bot.send_message(message.chat.id,text= f"{e} ")
 		
 
@@ -376,8 +382,9 @@ def stsrt():
 			bot.polling()
 
 		except Exception as e:
+			logging.exception('Caught an error')
 			print(e)
-			time.sleep(60)
+			time.sleep(1)
 			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 
 
