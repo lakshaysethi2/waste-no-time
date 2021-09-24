@@ -17,7 +17,7 @@ headers = {
     'Authorization': f'Bearer {AUTH_TOKEN}',
 }
 
-def get_token():
+def get_token(username,password):
 
     headers = {
         'Accept': 'application/vnd.manictime.v2+json',
@@ -26,8 +26,8 @@ def get_token():
 
     data = {
     'grant_type': 'password',
-    'username': 'username',
-    'password': 'password'
+    'username': username,
+    'password': passsword,
     }
 
     resp=  requests.post(f'{SERVER_LINK}/api/token', headers=headers,data=data)
@@ -202,3 +202,5 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration):
 
 def getNow():
     return datetime.utcnow()+ timedelta(hours=12)
+
+
