@@ -7,3 +7,6 @@ Put the service file at
 /etc/systemd/system/
 
 If you want to run this as a server
+
+Tnx 
+https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
