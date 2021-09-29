@@ -225,7 +225,7 @@ def new_tag(message):
 		now = getNow()
 		text = "stats:\n"
 		text += "Today:\n"
-		today = datetime(year=now.year,month=now.month,day=now.day,hour=0,minute=0,second=0) + timedelta(hours=12)
+		today = datetime(year=now.year,month=now.month,day=now.day,hour=0,minute=0,second=0) 
 		text += f'{tag_name}: ' +str( round(get_report_for_tag(f'{tag_name}',today,now)[0].seconds/3600,2))
 		text += "\n"
 		text += "Yesterday:\n"
@@ -283,7 +283,7 @@ def check(message = 'hi'):
 		rm.__init__()
 		for act in activities_markup:
 			rm.add(act)
-		now = datetime.utcnow() + timedelta(hours =12)
+		now = getNow()
 		to_time = now
 		from_time = to_time - timedelta(minutes=CHECKINTERVAL)
 		if there_is_no_tag(from_time, to_time):

@@ -130,7 +130,7 @@ def get_manictime_last_x_days(bot,message,x):
 
 
 def get_report(tag,message,bot):
-    to_time = datetime.now() + timedelta(hours=12)
+    to_time = getNow()
     from_time = to_time -timedelta(days=7)
     res_json = getactivities_json(to_time,from_time)
     text = ""
@@ -201,6 +201,6 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration):
 
 
 def getNow():
-    return datetime.utcnow()+ timedelta(hours=12)
+    return datetime.utcnow()+ timedelta(hours=13)
 
 
