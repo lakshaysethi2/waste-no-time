@@ -205,8 +205,15 @@ def getNow():
 
 
 def getLastfewHours():
+    text = ""
+    
+    to_time =  getNow()
+    
+    from_time = to_time - timedelta(hours = 12)
 
+    res_json = getactivities_json(to_time,from_time)
 
-
-
-    return " 5pm - 6pm - eating"
+    for activity in res_json['activities']:
+        duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
+        text += f'{activity["startTime"]} - {activity["endTime"]} - {duration} {activity["displayName"]}'
+    return text 
