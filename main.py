@@ -389,7 +389,7 @@ def run_continuously(interval=5):
 
 
 def stsrt():
-	bot.send_message(LAKSHAY_CID,text='starting..')
+	bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).minutes.do(check)
 	schedule.every(5).seconds.do(dailynotification)
