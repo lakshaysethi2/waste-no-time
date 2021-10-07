@@ -203,7 +203,13 @@ def x_days(message):
 @bot.message_handler(commands=['last'])
 def last(message):
 	text = 'from - to - activity\n'
-	text += getLastfewHours()
+	notes_needed = False
+	try:
+		if message.text.split("/last")[1]:
+			notes_needed = True
+	except Exception as e:
+		pass
+	text += getLastfewHours(notes_needed)
 	bot.send_message(LAKSHAY_CID,text= text)
 
 
