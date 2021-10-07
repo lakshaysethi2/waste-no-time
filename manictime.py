@@ -70,7 +70,10 @@ def get_activities_for_awareness(to_time,from_time):
         if index < 10:
             total += ua["totalTime"]
             interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
-    total= round(total.total_seconds()/3600 ,2)  
+    total= round(total.total_seconds()/3600 ,2) 
+    for index,ua in enumerate(unique_activities):
+        if index<5:
+            interval_str += f'{ua["name"] } - {((ua["totalTime"].total_seconds()/3600)/total)*100}'
     interval_str += f'total: {total}\n'
     return interval_str 
  
