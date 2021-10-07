@@ -215,6 +215,11 @@ def getLastfewHours():
 
     for activity in res_json['activities']:
         duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
+        try: 
+            text +='\n'
+            notes = activity['textData'].split('Notes')[1]
+        except Exception as e:
+            notes =""
 
-        text += f'{activity["startTime"].split("T")[1].split("+")[0][0:5]} - {activity["endTime"].split("T")[1].split("+")[0][0:5]} - {duration} - {activity["displayName"]} - \n {activity["textData"].split("Notes")[1]} \n'
+        text += f'{activity["startTime"].split("T")[1].split("+")[0][0:5]} - {activity["endTime"].split("T")[1].split("+")[0][0:5]} - {duration} - {activity["displayName"]} - {notes} \n'
     return text 
