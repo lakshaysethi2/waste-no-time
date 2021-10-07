@@ -216,8 +216,7 @@ def getLastfewHours():
     for activity in res_json['activities']:
         duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
         try: 
-            text +='\n'
-            notes = activity['textData'].split('Notes')[1]
+            notes = "\n"+ activity['textData'].split('Notes')[1]
         except Exception as e:
             notes =""
 
