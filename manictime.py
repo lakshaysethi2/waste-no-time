@@ -204,3 +204,9 @@ def getNow():
     return datetime.utcnow()+ timedelta(hours=13)
 
 
+def getLastfewHours():
+
+
+
+
+    return " 5pm - 6pm - eating"

@@ -37,18 +37,18 @@ def send_welcome(message):
 	
 	
 	print(message.text)
-	bot.send_message(message.chat.id,text=f"Hi,{message.from_user.first_name} Welcome - please choose from the following options",reply_markup= rm)
+	bot.send_message(LAKSHAY_CID,text=f"Hi,{message.from_user.first_name} Welcome - please choose from the following options",reply_markup= rm)
 @bot.message_handler(commands=["n"])
 def new_goals(message):
 	
 
-	bot.send_message(message.chat.id,text = 'sweet lets set some new goals http://goals.lak.nz')#,reply_markup=rm)
+	bot.send_message(LAKSHAY_CID,text = 'sweet lets set some new goals http://goals.lak.nz')#,reply_markup=rm)
 
 @bot.message_handler(commands=["l"])
 def new_goals(message):
-	bot.send_message(message.chat.id,text = 'here is a list of your goals')#,reply_markup=rm)
-	bot.send_message(message.chat.id,text = 'http://goals.lak.nz')#,reply_markup=rm)
-	bot.send_message(message.chat.id,text = 'which goal do you want to work on?')#,reply_markup=rm)
+	bot.send_message(LAKSHAY_CID,text = 'here is a list of your goals')#,reply_markup=rm)
+	bot.send_message(LAKSHAY_CID,text = 'http://goals.lak.nz')#,reply_markup=rm)
+	bot.send_message(LAKSHAY_CID,text = 'which goal do you want to work on?')#,reply_markup=rm)
 
 
 @bot.message_handler(commands=["top"])
@@ -62,7 +62,7 @@ def manictime(message):
 @bot.message_handler(commands=["mtc"])
 def manictime(message):
 	goal = f'''Goal \n7:30:00  -  sleep\n4:00:00  -  Programming\n3:30:30  -  Job Apply\n3:00:00  -  Uber    '''
-	bot.send_message(message.chat.id,text =goal)
+	bot.send_message(LAKSHAY_CID,text =goal)
 	get_manictime_yesterday(bot,message)
 	get_manictime_today(bot,message)
 
@@ -81,7 +81,7 @@ def mt(message):
 		get_report(tag,message,bot)
 	except Exception as e:
 		logging.exception('Caught an error')
-		bot.send_message(message.chat.id,text=e)
+		bot.send_message(LAKSHAY_CID,text=e)
 		
 
 
@@ -147,7 +147,7 @@ def keyvalue(message):
 
 @bot.message_handler(commands=['del'])
 def delkeyvalue(message):
-	if message.chat.id == LAKSHAY_CID:
+	if LAKSHAY_CID == LAKSHAY_CID:
 		text = 'deleating...'
 		key = message.text.split('/del')[1].strip()
 		try:
@@ -180,7 +180,7 @@ def delkeyvalue(message):
 def authtoken(message):
 	AUTH_TOKEN = message.text.split()[1]
 
-	bot.send_message(message.chat.id,text=AUTH_TOKEN)
+	bot.send_message(LAKSHAY_CID,text=AUTH_TOKEN)
 
 
 
@@ -192,7 +192,19 @@ def x_days(message):
 		get_manictime_last_x_days(bot,message,x)
 	except Exception as e:
 		logging.exception('Caught an error')
-		bot.send_message(message.chat.id,text= e)
+		bot.send_message(LAKSHAY_CID,text= e)
+
+
+
+
+
+
+
+@bot.message_handler(commands=['last'])
+def last(message):
+	text = 'from - to - activity\n'
+	text += getLastfewHours()
+	bot.send_message(LAKSHAY_CID,text= text)
 
 
 
@@ -207,10 +219,10 @@ def new_tag(message):
 		dto = now - timedelta(minutes=int(message.text.split(",")[2]))
 		duration = int(message.text.split(",")[3]) *60
 		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
-		bot.send_message(message.chat.id,text=f"{tag_name} tag made")
+		bot.send_message(LAKSHAY_CID,text=f"{tag_name} tag made")
 	except Exception as e:
 		logging.exception('Caught an error')
-		bot.send_message(message.chat.id,text= f"{e} tn nte ago durmin")
+		bot.send_message(LAKSHAY_CID,text= f"{e} tn nte ago durmin")
 		
 
 @bot.message_handler(commands=['stats'])
@@ -237,16 +249,16 @@ def new_tag(message):
 		text += f'{tag_name}: ' + str(round(get_report_for_tag(f'{tag_name}',today-timedelta(days=7),now)[0].seconds/3600,2))
 		
 		
-		bot.send_message(message.chat.id,text=text)
+		bot.send_message(LAKSHAY_CID,text=text)
 	except Exception as e:
 		logging.exception('Caught an error')
-		bot.send_message(message.chat.id,text= f"{e} ")
+		bot.send_message(LAKSHAY_CID,text= f"{e} ")
 		
 
 @bot.message_handler(commands=['s'])
 def say_this(message):
-	bot.send_message(message.chat.id,text=message.text.split('/s')[1])
-	bot.delete_message(message.chat.id, message.id)
+	bot.send_message(LAKSHAY_CID,text=message.text.split('/s')[1])
+	bot.delete_message(LAKSHAY_CID, message.id)
 
 
 @bot.message_handler(commands=['now'])
@@ -257,12 +269,12 @@ def now(message):
 	if len(a)>1:
 		notes = a[1]
 	dto = getNow() -timedelta(seconds=5)
-	if message.chat.id == 1040271347:
+	if LAKSHAY_CID == 1040271347:
 		if notes !='':
 			create_activity_tag(tag,notes,datetimeObj=dto,duration=4)
 		else:
 			create_activity_tag(tag,"made with /now ",datetimeObj=dto,duration=4)
-		bot.send_message(message.chat.id,text=f'{tag} tag made')
+		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made')
 
 
 def there_is_no_tag(from_time,to_time)->bool:
@@ -320,22 +332,22 @@ def conversation(message):
 			rm.add(activity)
 
 	elif 'programming' ==  message.text.lower() :
-		if message.chat.id == LAKSHAY_CID:
+		if LAKSHAY_CID == LAKSHAY_CID:
 			create_activity_tag("programming","from telegram",datetimeObj=now,duration=6)
 			text = "progamming tag made for now"
 	elif 'doing phone' ==  message.text.lower() :
-		if message.chat.id == LAKSHAY_CID:
+		if LAKSHAY_CID == LAKSHAY_CID:
 			create_activity_tag("doing phone","from telegram",datetimeObj=now,duration=6)
 			text = "doing phone tag made for now"
 	elif 'not good' in  message.text.lower() :
-		if message.chat.id == LAKSHAY_CID:
+		if LAKSHAY_CID == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
 		text = 'humm why ? what happened?'
 		rm.__init__()
 		rm.add('i feel like shit :(')
 	
 	elif 'shit' in  message.text.lower() :
-		if message.chat.id == LAKSHAY_CID:
+		if LAKSHAY_CID == LAKSHAY_CID:
 			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
 		text = 'why ?'	
 	elif 'what are my goals' in message.text.lower() :
@@ -345,7 +357,7 @@ def conversation(message):
 	else:
 		return	
 	
-	bot.send_message(message.chat.id,text=text,reply_markup= rm)
+	bot.send_message(LAKSHAY_CID,text=text,reply_markup= rm)
 
 
 
