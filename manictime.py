@@ -215,5 +215,6 @@ def getLastfewHours():
 
     for activity in res_json['activities']:
         duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
-        text += f'{activity["startTime"]} - {activity["endTime"]} - {duration} {activity["displayName"]}'
+
+        text += f'{activity["startTime"].split("T")[1].split("+")[0]} - {activity["endTime"].split("T")[1].split("+")[0]} - {duration} {activity["displayName"]}\n'
     return text 
