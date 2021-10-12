@@ -328,7 +328,7 @@ def update_activity_start(activity,new_start_time,delta):
     # return res_json
 
 
-fix_manictime()
+#fix_manictime()
             
 
 
