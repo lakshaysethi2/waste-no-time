@@ -292,7 +292,7 @@ def there_is_no_tag(from_time,to_time)->bool:
 		return True
 	return False
 @bot.message_handler(commands=['fixmt'])
-def fixmt():
+def fixmt(message):
 	fix_manictime()
 	text = "all fixed"
 	bot.send_message(LAKSHAY_CID,text=text)
