@@ -183,7 +183,7 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
     for timeline in timelines['timelines']:
         if timeline['timelineType']['typeName'] =="ManicTime/Tags":
             tags_timeline_id = timeline['timelineId']
-    start = f"{datetimeObj.isoformat()}+{newzealnd}:00",
+    start = f"{datetimeObj.isoformat()}+{newzealnd}:00"
     if datetimestr !='':
         start = str(datetimestr)
     post_json = json.dumps({
@@ -202,7 +202,7 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
         'Authorization': f'Bearer {AUTH_TOKEN}',
     }
     response = requests.post(url=f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities',data=post_json,headers=headers1)
-    #print(response.text)
+    print(response.text)
 
 
 
