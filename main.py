@@ -225,7 +225,7 @@ def new_tag(message):
 		dto = now - timedelta(minutes=int(message.text.split(",")[2]))
 		duration = int(message.text.split(",")[3]) *60
 		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
-		bot.send_message(LAKSHAY_CID,text=f"{tag_name} tag made")
+		bot.send_message(LAKSHAY_CID,text=f"{tag_name} tag made",disable_notification=True)
 	except Exception as e:
 		logging.exception('Caught an error')
 		bot.send_message(LAKSHAY_CID,text= f"{e} tn nte ago durmin")

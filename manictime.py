@@ -11,7 +11,7 @@ from datetime import datetime,timedelta,timezone
 LAKSHAY_CID =1040271347
 
 from keyvalue import *
-
+newzealnd = 13
 headers = {
     'Accept': 'application/vnd.manictime.v2+json',
     'Authorization': f'Bearer {AUTH_TOKEN}',
@@ -177,18 +177,21 @@ def get_report_for_tag(tag_name,start,end):
 
 
 
-def create_activity_tag(user_tag,notes,datetimeObj,duration):
+def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
         if timeline['timelineType']['typeName'] =="ManicTime/Tags":
             tags_timeline_id = timeline['timelineId']
+    start = f"{datetimeObj.isoformat()}"+"+{newzealnd}:00",
+    if datetimestr !='':
+        start = str(datetimestr)
     post_json = json.dumps({
         "values":{
             "name": user_tag,
             "notes":notes,
             "timeInterval": {
-                "start": f"{datetimeObj.isoformat()}"+"+12:00",
+                "start": start,
                 "duration": duration
             }
         }
@@ -206,7 +209,7 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration):
 
 
 def getNow():
-    return datetime.utcnow()+ timedelta(hours=13)
+    return datetime.utcnow()+ timedelta(hours=newzealnd)
 
 
 def getLastfewHours(notes_needed):
@@ -231,24 +234,65 @@ def getLastfewHours(notes_needed):
     return text 
 
 
-
+def gettimeofact(act):
+    return datetime.fromisoformat(act['startTime'])
 
 def fix_manictime():
     to_time = getNow()
-    from_time = to_time - timedelta(hours=10)
+    from_time = to_time - timedelta(hours=20)
     res_json = getactivities_json(to_time,from_time)
-
-    for index, activity in enumerate(res_json['activities']):
-            activity1 = res_json['activities'][index]
+    activities_array = (res_json['activities'])
+    sorted_act_array = newlist = sorted(activities_array, key=lambda x: x['endTime'] )
+    for  activity in sorted_act_array:
+            index = sorted_act_array.index(activity)
+            activity1 = activity
             
-            if (index+1)< len(res_json['activities']):
-                activity2 = res_json['activities'][index+1]
+            if (index+1)< len(sorted_act_array):
+                activity2 = sorted_act_array[index+1]
                 a2start =  datetime.fromisoformat(activity2['startTime'])
                 a1end = datetime.fromisoformat(activity1['endTime'])
                 delta = a2start-a1end 
-                if  delta > timedelta(seconds=0):
+                if activity1['displayName']==activity2['displayName']:
+                    merge_activities(activity1,activity2)
+                    return fix_manictime()
+                elif delta > timedelta(seconds=0):
                     update_activity_start(activity2,a1end,delta)
-                    
+
+
+
+def merge_activities(act1,act2):
+    a2end = datetime.fromisoformat(act2['endTime'])
+    a1start = datetime.fromisoformat(act1['startTime'])
+    duration = str((a2end-a1start).total_seconds()).split('.')[0]
+    merged_notes = ""
+    try:
+        a1notes=  notes = act1['textData'].split("<")[2].split('Notes>')[1]
+    except KeyError:
+        a1notes =""
+    try:
+        a2notes =  notes = act2['textData'].split("<")[2].split('Notes>')[1]
+    except KeyError:
+        a2notes =""
+    merged_notes = a1notes +"\n"+a2notes 
+    create_activity_tag(act1['displayName'],merged_notes,a1start,duration,a1start)
+    deleteActivity(act1)
+    deleteActivity(act2)
+
+def deleteActivity(act):
+    act_id = act['activityId']
+    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
+    timelines = json.loads(response.text)
+    for timeline in timelines['timelines']:
+        if timeline['timelineType']['typeName'] =="ManicTime/Tags":
+            tags_timeline_id = timeline['timelineId']
+    headers1 = {
+        'Accept': 'application/vnd.manictime.v3+json',
+        'Content-Type': 'application/vnd.manictime.v3+json',
+        'Authorization': f'Bearer {AUTH_TOKEN}',
+    }
+    response = requests.delete(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities/{act_id}', headers=headers1)
+    print(response.text)
+
 def update_activity_start(activity,new_start_time,delta):
     act_id = activity['activityId']
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
@@ -256,8 +300,8 @@ def update_activity_start(activity,new_start_time,delta):
     for timeline in timelines['timelines']:
         if timeline['timelineType']['typeName'] =="ManicTime/Tags":
             tags_timeline_id = timeline['timelineId']
-    owndelta = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
-    newduration = str(delta.total_seconds()+owndelta.total_seconds()).split('.')[0]
+    owndelta = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(new_start_time.isoformat())
+    newduration = str(owndelta.total_seconds()).split('.')[0]
     try:
         notes = activity['textData'].split("<")[2].split('Notes>')[1]
     except KeyError:
