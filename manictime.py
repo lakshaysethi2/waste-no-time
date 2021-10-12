@@ -229,3 +229,63 @@ def getLastfewHours(notes_needed):
 
         text += f'{activity["startTime"].split("T")[1].split("+")[0][0:5]} - {activity["endTime"].split("T")[1].split("+")[0][0:5]} - {duration} - {activity["displayName"]}  {notes} \n'
     return text 
+
+
+
+
+def fix_manictime():
+    to_time = getNow()
+    from_time = to_time - timedelta(hours=10)
+    res_json = getactivities_json(to_time,from_time)
+
+    for index, activity in enumerate(res_json['activities']):
+            activity1 = res_json['activities'][index]
+            
+            if (index+1)< len(res_json['activities']):
+                activity2 = res_json['activities'][index+1]
+                a2start =  datetime.fromisoformat(activity2['startTime'])
+                a1end = datetime.fromisoformat(activity1['endTime'])
+                delta = a2start-a1end 
+                if  delta > timedelta(seconds=0):
+                    update_activity_start(activity2,a1end,delta)
+                    
+def update_activity_start(activity,new_start_time,delta):
+    act_id = activity['activityId']
+    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
+    timelines = json.loads(response.text)
+    for timeline in timelines['timelines']:
+        if timeline['timelineType']['typeName'] =="ManicTime/Tags":
+            tags_timeline_id = timeline['timelineId']
+    owndelta = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
+    newduration = str(delta.total_seconds()+owndelta.total_seconds()).split('.')[0]
+    try:
+        notes = activity['textData'].split("<")[2].split('Notes>')[1]
+    except KeyError:
+        notes = ""
+    payload = json.dumps({
+         "values":{
+            "name": activity['displayName'],
+            "notes":notes,
+            "timeInterval": {
+                "start": f"{new_start_time.isoformat()}",
+                "duration": newduration,
+            }
+        }
+    })
+    headers1 = {
+        'Accept': 'application/vnd.manictime.v3+json',
+        'Content-Type': 'application/vnd.manictime.v3+json',
+        'Authorization': f'Bearer {AUTH_TOKEN}',
+    }
+    response = requests.put(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities/{act_id}', headers=headers1,data=payload)
+    print(response.text)
+    # res_json = json.loads(response.text)
+    # print(res_json)
+    # return res_json
+
+
+fix_manictime()
+            
+
+
+   
