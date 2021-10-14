@@ -386,6 +386,13 @@ def is_in_future(event,now):
 	if event_time > now:
 		return True
 	return False
+
+def seconds_till_event(event,now):
+	"""returns int of seconds till event"""
+	event_time = datetime.fromtimestamp(event['timestamp'])
+	seconds_int = int((now-event_time).total_seconds())
+	return seconds_int
+
 def run_continuously(interval=5):
     cease_continuous_run = threading.Event()
     class ScheduleThread(threading.Thread):
