@@ -320,6 +320,36 @@ def check(message = 'hi'):
 
 
 
+@bot.message_handler(commands=['schedule'])
+def schedule_event(message):
+	"""expects event name as first argument and 
+	%d-%m-%y-%H-%M as second argument
+	creates an event and stores it in database as json string
+	"""
+	
+	text = "name,%d-%m-%y-%H-%M"
+	try:
+		parced = message.text.split("/schedule")[1].split(",")
+		event_name = parced[0]
+		event_time = datetime.strptime(parced[1], '%d-%m-%y-%H-%M')
+		event = {'event_name':event_name}
+		event['timestamp'] = event_time.timestamp()
+		try:
+			events_array =json.loads( get_value('events'))
+		except KeyError or ValueError:
+			set_value('events',"[]")
+			events_array =json.loads( get_value ('events'))
+		events_array.append(event)
+		set_value('events',json.dumps(events_array))
+		text ="event created you can can check with /key events"
+	except IndexError:
+		pass
+	except Exception as e:
+		bot.send_message(LAKSHAY_CID,text=str(e))
+
+	bot.send_message(LAKSHAY_CID,text=text)
+	
+
 
 
 @bot.message_handler(func=lambda m: True)
