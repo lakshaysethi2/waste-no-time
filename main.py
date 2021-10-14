@@ -412,8 +412,20 @@ def getMyevents():
 	return myevents_array
 
 def dailynotification():
-	h = getNow().hour 
-	m = getNow().minute
+	now = getNow()
+	for event in getMyevents():
+		if is_in_future(event,now):
+			if seconds_till_event(event,now) < 60:
+				bot.send_message(LAKSHAY_CID,text=event['event_name'])
+			# else:
+			# 	bot.send_message(LAKSHAY_CID,text='error in daily notification')
+
+
+		else:
+			delete_event(event)
+			
+	h = now.hour 
+	m = now.minute
 	if h == 21 and m == 00:
 		bot.send_message(LAKSHAY_CID,text='shave bro')
 		
@@ -427,10 +439,11 @@ def is_in_future(event,now):
 		return True
 	return False
 
+
 def seconds_till_event(event,now):
 	"""returns int of seconds till event"""
 	event_time = datetime.fromtimestamp(event['timestamp'])
-	seconds_int = int((now-event_time).total_seconds())
+	seconds_int = int((event_time-now).total_seconds())
 	return seconds_int
 
 def delete_event(event_to_delete):
@@ -439,6 +452,8 @@ def delete_event(event_to_delete):
 		if event['event_name'] == event_to_delete['event_name']:
 			events_array.pop(index)
 	set_value('events', json.dumps(events_array))
+
+
 def run_continuously(interval=5):
     cease_continuous_run = threading.Event()
     class ScheduleThread(threading.Thread):
