@@ -2,7 +2,6 @@ import telebot
 from manictime import *
 from goals import *
 import logging
-
 import json
 from datetime import datetime,timedelta,timezone
 import schedule
@@ -296,7 +295,6 @@ def there_is_no_tag(from_time,to_time)->bool:
 def fixmt(message):
 	fix_manictime()
 	text = "all fixed"
-	bot.send_message(LAKSHAY_CID,text=text)
 	bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
 
 
