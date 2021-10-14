@@ -379,6 +379,13 @@ def dailynotification():
 		
 	return
 
+
+def is_in_future(event,now):
+	"""return true or false"""
+	event_time = datetime.fromtimestamp(event['timestamp'])
+	if event_time > now:
+		return True
+	return False
 def run_continuously(interval=5):
     cease_continuous_run = threading.Event()
     class ScheduleThread(threading.Thread):
