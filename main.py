@@ -370,6 +370,16 @@ def conversation(message):
 	bot.send_message(LAKSHAY_CID,text=text,reply_markup= rm)
 
 
+def getMyevents():
+	
+
+	myevents_array = []
+	try:
+		events_str = database['events']
+		myevents_array=  json.loads(events_str)
+	except KeyError:
+		pass
+	return myevents_array
 
 def dailynotification():
 	h = getNow().hour 
