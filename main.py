@@ -393,6 +393,12 @@ def seconds_till_event(event,now):
 	seconds_int = int((now-event_time).total_seconds())
 	return seconds_int
 
+def delete_event(event_to_delete):
+	events_array = json.loads(get_value('events'))
+	for index,event in enumerate(events_array):
+		if event['event_name'] == event_to_delete['event_name']:
+			events_array.pop(index)
+	set_value('events', json.dumps(events_array))
 def run_continuously(interval=5):
     cease_continuous_run = threading.Event()
     class ScheduleThread(threading.Thread):
