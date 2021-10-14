@@ -3,6 +3,7 @@ from manictime import *
 from goals import *
 import logging
 
+import json
 from datetime import datetime,timedelta,timezone
 import schedule
 import time
@@ -296,6 +297,7 @@ def fixmt(message):
 	fix_manictime()
 	text = "all fixed"
 	bot.send_message(LAKSHAY_CID,text=text)
+	bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
 
 
 
