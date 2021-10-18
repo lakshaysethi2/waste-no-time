@@ -280,7 +280,7 @@ def now(message):
 			create_activity_tag(tag,notes,datetimeObj=dto,duration=4)
 		else:
 			create_activity_tag(tag,"made with /now ",datetimeObj=dto,duration=4)
-		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made')
+		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 
 
 def there_is_no_tag(from_time,to_time)->bool:
