@@ -7,6 +7,7 @@ from datetime import datetime,timedelta,timezone
 import schedule
 import time
 import threading
+from assistant import *
 CHECKINTERVAL=2
 activities_markup = [
 	'programming',
@@ -170,6 +171,10 @@ def delkeyvalue(message):
 
 
 
+
+@bot.message_handler(commands=['basics'])
+def basics(message):
+	take_care_of_basics()
 
 
 
