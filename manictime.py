@@ -86,7 +86,7 @@ def get_manictime_yesterday(bot,message):
     to_time = today_started
     from_time = today_started -timedelta(days=1)
     text = "yesterday\n"+  get_activities_for_awareness(to_time,from_time)
-    bot.send_message(message.chat.id,text=text)
+    bot.send_message(LAKSHAY_CID,text=text)
     
 
 def get_manictime_today(bot,message):
@@ -96,7 +96,7 @@ def get_manictime_today(bot,message):
     from_time = today_started
     
     text = 'today\n'+ get_activities_for_awareness(to_time,from_time)
-    bot.send_message(message.chat.id,text=text)
+    bot.send_message(LAKSHAY_CID,text=text)
    
 
 
@@ -108,7 +108,7 @@ def get_manictime_7days_total(bot,message,goal):
     from_time = now - timedelta(hours=168)
     text = goal
     text += '\nlast 7 days \n'+ get_activities_for_awareness(to_time,from_time)
-    bot.send_message(message.chat.id,text=text)
+    bot.send_message(LAKSHAY_CID,text=text)
    
 
 def get_top_for_days(bot,days):
@@ -121,7 +121,7 @@ def get_top_for_days(bot,days):
     
 
 
-def get_manictime_last_x_days(bot,message,x):
+def get_manictime_last_x_days(x):
     text = ""
     now = getNow()
     for a in range (0,x):
@@ -131,8 +131,7 @@ def get_manictime_last_x_days(bot,message,x):
         to_time = day_end
         text += f'{day_start.day}-{day_start.month}\n'+ get_activities_for_awareness(to_time,from_time)
     text += f'\n{23-getNow().hour}h{60-getNow().minute}m \n'
-    bot.send_message(message.chat.id,text = text)
-
+    return text
 
 def get_report(tag,message,bot):
     to_time = getNow()
@@ -151,7 +150,7 @@ def get_report(tag,message,bot):
                 notes =""
             text += f"""on: {starttime.date()} \n{starttime.hour}:{starttime.minute} \nduration:{duration}\nNotes:\n {notes} \n\n\n"""
             #  notes: {activity['notes']} 
-    bot.send_message(message.chat.id,text)
+    bot.send_message(LAKSHAY_CID,text)
 
 
 def get_report_for_tag(tag_name,start,end):

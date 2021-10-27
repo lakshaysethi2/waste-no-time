@@ -194,7 +194,8 @@ def x_days(message):
 	try:
 		x = message.text.split("/x")[1]
 		x = int(x)
-		get_manictime_last_x_days(bot,message,x)
+		text = get_manictime_last_x_days(x)
+    	bot.send_message(LAKSHAY_CID,text = text)
 	except Exception as e:
 		logging.exception('Caught an error')
 		bot.send_message(LAKSHAY_CID,text= e)
