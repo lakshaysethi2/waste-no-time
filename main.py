@@ -285,7 +285,7 @@ def now(message):
 		if notes !='':
 			create_activity_tag(tag,notes,datetimeObj=dto,duration=4)
 		else:
-			create_activity_tag(tag,".",datetimeObj=dto,duration=4)
+			create_activity_tag(tag,"",datetimeObj=dto,duration=4)
 		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 
 
