@@ -123,7 +123,20 @@ def set_value(key,value):
 	updateDatabase()
 	return (f'{text} {key}',database[f'{key}'])
 
-
+@bot.message_handler(commands=['append'])
+def keyappendvalue(message):
+	text = ""
+	try:
+		key = message.text.split('/key')[1].split(',')[0].strip()
+		value = message.text.split('/key')[1].split(',')[1].strip()
+		value = str(get_value(key)) +'\n'+value
+		text ='append successful\n'+ str(set_value(key, value))
+	except IndexError as e:
+		text = 'syntax is /append key, text to append'
+	except KeyError:
+		text = 'can not append as key not created yet'
+		
+	bot.send_message(LAKSHAY_CID,text=text)
 
 @bot.message_handler(commands=['key'])
 def keyvalue(message):
