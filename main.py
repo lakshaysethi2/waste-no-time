@@ -127,8 +127,8 @@ def set_value(key,value):
 def keyappendvalue(message):
 	text = ""
 	try:
-		key = message.text.split('/key')[1].split(',')[0].strip()
-		value = message.text.split('/key')[1].split(',')[1].strip()
+		key = message.text.split('/append')[1].split(',')[0].strip()
+		value = message.text.split('/append')[1].split(',')[1].strip()
 		value = str(get_value(key)) +'\n'+value
 		text ='append successful\n'+ str(set_value(key, value))
 	except IndexError as e:
