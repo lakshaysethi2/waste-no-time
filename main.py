@@ -135,7 +135,7 @@ def keyappendvalue(message):
 		text = 'syntax is /append key, text to append'
 	except KeyError:
 		text = 'can not append as key not created yet'
-		
+
 	bot.send_message(LAKSHAY_CID,text=text)
 
 @bot.message_handler(commands=['key'])
@@ -300,7 +300,7 @@ def now(message):
 		else:
 			create_activity_tag(tag,"",datetimeObj=dto,duration=4)
 		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
-
+		fixmt(message)
 
 def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false
