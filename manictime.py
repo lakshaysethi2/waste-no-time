@@ -225,7 +225,9 @@ def getLastfewHours(notes_needed):
         notes = ""
         if notes_needed == True:
             try: 
-                notes = "\n"+ activity['textData'].split('Notes')[1]
+                notes = "\n Notes:"+ activity['textData'].split('Notes')[1]
+                notes = notes.replace('>',"")
+                notes = notes.replace('</',"")
             except Exception as e:
                 notes = ""
 
