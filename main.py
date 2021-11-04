@@ -8,6 +8,8 @@ import schedule
 import time
 import threading
 from assistant import *
+from calendarfile import get_calendar_html
+
 CHECKINTERVAL=2
 activities_markup = [
 	'programming',

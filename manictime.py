@@ -9,7 +9,6 @@ import requests
 import json
 from datetime import datetime,timedelta,timezone
 LAKSHAY_CID =1040271347
-from calendarfile import get_calendar_html
 from keyvalue import *
 newzealnd = 13
 headers = {
