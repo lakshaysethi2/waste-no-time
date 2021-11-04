@@ -7,24 +7,24 @@ def get_calendar_html():
     lines = text.split('\n')
     activities = []
     for line in lines:
-        if 'from - to - activity' not in line:
+        if 'from - to - activity' not in line and line !='':
             act = SimpleNamespace()
             act.from_time = line.split(' - ')[0]
-            act.to_time = line.split(' - ')[2]
-            act.duration = line.split(' - ')[3]
-            act.tag = line.split(' - ')[4]
+            act.to_time = line.split(' - ')[1]
+            act.duration = line.split(' - ')[2]
+            act.tag = line.split(' - ')[3].strip()
             activities.append(act)
 
     return getHtml(activities)
 
 
 def getHeight(dur_string):
-    height = 0
+    height = 10
     split = dur_string.split(":")
     hours = int(split[0])*83
     min = int(split[1])*2
     # sec = int(split[2])
-    height = hours + min
+    height += hours + min
     return height
     # 11:11:03
 
@@ -35,9 +35,12 @@ def getHtml(activities):
         name = act.tag
         height = getHeight(act.duration)
         duration = act.duration
-        act_div += f''' <div style="height:{height}px" class = "activity-aware act-1 ">
-                            {name} {duration}
-                        </div>'''
+        
+        act_div += f'<div style="height:{height}px" \
+                    class = "activity-aware act-1 "> \
+                            {name} {duration} \
+                             t : {act.from_time}-{act.to_time} \
+                        </div>'
 
 
     return    f'''<!DOCTYPE html>
@@ -60,9 +63,7 @@ def getHtml(activities):
             
             <div class="container">
                 <div class="row">
-                <div class="col-4">
-                    {act_div}
-                </div>
+                <div class="col-4">{act_div}</div>
 
                     
                 
