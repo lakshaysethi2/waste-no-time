@@ -215,6 +215,12 @@ def x_days(message):
 
 
 
+@bot.message_handler(commands=['calendar'])
+def last(message):
+	# text = 'from - to - activity\n'
+	
+	file = get_calendar_html()
+	bot.send_message(LAKSHAY_CID,'hi how are you')
 
 
 
