@@ -367,7 +367,14 @@ def schedule_event(message):
 		bot.send_message(LAKSHAY_CID,text=str(e))
 
 	bot.send_message(LAKSHAY_CID,text=text)
-	
+
+
+@bot.message_handler(commands=['math'])
+def math(message):
+	exp = message.text.split('/math')[1]
+	text = eval(exp)
+	bot.send_message(LAKSHAY_CID,text=text)
+
 
 
 
