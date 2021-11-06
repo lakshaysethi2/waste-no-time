@@ -10,3 +10,14 @@ If you want to run this as a server
 
 Tnx 
 https://medium.com/@benmorel/creating-a-linux-service-with-systemd-611b5c8b91d6
+
+
+
+how to use telegram bot api to sed yourself files ?
+
+https://core.telegram.org/bots/api#senddocument
+
+https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendDocument?chat_id=1040271347&document=https://sethi-team.github.io/rain.m4a
+
+
+https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendDocument?chat_id=1040271347&document=BQACAgQAAxkDAAJxcWGGIgVqqeCbMN7qeU-PVmbkUbsDAALIAgACy7k0UIEAAZ7XjJ_ozyIE
