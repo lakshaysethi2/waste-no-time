@@ -188,7 +188,7 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
     post_json = json.dumps({
         "values":{
             "name": user_tag,
-            "notes":notes,
+            "notes":notes.strip(),
             "timeInterval": {
                 "start": start,
                 "duration": duration
@@ -310,7 +310,7 @@ def update_activity_start(activity,new_start_time,delta):
     payload = json.dumps({
          "values":{
             "name": activity['displayName'],
-            "notes":notes,
+            "notes":notes.strip(),
             "timeInterval": {
                 "start": f"{new_start_time.isoformat()}",
                 "duration": newduration,
