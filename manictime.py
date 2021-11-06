@@ -9,8 +9,11 @@ import requests
 import json
 from datetime import datetime,timedelta,timezone
 LAKSHAY_CID =1040271347
+try:
+    from keyvalue import *
+except:
+    from .keyvalue import *
 
-from keyvalue import *
 newzealnd = 13
 headers = {
     'Accept': 'application/vnd.manictime.v2+json',
