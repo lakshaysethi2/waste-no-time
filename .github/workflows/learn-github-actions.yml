@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_IP }}
+          host: ${{ secrets.HOST }}
           username: laksh
           key: ${{ secrets.OMG_secret }}
           port: 22
