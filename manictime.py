@@ -214,6 +214,9 @@ def getNow():
     return datetime.utcnow()+ timedelta(hours=newzealnd)
 
 
+def get_formated_time(dto):
+    return f'{dto.hour}:{dto.minute}:{dto.second}'
+
 def getLastfewHours(notes_needed):
     text = ""
     

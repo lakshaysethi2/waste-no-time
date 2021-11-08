@@ -295,6 +295,7 @@ def now(message):
 	notes=''
 	if len(a)>1:
 		notes = a[1]
+		notes+= get_formated_time(getNow())
 	dto = getNow() -timedelta(seconds=5)
 	if LAKSHAY_CID == 1040271347:
 		if notes !='':
