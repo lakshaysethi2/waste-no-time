@@ -12,6 +12,8 @@ from calendarfile import get_calendar_html
 
 CHECKINTERVAL=2
 activities_markup = [
+	'/now driving',
+	'/now uber',
 	'programming',
 	'doing phone',
 	"/now sleep",
