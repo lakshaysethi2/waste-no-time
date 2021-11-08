@@ -221,10 +221,11 @@ def x_days(message):
 
 @bot.message_handler(commands=['calendar'])
 def last(message):
-	# text = 'from - to - activity\n'
-	
-	file = get_calendar_html()
-	bot.send_message(LAKSHAY_CID,'hi how are you')
+	html_string = get_calendar_html()
+url = 'https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendDocument'
+files = {'document': ('calendar.html', 'some,data,to,send\nanother,row,to,send')}
+response = requests.post(url, files=files,data={"chat_id":1040271347})
+response.text
 
 
 

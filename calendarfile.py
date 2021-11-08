@@ -70,7 +70,6 @@ def getHtml(activities):
                 </div>
             </div>
             
-from calendarfile import get_calendar_html
 
 
 
