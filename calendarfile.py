@@ -56,8 +56,8 @@ def getHtml(activities):
             
 
             <style>
-                .act-1 {{ border-top:solid 5px;border-bottom: solid 5px;  }}
-                .act-3 {{ border-bottom: solid 5px;  }}
+                .act-1 {{ border-top:solid 1px;border-bottom: solid 1px;  }}
+                .act-3 {{ border-bottom: solid 1px;  }}
             </style>
 
             
