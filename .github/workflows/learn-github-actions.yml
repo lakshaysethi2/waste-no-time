@@ -1,0 +1,14 @@
+name: learn-github-actions
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - run: echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwoJc7XOYe4icpXg6Eb4HENDI1rO09vnV4sauAqbGkGioZy3pX29YcDvUaH3/mzyH0AESzphMdUmcI3oZ6xZ0L1e3dIVpxuBceHX0qQDitgFRTkHUctsV1D8ZhoYJLO0yQnL/FD3zqUn6XuFbVH/jVWdqYaj0iFGcc9BAcwUTg1kaRJX0LaHTu3k4rqO+66+r6o2q97IEWRSvKkI5vDD7cHHPx8W8FkR7gl5VRN1tbV3OQrIYyF2D7qAgBM2sUjpDhIAnsFgIh/5iCIct0eZhdOBExBY4VzYNv71fz7b42YAnNV2D67+x1XoI8u2r5vREJVdPCftL5Ojr4cvwzexyn laksh@DESKTOP-J7OF60K" > ~/.ssh/id_rsa.pub
+      - run chmod 700 ~/.ssh
+      - run chmod 600 ~/.ssh/id_rsa.pub
+      - run: ssh laksh@130.211.202.38
+      - run: logout      
+      - run: nano --version
