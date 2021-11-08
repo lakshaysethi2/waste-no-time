@@ -63,7 +63,7 @@ def getHtml(activities):
             
             <div class="container">
                 <div class="row">
-                <div class="col-4">{act_div}</div>
+                <div class="col">{act_div}</div>
 
                     
                 
