@@ -1,5 +1,21 @@
+from peewee import ProgrammingError
 from manictime import getLastfewHours
 from types import SimpleNamespace
+
+def getStyle(tag:str):
+    color = ""
+    if 'programming' in tag.lower():
+        color = '#a4ed82'
+    elif 'uber' in tag.lower():
+        color = '#656664'
+    elif 'ctek' in tag.lower():
+        color = '#72dba1'
+    elif 'sleep' in tag.lower():
+        color = '#373837'
+    elif 'bio' in tag.lower():
+        color = "#f54949"
+    return f'background-color:{color};'
+
 def get_calendar_html():
 
     text = getLastfewHours(False) 
@@ -13,19 +29,22 @@ def get_calendar_html():
             act.to_time = line.split(' - ')[1]
             act.duration = line.split(' - ')[2]
             act.tag = line.split(' - ')[3].strip()
+            act.style = getStyle(act.tag)
             activities.append(act)
+
 
     return getHtml(activities)
 
-
+#1 minute = 0.70 pixels
+# = 1 minute = 0.7*3 = 2  pixel
 def getHeight(dur_string):
-    height = 10
+    height_px = 2
     split = dur_string.split(":")
-    hours = int(split[0])*83
-    min = int(split[1])*2
+    hours = int(split[0])*60*2
+    minutes_px = int(split[1])*2
     # sec = int(split[2])
-    height += hours + min
-    return height
+    height_px += hours + minutes_px
+    return height_px
     # 11:11:03
 
 
@@ -36,11 +55,14 @@ def getHtml(activities):
         height = getHeight(act.duration)
         duration = act.duration
         
-        act_div += f'<div style="height:{height}px" \
+        act_div += f'<div style="height:{height}px; {act.style} " \
                     class = "activity-aware act-1 "> \
-                             {act.from_time} to: {act.to_time} \
-                              -  {name}  \
-                            - {duration} \
+
+                             {act.from_time} - {name}   \
+                             <br> ------ -{duration}   \
+                        <div class = "notes">  </div>\
+                        <div class="to-time">{act.to_time}</div> \
+
                         </div>'
 
 
@@ -57,8 +79,8 @@ def getHtml(activities):
             
 
             <style>
-                .act-1 {{ border-top:solid 1px;border-bottom: solid 1px;  }}
-                .act-3 {{ border-bottom: solid 1px;  }}
+                .act-1 {{ border:solid 1px; overflow:hidden;position: relative; }}
+               .to-time{{  position: absolute; bottom: 0;  }}
             </style>
 
             
