@@ -38,8 +38,9 @@ def getHtml(activities):
         
         act_div += f'<div style="height:{height}px" \
                     class = "activity-aware act-1 "> \
-                            {name} {duration} \
-                             t : {act.from_time}-{act.to_time} \
+                             {act.from_time} to: {act.to_time} \
+                              -  {name}  \
+                            - {duration} \
                         </div>'
 
 
