@@ -55,15 +55,13 @@ def getHtml(activities):
         height = getHeight(act.duration)
         duration = act.duration
         
-        act_div += f'<div style="height:{height}px; {act.style} " \
-                    class = "activity-aware act-1 "> \
-
-                             {act.from_time} - {name}   \
-                             <br> ------ -{duration}   \
-                        <div class = "notes">  </div>\
-                        <div class="to-time">{act.to_time}</div> \
-
-                        </div>'
+        act_div += f'''<div style="height:{height}px; {act.style}" class = "activity-aware act-1"> 
+                            {act.from_time} - {name}<br>   
+                            ------- {duration}   
+                            <div class = "notes">  </div>
+                            <div class="to-time">{act.to_time}</div> 
+                        </div>
+                    '''
 
 
     return    f'''<!DOCTYPE html>
