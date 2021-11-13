@@ -58,7 +58,9 @@ def getHtml(activities):
         act_div += f'''<div style="height:{height}px; {act.style}" class = "activity-aware act-1"> 
                             {act.from_time} - {name}<br>   
                             ------- {duration}   
-                            <div class = "notes">  </div>
+                            <div class = "notes">  
+                                <textarea></textarea>
+                            </div>
                             <div class="to-time">{act.to_time}</div> 
                         </div>
                     '''
@@ -74,26 +76,27 @@ def getHtml(activities):
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap-grid.min.css" integrity="sha512-3AxW5HcDzhL9MJdO2mpDEGEZ6NcCg/pDSa8R2kH5gwEA4r48RxZf0nPITA1NfX1pNA6a/eAayX+yW6QopF4jeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         </head>
         <body>
-            
-
             <style>
                 .act-1 {{ border:solid 1px; overflow:hidden;position: relative; }}
                .to-time{{  position: absolute; bottom: 0;  }}
             </style>
-
-            
             <div class="container">
                 <div class="row">
                 <div class="col">{act_div}</div>
-
-                    
-                
                 </div>
             </div>
-            
-
-
-
-
+       
+        <script>
+        let all_activity_divs = document.querySelectorAll(".activity-aware")
+        function change_color(b){{
+        if (b.style.background == 'red'){{
+            b.style.background = 'white';
+        }}
+        else if (b.style.background == 'white'){{
+            b.style.background = 'green'
+        }}else{{b.style.background = "red"}}
+        }}
+        all_activity_divs.forEach(  (b) =>{{b.addEventListener('click',()=>{{change_color(b)}})}})
+        </script>
         </body>
         </html> '''
