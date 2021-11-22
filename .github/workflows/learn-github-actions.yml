@@ -18,7 +18,7 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
       - name: copy all
         run: |
-          rsync ./*  laksh@{{secrets.HOST}}:/home/lakshay_new/github 
+              ssh laksh@{{secrets.HOST}} echo "hello1"
       - name: restart service
         run: |              
-              ssh laksh@{{secrets.HOST}} echo "hello"
+              ssh laksh@{{secrets.HOST}} echo "hello2"
