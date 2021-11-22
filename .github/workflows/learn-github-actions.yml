@@ -21,7 +21,7 @@ jobs:
       - name: copy all
         run: |
               
-              scp -r ./* ls@${{secrets.HOST}}:/home/lakshay_new/tg/
+              scp -r ./* lakshay_new@${{secrets.HOST}}:/home/lakshay_new/tg/
       - name: restart service
         run: |              
               ssh ls@${{secrets.HOST}} sudo systemctl restart telegram-bot
