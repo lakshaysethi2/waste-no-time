@@ -18,7 +18,7 @@ def getStyle(tag:str):
 
 def get_calendar_html():
 
-    text = getLastfewHours(False) 
+    text = getLastfewHours(False,24) 
     # this text we need to parse and write an html file 
     lines = text.split('\n')
     activities = []

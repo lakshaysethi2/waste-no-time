@@ -218,12 +218,12 @@ def getNow():
 def get_formated_time(dto):
     return f'{dto.hour}:{dto.minute}:{dto.second}'
 
-def getLastfewHours(notes_needed):
+def getLastfewHours(notes_needed,hours_wanted=12):
     text = ""
     
     to_time =  getNow()
     
-    from_time = to_time - timedelta(hours = 12)
+    from_time = to_time - timedelta(hours = hours_wanted)
 
     res_json = getactivities_json(to_time,from_time)
 
