@@ -1,14 +1,14 @@
-[Unit]
-Description= Goals Bot telegram service
-After=network.target
-StartLimitIntervalSec=0
-[Service]
-Type=simple
-Restart=always
-RestartSec=1
-User=ls
-StartLimitAction=reboot
-ExecStart=/usr/bin/env python /path/to/main.py
-
+Description=telegrambot 
+Wants=network.target 
+After=syslog.target 
+network-online.target 
+[Service] 
+Type=simple 
+ExecStart=bash -c "source /home/ls/tgb-venv/bin/activate && \
+                    python /home/lakshay_new/tg/main.py"
+Restart=on-failure 
+RestartSec=10 
+RuntimeMaxSec=600
+KillMode=process 
 [Install]
 WantedBy=multi-user.target
