@@ -1,4 +1,4 @@
-name: Google CI deploy
+name: CI deploy
 on: 
   push:
     branches: [main]
