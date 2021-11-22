@@ -20,8 +20,8 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
       - name: copy all
         run: |
-              pwd
-              ssh ls@${{secrets.HOST}} pwd
+              
+              rsync -r ./* ls@${{secrets.HOST}}:/home/lakshay_new/tg/
       - name: restart service
         run: |              
-              ssh ls@${{secrets.HOST}} echo "hello2"
+              ssh ls@${{secrets.HOST}} sudo systemctl restart telegram-bot
