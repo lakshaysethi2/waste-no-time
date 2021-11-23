@@ -19,7 +19,7 @@ def getStyle(tag:str):
     elif 'sleep' in tag.lower():
         color = '#373837'
     elif 'bio' in tag.lower():
-        color = "#f54949"
+        color = "#c0e5eb"
     return f'background-color:{color};'
 
 def get_calendar_html():
