@@ -40,8 +40,9 @@ def get_calendar_html():
 def getHeight(dur_string):
     height_px = 2
     split = dur_string.split(":")
-    hours = int(split[0])*60*2
-    minutes_px = int(split[1])*2
+    multiplyer = 1
+    hours = int(split[0])*60*multiplyer
+    minutes_px = int(split[1])*multiplyer
     # sec = int(split[2])
     height_px += hours + minutes_px
     return height_px
