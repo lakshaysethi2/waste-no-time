@@ -8,6 +8,12 @@ def getStyle(tag:str):
         color = '#a4ed82'
     elif 'uber' in tag.lower():
         color = '#656664'
+    elif 'writing' in tag.lower():
+        color = '#72dba1'
+    elif 'job apply' in tag.lower():
+        color = '#72dba1'
+    elif 'manictime' in tag.lower():
+        color = '#72dba1'
     elif 'ctek' in tag.lower():
         color = '#72dba1'
     elif 'sleep' in tag.lower():
