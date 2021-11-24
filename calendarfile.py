@@ -3,29 +3,20 @@ from manictime import getLastfewHours
 from types import SimpleNamespace
 
 def getStyle(tag:str):
-    color = ""
-    if 'programming' in tag.lower():
-        color = '#a4ed82'
-    elif 'uber' in tag.lower():
-        color = '#656664'
-    elif 'writing' in tag.lower():
-        color = '#72dba1'
-    elif 'goal setting' in tag.lower():
-        color = '#72dba1'
-    elif 'reading' in tag.lower():
-        color = '#72dba1'
-    elif 'udemy' in tag.lower():
-        color = '#72dba1'
-    elif 'job apply' in tag.lower():
-        color = '#72dba1'
-    elif 'manictime' in tag.lower():
-        color = '#72dba1'
-    elif 'ctek' in tag.lower():
-        color = '#72dba1'
-    elif 'sleep' in tag.lower():
-        color = '#373837'
-    elif 'bio' in tag.lower():
-        color = "#c0e5eb"
+    color_db = {
+     'programming' : '#a4ed82',
+     'uber' : '#656664',
+     'writing' : '#72dba1',
+     'goal setting' : '#72dba1',
+     'reading' : '#72dba1',
+     'udemy' : '#72dba1',
+     'job apply' : '#72dba1',
+     'manictime' : '#72dba1',
+     'ctek' : '#72dba1',
+     'sleep' : '#373837',
+     'bio' : "#c0e5eb"
+    }
+    color = color_db.get(tag.lower())
     return f'background-color:{color};'
 
 def get_calendar_html():
