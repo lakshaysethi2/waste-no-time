@@ -10,6 +10,8 @@ def getStyle(tag:str):
         color = '#656664'
     elif 'writing' in tag.lower():
         color = '#72dba1'
+    elif 'goal setting' in tag.lower():
+        color = '#72dba1'
     elif 'udemy' in tag.lower():
         color = '#72dba1'
     elif 'job apply' in tag.lower():
