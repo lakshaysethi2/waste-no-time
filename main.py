@@ -221,9 +221,11 @@ def x_days(message):
 
 @bot.message_handler(commands=['calendar'])
 def last(message):
+	now = getNow()
+	date = f'{now.day}-{now.month}-{now.hour}-{now.minute}'
 	html_string = get_calendar_html()
 	url = 'https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendDocument'
-	files = {'document': ('calendar.html', html_string)}
+	files = {'document': (f'{date}-calendar.html', html_string)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 	# response.text
 
