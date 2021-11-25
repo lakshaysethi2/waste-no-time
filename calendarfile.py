@@ -13,6 +13,8 @@ def getStyle(tag:str):
      'udemy' : '#72dba1',
      'job apply' : '#72dba1',
      'manictime' : '#72dba1',
+     'planning' : '#72dba1',
+     'job apply' : '#72dba1',
      'ctek' : '#72dba1',
      'sleep' : '#373837',
      'bio' : "#c0e5eb"
