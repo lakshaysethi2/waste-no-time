@@ -9,6 +9,7 @@ import requests
 import json
 from datetime import datetime,timedelta,timezone
 LAKSHAY_CID =1040271347
+from types import SimpleNamespace
 
 try:
     from keyvalue import *
