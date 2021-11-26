@@ -84,12 +84,16 @@ def getHtml(activities):
         </head>
         <body>
             <style>
+                .layer-on-top-container{{position: relative;}}
+                .layer-on-top {{position: absolute;right: 14px;width: 63px;height: -webkit-fill-available;background-color: rgb(178 239 177 / 15%);border-left: dotted 39px black;z-index: 2;}}
                 .act-1 {{ border:solid 1px; overflow:hidden;position: relative; }}
                .to-time{{  position: absolute; bottom: 0;  }}
             </style>
             <div class="container">
                 <div class="row">
-                <div class="col">{act_div}</div>
+                <div class="col layer-on-top-container">
+                <div class="layer-on-top"></div>
+                {act_div}</div>
                 </div>
             </div>
        
