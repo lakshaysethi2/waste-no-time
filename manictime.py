@@ -159,32 +159,36 @@ def get_report(tag,message,bot):
 
 def get_notes(activity):
     try:
-        notes = activity['textData'].split("<")[2].split('Notes>')[1].strip()
+        return activity['textData'].split("<")[2].split('Notes>')[1].strip()
     except KeyError:
-        notes = ""
+        return ""
 
 def get_simple_activity_obj(activity):
     act = SimpleNamespace()
     act.starttime = datetime.fromisoformat(activity['startTime'])
     act.endtime= datetime.fromisoformat(activity['endTime'])
-    act.duration = endtime - starttime
+    act.duration = act.endtime - act.starttime
     act.notes = get_notes(activity)
     return act
 
-def get_timesheet_html(tag,days):
+def get_nice_date_and_time(datetime):
+    return f'{datetime.day}/{datetime.month}/{datetime.year} - {datetime.hour}:{datetime.minute}'
+
+def get_timesheet_html(tag,days,minimum_minutes=30):
     to_time = getNow()
     from_time = to_time -timedelta(days=int(days))
     res_json = getactivities_json(to_time,from_time)
-    text = ""
-    timesheet_units_html =""
+    timesheet_units_html ="<style> .work_unit{ border: solid 2px } </style>"
     for activity in res_json['activities']:
         if activity['displayName'].lower() == tag.lower():
             act = get_simple_activity_obj(activity)
-            timesheet_unit_div += f'''
+            act.notes = act.notes.replace("\n"," - - ")
+            if act.duration.seconds > (60*int(minimum_minutes)):
+                timesheet_units_html += f'''
                         <div class='work_unit'>
-                            {act.starttime} - {act.endtime}: <br>
-                            {notes}<br>
-                            {duration}
+                            {get_nice_date_and_time(act.starttime)} - {get_nice_date_and_time(act.endtime)}: <br>
+                            {act.notes}<br>
+                            {act.duration}
                         </div>'''
     return timesheet_units_html
 
