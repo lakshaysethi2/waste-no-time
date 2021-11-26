@@ -156,6 +156,36 @@ def get_report(tag,message,bot):
             #  notes: {activity['notes']} 
     bot.send_message(LAKSHAY_CID,text)
 
+def get_notes(activity):
+    try:
+        notes = activity['textData'].split("<")[2].split('Notes>')[1].strip()
+    except KeyError:
+        notes = ""
+
+def get_simple_activity_obj(activity):
+    act = SimpleNamespace()
+    act.starttime = datetime.fromisoformat(activity['startTime'])
+    act.endtime= datetime.fromisoformat(activity['endTime'])
+    act.duration = endtime - starttime
+    act.notes = get_notes(activity)
+    return act
+
+def get_timesheet_html(tag,days):
+    to_time = getNow()
+    from_time = to_time -timedelta(days=int(days))
+    res_json = getactivities_json(to_time,from_time)
+    text = ""
+    timesheet_units_html =""
+    for activity in res_json['activities']:
+        if activity['displayName'].lower() == tag.lower():
+            act = get_simple_activity_obj(activity)
+            timesheet_unit_div += f'''
+                        <div class='work_unit'>
+                            {act.starttime} - {act.endtime}: <br>
+                            {notes}<br>
+                            {duration}
+                        </div>'''
+    return timesheet_units_html
 
 def get_report_for_tag(tag_name,start,end):
     to_time = end

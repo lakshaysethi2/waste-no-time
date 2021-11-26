@@ -389,6 +389,14 @@ def math(message):
 	text = eval(exp)
 	bot.send_message(LAKSHAY_CID,text=text)
 
+@bot.message_handler(commands=['timesheet'])
+def timesheet(message):
+	[tag,days] = message.text.split('/timesheet ')[1].split(",")	
+	html_string = get_timesheet_html(tag,days)
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'{tag}-timesheet-last-{int(days)}-days.html', html_string)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+
 
 
 
