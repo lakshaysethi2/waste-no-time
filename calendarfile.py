@@ -5,6 +5,7 @@ from types import SimpleNamespace
 def getStyle(tag:str):
     color_db = {
      'programming' : '#a4ed82',
+     'food' : 'yellow',
      'uber' : '#656664',
      'writing' : '#72dba1',
      'goal setting' : '#72dba1',
