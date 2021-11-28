@@ -179,6 +179,7 @@ def get_timesheet_html(tag,days,minimum_minutes=30):
     from_time = to_time -timedelta(days=int(days))
     res_json = getactivities_json(to_time,from_time)
     timesheet_units_html ="<style> .work_unit{ border: solid 2px } </style>"
+    timesheet_total = timedelta (hours=0)
     for activity in res_json['activities']:
         if activity['displayName'].lower() == tag.lower():
             act = get_simple_activity_obj(activity)
@@ -190,7 +191,8 @@ def get_timesheet_html(tag,days,minimum_minutes=30):
                             {act.notes}<br>
                             {act.duration}
                         </div>'''
-    return timesheet_units_html
+                timesheet_total +=act.duration
+    return timesheet_units_html + f"<br>{timesheet_total}"
 
 def get_report_for_tag(tag_name,start,end):
     to_time = end
