@@ -76,14 +76,16 @@ def get_activities_for_awareness(to_time,from_time):
             total += ua["totalTime"]
             interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
     total= round(total.total_seconds()/3600 ,2) 
-    interval_str += 'top %\n\n'
+    interval_str += '\ntop % - avg per day\n\n'
     for index,ua in enumerate(unique_activities):
         if index<5:
             percent = round(((ua["totalTime"].total_seconds()/3600)/total)*100,2)
-            interval_str += f'{percent}% {round(percent/100*24,1)}hr - {ua["name"] }  \n'
+            interval_str += f'{percent}% {round((ua["totalTime"].total_seconds()/get_total_seconds_between(from_time,to_time))*24,1)}hr - {ua["name"] }  \n'
     interval_str += f'total: {total}\n'
     return interval_str 
  
+def get_total_seconds_between(from_t,to_t):
+    return (from_t-to_t).total_seconds()
 
 def get_manictime_yesterday(bot,message):
     now = getNow()
