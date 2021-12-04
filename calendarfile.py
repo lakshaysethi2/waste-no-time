@@ -10,6 +10,7 @@ def getStyle(tag:str):
      'writing' : '#72dba1',
      'goal setting' : '#72dba1',
      'cleaning' : '#72dba1',
+     'linux' : '#72dba1',
      'reading' : '#72dba1',
      'udemy' : '#72dba1',
      'job apply' : '#72dba1',
