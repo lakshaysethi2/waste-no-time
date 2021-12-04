@@ -23,9 +23,10 @@ def getStyle(tag:str):
     color = color_db.get(tag.lower())
     return f'background-color:{color};'
 
-def get_calendar_html():
-
-    text = getLastfewHours(False,24) 
+def get_calendar_html(hours=24):
+    if hours == '':
+        hours = 24
+    text = getLastfewHours(False,int(hours)) 
     # this text we need to parse and write an html file 
     lines = text.split('\n')
     activities = []
