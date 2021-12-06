@@ -13,13 +13,18 @@ def getStyle(tag:str):
      'linux' : '#72dba1',
      'reading' : '#72dba1',
      'udemy' : '#72dba1',
+     'learning' : '#72dba1',
      'job apply' : '#72dba1',
      'manictime' : '#72dba1',
      'planning' : '#72dba1',
      'job apply' : '#72dba1',
      'ctek' : '#72dba1',
-     'sleep' : '#373837',
-     'bio' : "#c0e5eb"
+    #  'sleep' : '#373837',
+     'sleep' : 'red',
+     'trying or setting up' : 'red',
+     'data' : 'red',
+     'doing phone' : 'red',
+     'bio' : "pink"
     }
     color = color_db.get(tag.lower())
     return f'background-color:{color};'
