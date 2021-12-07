@@ -410,11 +410,11 @@ def conversation(message):
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
 		rm.__init__()
-		rm.add('how are you ?')
-	elif 'how are you' in  message.text.lower() :
-		text = 'Im good how about you?'
+		rm.add('What Should I do now ?')
+	elif 'What Should I do now' in  message.text.lower():
+		text = 'check todo.lak.nz or \n todo2.lak.nz \nor todo.lak.nz \nand bad.lak.nz \nand good.lak.nz '
 		rm.__init__()
-		rm.add('im good thanks','not good')
+		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
 		rm.__init__()
