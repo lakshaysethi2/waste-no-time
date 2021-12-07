@@ -411,8 +411,8 @@ def conversation(message):
 		text = 'Hi! :)'
 		rm.__init__()
 		rm.add('What Should I do now ?')
-	elif 'What Should I do now' in  message.text.lower():
-		text = 'check todo.lak.nz or \n todo2.lak.nz \nor todo.lak.nz \nand bad.lak.nz \nand good.lak.nz '
+	elif 'What Should I do now'.lower() in  message.text.lower():
+		text = 'check todo.lak.nz or \n\n todo2.lak.nz \n\nor todo3.lak.nz \n\nand bad.lak.nz \n\nand good.lak.nz '
 		rm.__init__()
 		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
