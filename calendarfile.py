@@ -24,6 +24,8 @@ def getStyle(tag:str):
      'trying or setting up' : 'red',
      'data' : 'red',
      'doing phone' : 'red',
+     'family' : 'red',
+     'shopping' : 'red',
      'bio' : "pink"
     }
     color = color_db.get(tag.lower())
