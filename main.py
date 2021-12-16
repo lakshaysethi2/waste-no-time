@@ -31,7 +31,7 @@ activities_markup = [
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4" # main
-# TOKEN = "1909326610:AAFh7rsp1dbD6XJ2IGmn5Og8ZfIuF6ZRmNk" # conversation bot
+# TOKEN = "5061167346:AAECJdb_-U9jQorMiJRsITRJBRyf-53Ctv4" # conversation bot
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
