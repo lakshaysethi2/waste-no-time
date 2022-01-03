@@ -19,6 +19,7 @@ def getStyle(tag:str):
      'manictime' : f'{green}',
      'planning' : f'{green}',
      'job apply' : f'{green}',
+     'walking' : f'{green}',
      'ctek' : f'{green}',
      'sleep' : '#373837',
      'trying or setting up' : 'red',
