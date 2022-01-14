@@ -182,11 +182,13 @@ def get_timesheet_html(tag,days,minimum_minutes=30):
     res_json = getactivities_json(to_time,from_time)
     timesheet_units_html ="<style> .work_unit{ border: solid 2px } </style>"
     timesheet_total = timedelta (hours=0)
+    filtered_act_array = []
     for activity in res_json['activities']:
         if activity['displayName'].lower() == tag.lower():
             act = get_simple_activity_obj(activity)
             act.notes = act.notes.replace("\n"," - - ")
             if act.duration.seconds > (60*int(minimum_minutes)):
+                filtered_act_array.append(act)
                 timesheet_units_html += f'''
                         <div class='work_unit'>
                             {get_nice_date_and_time(act.starttime)} - {get_nice_date_and_time(act.endtime)}: <br>
@@ -194,7 +196,37 @@ def get_timesheet_html(tag,days,minimum_minutes=30):
                             {act.duration}
                         </div>'''
                 timesheet_total +=act.duration
+    timesheet_units_html += get_graph_html_for_timesheet(filtered_act_array,tag)
     return timesheet_units_html + f"<br>{timesheet_total}"
+
+def get_graph_html_for_timesheet(act_arr, tag):
+    graph_html =""
+    labels = [get_nice_date_and_time(act.starttime) for act in act_arr]
+    graph_html += f'''
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" integrity="sha256-Y26AMvaIfrZ1EQU49pf6H4QzVTrOI8m9wQYKkftBt4s=" crossorigin="anonymous"></script>
+
+        <canvas id="myChart" width="400" height="400"></canvas>
+        <script>
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const labels = {labels}
+            const config ={{
+                type: 'bar',
+                backgroundColor: "yellow",
+                data: {{
+                labels: labels,
+                datasets: [{{
+                    label: '{tag}',
+                    data: {[(act.duration.seconds)/60 for act in act_arr]},
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }}]
+                }},
+                
+            }}
+            const myChart = new Chart(ctx, config);
+        </script>'''
+    return graph_html
 
 def get_report_for_tag(tag_name,start,end):
     to_time = end

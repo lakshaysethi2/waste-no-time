@@ -25,6 +25,7 @@ activities_markup = [
 	'/now bio',
 	'/now manictime',
 	'/now thinking',
+	'/now family',
 
 
 ]
