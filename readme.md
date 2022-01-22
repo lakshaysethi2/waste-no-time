@@ -21,3 +21,12 @@ https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendD
 
 
 https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendDocument?chat_id=1040271347&document=BQACAgQAAxkDAAJxcWGGIgVqqeCbMN7qeU-PVmbkUbsDAALIAgACy7k0UIEAAZ7XjJ_ozyIE
+
+# requirements
+
+firebase-admin \
+peewee \
+pyTelegramBotAPI \
+schedule \
+requests \
+reload 
