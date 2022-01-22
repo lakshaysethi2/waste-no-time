@@ -20,6 +20,7 @@ def getStyle(tag:str):
      'planning' : f'{green}',
      'job apply' : f'{green}',
      'walking' : f'{green}',
+     'ecl' : f'{green}',
      'ctek' : f'{green}',
      'sleep' : '#373837',
      'trying or setting up' : 'red',
