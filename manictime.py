@@ -170,6 +170,12 @@ def summary_top():
     html += "<div class='container'>"
     html += "<div class='row'>"
     html +="<pre class='col' >"
+
+    html += get_top_for_days(1)
+
+    html += "</pre>"
+  
+    html +="<pre class='col' >"
     html += get_top_for_days(7)
     html += "</pre>"
     html +="<pre class='col' >"
