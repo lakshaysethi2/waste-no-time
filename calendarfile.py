@@ -29,7 +29,10 @@ def getStyle(tag:str):
      'doing phone' : 'red',
      'family' : 'red',
      'shopping' : 'red',
-     'bio' : "pink"
+     'bio' : "pink",
+     'sick' : 'red',
+     'flatmates' : 'red',
+     'other people' : 'red',
     }
     color = color_db.get(tag.lower())
     return f'background-color:{color};'
