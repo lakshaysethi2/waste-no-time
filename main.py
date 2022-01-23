@@ -61,10 +61,17 @@ def new_goals(message):
 @bot.message_handler(commands=["top"])
 def manictime(message):
 	days= int(message.text.split('/top')[1])
-	get_top_for_days(bot,days)
+	text = get_top_for_days(days)
+	bot.send_message(LAKSHAY_CID,text=text)
 	
 	
-	
+
+@bot.message_handler(commands=["summary"])
+def summary(message):
+	html_string =  summary_top()
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'summary-{getNow()}.html', html_string)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 
 @bot.message_handler(commands=["mtc"])
 def manictime(message):

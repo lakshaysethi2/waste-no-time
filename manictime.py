@@ -118,13 +118,13 @@ def get_manictime_7days_total(bot,message,goal):
     bot.send_message(LAKSHAY_CID,text=text)
    
 
-def get_top_for_days(bot,days):
+def get_top_for_days(days):
     now = getNow()
     to_time = now
     text = ""
     from_time = now - timedelta(days=days)
     text += f'\nlast {days} days top activities\n'+ get_activities_for_awareness(to_time,from_time)
-    bot.send_message(LAKSHAY_CID,text=text)
+    return text
     
 
 
@@ -164,6 +164,36 @@ def get_notes(activity):
         return activity['textData'].split("<")[2].split('Notes>')[1].strip()
     except KeyError:
         return ""
+
+def summary_top():
+    html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap-grid.min.css" integrity="sha512-Xj2sd25G+JgJYwo0cvlGWXoUekbLg5WvW+VbItCMdXrDoZRWcS/d40ieFHu77vP0dF5PK+cX6TIp+DsPfZomhw==" crossorigin="anonymous" referrerpolicy="no-referrer" />'
+    html += "<div class='container'>"
+    html += "<div class='row'>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(7)
+    html += "</pre>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(14)
+    html += "</pre>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(21)
+    html += "</pre>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(30)
+    html += "</pre>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(60)
+    html += "</pre>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(90)
+    html += "</pre>"
+    html +="<pre class='col' >"
+    html += get_top_for_days(180)
+    html += "</pre>"
+    html += "</div>"
+    html += "</div>"
+
+    return html
 
 def get_simple_activity_obj(activity):
     act = SimpleNamespace()
