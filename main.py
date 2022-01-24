@@ -14,6 +14,8 @@ CHECKINTERVAL=2
 activities_markup = [
 	'/now driving',
 	'/now uber',
+	'/key ci, 2',
+	'/key ci, 20',
 	'/now programming',
 	'/now doing phone',
 	"/now sleep",
