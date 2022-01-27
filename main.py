@@ -102,6 +102,12 @@ def mt(message):
 		
 
 
+@bot.message_handler(func=lambda message: True, content_types=['audio', 'photo', 'voice', 'video', 'document', 'location', 'contact', ])
+def default_command(message):
+	if message.chat.id == -1001792881544:
+		link = f'https://t.me/c/1792881544/{message.id}'
+		bot.send_message(-1001792881544, f"here is your link:\n\n {link}")
+
 database = {}
 
 db.connect()
