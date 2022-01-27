@@ -119,10 +119,11 @@ def get_manictime_7days_total(bot,message,goal):
    
 
 def get_top_for_days(days):
+    seconds=int(24*60*60*days)
     now = getNow()
     to_time = now
     text = ""
-    from_time = now - timedelta(days=days)
+    from_time = now - timedelta(seconds=seconds)
     text += f'\nlast {days} days top activities\n'+ get_activities_for_awareness(to_time,from_time)
     return text
     
