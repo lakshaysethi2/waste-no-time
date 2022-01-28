@@ -1,0 +1,13 @@
+Description=manictime_service
+Wants=network.target
+After=network-online.target
+[Service]
+User=root
+Type=simple
+ExecStart=/home/lakshay_new/manictimeserver/ManicTimeServer
+Restart=on-failure
+RestartSec=10
+RuntimeMaxSec=600
+KillMode=process
+[Install]
+WantedBy=multi-user.target
