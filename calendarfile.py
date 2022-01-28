@@ -15,6 +15,7 @@ def getStyle(tag:str):
      'reading' : f'{green}',
      'udemy' : f'{green}',
      'learning' : f'{green}',
+     'money' : f'{green}',
      'job apply' : f'{green}',
      'manictime' : f'{green}',
      'planning' : f'{green}',
