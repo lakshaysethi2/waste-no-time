@@ -34,6 +34,8 @@ def getStyle(tag:str):
      'sick' : 'red',
      'flatmates' : 'red',
      'other people' : 'red',
+     'driving' : 'red',
+     'games' : 'red',
     }
     color = color_db.get(tag.lower())
     return f'background-color:{color};'
