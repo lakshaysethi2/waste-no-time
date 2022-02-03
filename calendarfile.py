@@ -11,6 +11,7 @@ def getStyle(tag:str):
      'writing' :  f'{green}',
      'goal setting' : f'{green}',
      'cleaning' : f'{green}',
+     'fliss' : f'red',
      'linux' : f'{green}',
      'reading' : f'{green}',
      'udemy' : f'{green}',
