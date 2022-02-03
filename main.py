@@ -71,7 +71,11 @@ def manictime(message):
 
 @bot.message_handler(commands=["summary"])
 def summary(message):
-	html_string =  summary_top()
+	try:
+		months = int(message.text.split('/summary')[1])
+		html_string =  get_summary_monthly_html(months)
+	except:
+		html_string =  summary_top()
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'summary-{getNow()}.html', html_string)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})

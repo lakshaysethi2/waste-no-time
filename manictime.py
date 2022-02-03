@@ -54,8 +54,7 @@ def getactivities_json(to_time,from_time):
 def get_activities_for_awareness(to_time,from_time):
     res_json = getactivities_json(to_time,from_time)
     unique_activities = []
-    interval_str =""
-    
+    interval_str = f'FROM {from_time.day}/{from_time.month}/{from_time.year}  TO {to_time.day}/{to_time.month}/{to_time.year}\n'
     for activity in res_json['activities']:
         duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
         if activity['displayName'] not in str(unique_activities):
@@ -166,8 +165,31 @@ def get_notes(activity):
     except KeyError:
         return ""
 
+BOOTSTRAP_STRING='<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap-grid.min.css" integrity="sha512-Xj2sd25G+JgJYwo0cvlGWXoUekbLg5WvW+VbItCMdXrDoZRWcS/d40ieFHu77vP0dF5PK+cX6TIp+DsPfZomhw==" crossorigin="anonymous" referrerpolicy="no-referrer" />'
+
+def get_top_activities_for_month(which_month):
+    now = getNow()
+    if which_month == 0:
+        from_time = now - timedelta(days=now.day)
+        to_time = now
+    elif which_month>0:
+        to_time= now -timedelta(days=now.day) - (which_month-1)* timedelta(days=30)
+        from_time = to_time - timedelta(days=30)
+    return get_activities_for_awareness(to_time,from_time)
+
+def get_summary_monthly_html(number_of_months):
+    """gives a html with month to month extimates"""
+    html = BOOTSTRAP_STRING
+    html += "<div class='container'><div class='row'>"
+    for x in range(0,number_of_months):
+        html+="<pre class='col' style='border:solid black 2px;' >"
+        html += get_top_activities_for_month(x)
+        html += "</pre>"
+    return html
+
 def summary_top():
-    html = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap-grid.min.css" integrity="sha512-Xj2sd25G+JgJYwo0cvlGWXoUekbLg5WvW+VbItCMdXrDoZRWcS/d40ieFHu77vP0dF5PK+cX6TIp+DsPfZomhw==" crossorigin="anonymous" referrerpolicy="no-referrer" />'
+    html = BOOTSTRAP_STRING
+    html+= "<style>.col\{ border:solid black 2px; \} </style>"
     html += "<div class='container'>"
     html += "<div class='row'>"
     html +="<pre class='col' >"
