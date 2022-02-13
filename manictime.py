@@ -51,7 +51,7 @@ def getactivities_json(to_time,from_time):
 
 
 
-def get_activities_for_awareness(to_time,from_time):
+def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
     res_json = getactivities_json(to_time,from_time)
     unique_activities = []
     interval_str = f'FROM {from_time.day}/{from_time.month}/{from_time.year}  TO {to_time.day}/{to_time.month}/{to_time.year}\n'
@@ -73,7 +73,8 @@ def get_activities_for_awareness(to_time,from_time):
     for index,ua in enumerate(unique_activities):
         if index < 10:
             total += ua["totalTime"]
-            interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
+            if not simple_summary_wanted:
+                interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
     total= round(total.total_seconds()/3600 ,2) 
     interval_str += '\ntop % - avg per day\n\n'
     for index,ua in enumerate(unique_activities):
@@ -167,7 +168,7 @@ def get_notes(activity):
 
 BOOTSTRAP_STRING='<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.1/css/bootstrap-grid.min.css" integrity="sha512-Xj2sd25G+JgJYwo0cvlGWXoUekbLg5WvW+VbItCMdXrDoZRWcS/d40ieFHu77vP0dF5PK+cX6TIp+DsPfZomhw==" crossorigin="anonymous" referrerpolicy="no-referrer" />'
 
-def get_top_activities_for_month(which_month):
+def get_top_activities_for_month(which_month,simple_summary_wanted=False):
     now = getNow()
     if which_month == 0:
         from_time = now - timedelta(days=now.day)
@@ -175,15 +176,15 @@ def get_top_activities_for_month(which_month):
     elif which_month>0:
         to_time= now -timedelta(days=now.day) - (which_month-1)* timedelta(days=30)
         from_time = to_time - timedelta(days=30)
-    return get_activities_for_awareness(to_time,from_time)
+    return get_activities_for_awareness(to_time,from_time,simple_summary_wanted)
 
-def get_summary_monthly_html(number_of_months):
+def get_summary_monthly_html(number_of_months,simple_summary_wanted=False):
     """gives a html with month to month extimates"""
     html = BOOTSTRAP_STRING
     html += "<div class='container'><div class='row'>"
     for x in range(0,number_of_months):
         html+="<pre class='col' style='border:solid black 2px;' >"
-        html += get_top_activities_for_month(x)
+        html += get_top_activities_for_month(x,simple_summary_wanted)
         html += "</pre>"
     return html
 

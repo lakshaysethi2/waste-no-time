@@ -25,8 +25,4 @@ https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendD
 # requirements
 
 firebase-admin \
-peewee \
-pyTelegramBotAPI \
-schedule \
-requests \
-reload 
+peewee pyTelegramBotAPI schedule requests reload 
