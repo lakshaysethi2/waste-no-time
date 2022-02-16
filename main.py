@@ -65,7 +65,7 @@ def new_goals(message):
 
 @bot.message_handler(commands=["top"])
 def manictime(message):
-	days= float(eval((message.text.split('/top')[1])/24))
+	days= float(eval(message.text.split('/top')[1])/24)
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
 	
