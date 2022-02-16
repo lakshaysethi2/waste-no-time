@@ -118,8 +118,8 @@ def get_manictime_7days_total(bot,message,goal):
     bot.send_message(LAKSHAY_CID,text=text)
    
 
-def get_top_for_days(days):
-    seconds=int(24*60*60*days)
+def get_top_for_days(hours):
+    seconds=int(60*60*hours)
     now = getNow()
     to_time = now
     text = ""
