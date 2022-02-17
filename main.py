@@ -424,6 +424,14 @@ def math(message):
 	text = eval(exp)
 	bot.send_message(LAKSHAY_CID,text=text)
 
+@bot.message_handler(commands=['csv'])
+def timesheet(message):
+	[tag,days,*args] = message.text.split('/csv ')[1].split(",")
+	csv_string = get_timesheet_csv(tag,days,*args)
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'{tag}-timesheet-csv-last-{int(days)}-days.csv', csv_string)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+
 @bot.message_handler(commands=['timesheet'])
 def timesheet(message):
 	[tag,days,*args] = message.text.split('/timesheet ')[1].split(",")	

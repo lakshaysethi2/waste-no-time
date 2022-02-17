@@ -236,6 +236,24 @@ def get_simple_activity_obj(activity):
 def get_nice_date_and_time(datetime):
     return f'{datetime.day}/{datetime.month}/{datetime.year} - {datetime.hour}:{datetime.minute}'
 
+def get_timesheet_csv(tag,days,minimum_minutes=30):
+    to_time = getNow()
+    from_time = to_time -timedelta(days=int(days))
+    res_json = getactivities_json(to_time,from_time)
+    timesheet_units_csv ="from,till,duration,notes\n"
+    timesheet_total = timedelta (hours=0)
+    filtered_act_array = []
+    for activity in res_json['activities']:
+        if activity['displayName'].lower() == tag.lower():
+            act = get_simple_activity_obj(activity)
+            act.notes = act.notes.replace("\n"," - - ")
+            if act.duration.seconds > (60*int(minimum_minutes)):
+                filtered_act_array.append(act)
+                timesheet_units_csv += f'{act.starttime},{act.endtime},{act.duration},{act.notes}\n'
+                timesheet_total +=act.duration
+    timesheet_total = round(timesheet_total.total_seconds()/3600 ,2)
+    return timesheet_units_csv + f"TOTAL: {timesheet_total} hours"
+
 def get_timesheet_html(tag,days,minimum_minutes=30):
     to_time = getNow()
     from_time = to_time -timedelta(days=int(days))
