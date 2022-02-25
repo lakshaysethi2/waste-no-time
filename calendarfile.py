@@ -7,7 +7,8 @@ def getStyle(tag:str):
     color_db = {
      'programming' : f'{green}',
      'food' : 'yellow',
-     'uber' : '#656664',
+     # 'uber' : '#656664',
+     'uber' : f'{green}',
      'writing' :  f'{green}',
      'goal setting' : f'{green}',
      'cleaning' : f'{green}',
