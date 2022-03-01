@@ -22,6 +22,7 @@ activities_markup = [
 	'/now cleaning',
 	'/now programming',
 	'/now doing phone',
+	'/now goal setting',
 	"/now sleep",
 	"/now pre sleep",
 	"/now food",
