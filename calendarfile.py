@@ -77,14 +77,14 @@ def getHeight(dur_string):
 
 
 def getHtml(activities):
-    act_div = "<div class='col-4'>"
+    act_div = "<div class='col-sm-12 col-md-6 col-lg-4'>"
     for act in activities:
         name = act.tag
         height = getHeight(act.duration)
         duration = act.duration
         dur_int = int(duration.split(":")[0])
         if name == "sleep" and dur_int > 2  : act_div += f"</div> \
-            <div class='col-4'>"
+            <div class='col-sm-12 col-md-6 col-lg-4'>"
 
         act_div += f'''<div style="height:{height}px; {act.style}" class = "activity-aware act-1"> 
                             {act.from_time} - {name}<br>   
