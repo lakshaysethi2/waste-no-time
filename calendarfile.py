@@ -111,7 +111,7 @@ def getHtml(activities):
                 .act-1:hover, .act-1:active{{height:520px!important;width:50%;margin-left:30%}}
                 .layer-on-top-container{{position: relative;}}
                 .layer-on-top {{position: absolute;right: 14px;width: 63px;height: -webkit-fill-available;background-color: rgb(178 239 177 / 15%);border-left: dotted 39px black;z-index: 2;}}
-                .act-1 {{ border:solid 1px; overflow:hidden;position: relative; }}
+                .act-1 {{min-height: 35px; border:solid 1px; overflow:hidden;position: relative; }}
                .to-time{{  position: absolute; bottom: 0;  }}
             </style>
             <div class="container">
