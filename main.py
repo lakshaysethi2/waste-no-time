@@ -387,7 +387,7 @@ def check(message = 'hi'):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
-			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been VOTING for?'
+			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been INVESTING in ?'
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
 
