@@ -80,7 +80,7 @@ def manictime(message):
 def manictime(message):
 	now = getNow()
 	today = now - timedelta(hours = now.hour, minutes = now.minute)
-	today_morning = today + datetime.timedelta(hours=8)
+	today_morning = today + timedelta(hours=8)
 	yesterday_eve = today_morning - timedelta(hours=15)
 	from_time = yesterday_eve
 	to_time = today_morning
