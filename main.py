@@ -76,6 +76,16 @@ def manictime(message):
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
 	
+@bot.message_handler(commands=["evening"])
+def manictime(message):
+	now = getNow()
+	today = now - timedelta(hours = now.hour, minutes = now.minute)
+	today_morning = today + datetime.timedelta(hours=8)
+	yesterday_eve = today_morning - timedelta(hours=15)
+	from_time = yesterday_eve
+	to_time = today_morning
+	text = get_activities_for_awareness(to_time,from_time)
+	bot.send_message(LAKSHAY_CID,text=text)
 	
 
 @bot.message_handler(commands=["summary"])
