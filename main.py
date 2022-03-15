@@ -78,8 +78,10 @@ def manictime(message):
 	
 @bot.message_handler(commands=["evening"])
 def manictime(message):
+	try: days= message.text.split('/evening')[1] 
+	except: days = 1
 	now = getNow()
-	today = now - timedelta(hours = now.hour, minutes = now.minute)
+	today = now - timedelta(hours = now.hour, minutes = now.minute) - timedelta(days=(int(days)-1))
 	today_morning = today + timedelta(hours=8)
 	yesterday_eve = today_morning - timedelta(hours=15)
 	from_time = yesterday_eve
