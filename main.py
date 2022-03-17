@@ -472,7 +472,7 @@ def conversation(message):
 		rm.__init__()
 		rm.add('What Should I do now ?')
 	elif 'What Should I do now'.lower() in  message.text.lower():
-		text = 'check todo.lak.nz or \n\n todo2.lak.nz \n\nor todo3.lak.nz \n\nand bad.lak.nz \n\nand good.lak.nz '
+		text =  database['what should I do now']
 		rm.__init__()
 		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
