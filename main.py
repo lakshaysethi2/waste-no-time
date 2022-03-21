@@ -111,6 +111,17 @@ def simple_summary(message):
 	files = {'document': (f'SIMPLE-summary-{getNow()}.html', html_string)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 
+@bot.message_handler(commands=["sscsv"])
+def simple_summary(message):	
+	"""CSV simple summary in months"""
+	months = int(message.text.split('/sscsv')[1])
+	csv_string =  get_summary_monthly_csv(months,simple_summary_wanted=False)
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'summary-{getNow()}.csv', csv_string)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+
+
+
 @bot.message_handler(commands=["mtc"])
 def manictime(message):
 	goal = f'''Goal \n7:30:00  -  sleep\n4:00:00  -  Programming\n3:30:30  -  Job Apply\n3:00:00  -  Uber    '''

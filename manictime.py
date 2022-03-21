@@ -1,5 +1,6 @@
 
 from datetime import timezone
+import re
 from operator import itemgetter
 import math
 SERVER_LINK = 'https://manictime.lak.nz'
@@ -187,6 +188,24 @@ def get_summary_monthly_html(number_of_months,simple_summary_wanted=False):
         html += get_top_activities_for_month(x,simple_summary_wanted)
         html += "</pre>"
     return html
+
+def get_summary_monthly_csv(number_of_months,simple_summary_wanted=False):
+    """gives a csv with month to month extimates"""
+    csv = "from-to,top1,top2,top3,top4,top5,top6,top7,top8,top9,top10\n"
+    list_of_fromtos = []
+    # populate the list of from tos
+    for x in range(0 , number_of_months):
+        fromto={}
+        fromto['name']= f"month {x}"
+        fromto["list_of_acts"] =  re.findall (" -  .*",get_top_activities_for_month(x,simple_summary_wanted))
+        list_of_fromtos.append(fromto)
+
+    for fromto in list_of_fromtos:
+        csv += f'{fromto},'
+        for act in fromto["list_of_acts"]:
+            csv += f"{act},"
+        csv+='\n'
+    return csv
 
 def summary_top():
     html = BOOTSTRAP_STRING
