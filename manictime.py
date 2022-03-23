@@ -197,7 +197,7 @@ def get_summary_monthly_csv(number_of_months,simple_summary_wanted=False):
     for x in range(0 , number_of_months):
         fromto={}
         fromto['name']= f"month {x}"
-        fromto["list_of_acts"] =  re.findall (" -  .*",get_top_activities_for_month(x,simple_summary_wanted))
+        fromto["list_of_acts"] =  re.findall ("m  -  .*",get_top_activities_for_month(x,simple_summary_wanted))
         list_of_fromtos.append(fromto)
 
     for fromto in list_of_fromtos:
