@@ -41,7 +41,11 @@ def get_token(username,password):
 
 def getactivities_json(to_time,from_time):
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
-    timelines = json.loads(response.text)
+    try:
+        timelines = json.loads(response.text)
+    except:
+        sleep(10)
+        timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
         if timeline['timelineType']['typeName'] =="ManicTime/Tags":
             tags_timeline_id = timeline['timelineId']
