@@ -76,19 +76,36 @@ def manictime(message):
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
 	
-@bot.message_handler(commands=["evening"])
-def manictime(message):
-	try: days= message.text.split('/evening')[1] 
-	except: days = 1
+def get_evening_text(days):
 	now = getNow()
 	today = now - timedelta(hours = now.hour, minutes = now.minute) - timedelta(days=(int(days)-1))
 	today_morning = today + timedelta(hours=8)
 	yesterday_eve = today_morning - timedelta(hours=15)
 	from_time = yesterday_eve
 	to_time = today_morning
-	text = get_activities_for_awareness(to_time,from_time)
+	return get_activities_for_awareness(to_time,from_time)
+
+@bot.message_handler(commands=["evening"])
+def manictime(message):
+	try: days= message.text.split('/evening')[1] 
+	except: days = 1
+	text = get_evening_text(days)
 	bot.send_message(LAKSHAY_CID,text=text)
-	
+
+@bot.message_handler(commands=["eveningcsv"])
+def manictime(message):
+	try: 
+		days= message.text.split('/eveningcsv')[1] 
+		if days == '':
+			days = 1
+	except: days = 1
+	csv_string = "day,top1,top2,top3\n"
+	for x in range (0,int(days)):
+		csv_string += str(x) + "," + convert_to_csv(get_evening_text(x))
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'eveningcsv-{getNow()}.csv', csv_string)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+
 
 @bot.message_handler(commands=["summary"])
 def summary(message):

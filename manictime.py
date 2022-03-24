@@ -208,6 +208,18 @@ def get_summary_monthly_csv(number_of_months,simple_summary_wanted=False):
         csv+='\n'
     return csv
 
+def convert_to_csv(standard_top_txt):
+    arr = re.findall("m  -  .*",standard_top_txt)
+    new_arr=[]
+    for act in arr:
+        stripped = act.split("m  - ")[1]
+        new_arr.append(stripped)
+    csv = ""
+    for act in new_arr:
+        csv +=act+","
+    csv+='\n'
+    return csv
+
 def summary_top():
     html = BOOTSTRAP_STRING
     html+= "<style>.col\{ border:solid black 2px; \} </style>"
