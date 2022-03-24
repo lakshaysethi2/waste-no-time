@@ -1,6 +1,7 @@
 
 from datetime import timezone
 import re
+from time import sleep
 from operator import itemgetter
 import math
 SERVER_LINK = 'https://manictime.lak.nz'
