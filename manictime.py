@@ -81,7 +81,7 @@ def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
     for index,ua in enumerate(unique_activities):
         if index<6:
             dur_hours=round((ua["totalTime"].total_seconds()/get_total_seconds_between(from_time,to_time))*24,1)
-            percent = (dur_hours/24)*100
+            percent = round( (dur_hours/24)*100,2 )
             interval_str += f'{percent}% {dur_hours}hr - {ua["name"] }  \n'
     interval_str += f'total: {total}\n'
     return interval_str 
