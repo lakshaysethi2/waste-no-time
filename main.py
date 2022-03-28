@@ -132,12 +132,12 @@ def simple_summary(message):
 def simple_summary(message):	
 	"""CSV simple summary in months"""
 	months = int(message.text.split('/sscsv')[1])
-	csv_string =  get_summary_monthly_csv(months,simple_summary_wanted=False)
+	csv_string = "month,top1,top2,top3\n"
+	for x in range (0,int(months)):
+		csv_string += str(x) + "," + convert_to_csv(get_top_activities_for_month(x))
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
-	files = {'document': (f'summary-{getNow()}.csv', csv_string)}
+	files = {'document': (f'monthlycsv-{getNow()}.csv', csv_string)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
-
-
 
 @bot.message_handler(commands=["mtc"])
 def manictime(message):
