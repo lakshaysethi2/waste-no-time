@@ -1,0 +1,8 @@
+# firebase-admin
+peewee
+pyTelegramBotAPI
+# pytz
+# reload
+requests
+schedule
+# tzlocal

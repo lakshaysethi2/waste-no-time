@@ -57,10 +57,9 @@ def getactivities_json(to_time,from_time):
 
 
 
-def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
+def get_unique_activities(to_time,from_time,simple_summary_wanted=False):
     res_json = getactivities_json(to_time,from_time)
     unique_activities = []
-    interval_str = f'FROM {from_time.day}/{from_time.month}/{from_time.year}  TO {to_time.day}/{to_time.month}/{to_time.year}\n'
     for activity in res_json['activities']:
         duration = datetime.fromisoformat(activity['endTime']) - datetime.fromisoformat(activity['startTime'])
         if activity['displayName'] not in str(unique_activities):
@@ -71,10 +70,12 @@ def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
             for ua in unique_activities:
                 if ua['name'] == activity['displayName']:
                     ua['totalTime'] += duration
-        
-        
-    
     unique_activities = sorted(unique_activities, key=itemgetter('totalTime'), reverse=True)
+    return unique_activities
+
+def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
+    interval_str = f'FROM {from_time.day}/{from_time.month}/{from_time.year}  TO {to_time.day}/{to_time.month}/{to_time.year}\n'
+    unique_activities = get_unique_activities(to_time,from_time,simple_summary_wanted)
     total = timedelta(hours=0)
     for index,ua in enumerate(unique_activities):
         if index < 10:
@@ -525,5 +526,14 @@ def update_activity_start(activity,new_start_time,delta):
 #fix_manictime()
             
 
+def get_time_spent_today(tag):
+    now = getNow()
+    from_time = now - timedelta(hours=now.hour,minutes=now.minute,seconds=now.second)
+    to_time = now
+    unique_acts = get_unique_activities(to_time,from_time)
+    for act in unique_acts:
+        if (act['name']).strip().lower() == tag.strip().lower():
+            return act['totalTime']
+    return ""
 
    

@@ -397,6 +397,14 @@ def now(message):
 			create_activity_tag(tag,"",datetimeObj=dto,duration=4)
 		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 		fixmt(message)
+		time_spent_on_tag = get_time_spent_today(tag)
+		bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True)
+
+@bot.message_handler(commands=['budget'])
+def budget(message):
+	tag = message.text.split('budget')[1]
+	time_spent_on_tag = get_time_spent_today(tag)
+	bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today')
 
 def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false
