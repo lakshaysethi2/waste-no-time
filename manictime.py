@@ -18,7 +18,7 @@ try:
 except:
     from .keyvalue import *
 
-newzealnd = 13
+newzealnd = 12
 headers = {
     'Accept': 'application/vnd.manictime.v2+json',
     'Authorization': f'Bearer {AUTH_TOKEN}',
