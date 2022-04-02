@@ -390,12 +390,12 @@ def now(message):
 	if len(a)>1:
 		notes = a[1]
 		notes+= get_formated_time(getNow())
-	dto = getNow() -timedelta(seconds=5)
-	if LAKSHAY_CID == 1040271347:
+	dto = getNow()
+	if LAKSHAY_CID == message.chat.id:
 		if notes !='':
-			create_activity_tag(tag,notes,datetimeObj=dto,duration=4)
+			create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
 		else:
-			create_activity_tag(tag,"",datetimeObj=dto,duration=4)
+			create_activity_tag(tag,"",datetimeObj=dto,duration=1)
 		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 		fixmt(message)
 		time_spent_on_tag = get_time_spent_today(tag)

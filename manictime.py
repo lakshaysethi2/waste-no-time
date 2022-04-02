@@ -432,9 +432,9 @@ def getLastfewHours(notes_needed,hours_wanted=12):
 def gettimeofact(act):
     return datetime.fromisoformat(act['startTime'])
 
-def fix_manictime():
+def fix_manictime(minutes=30):
     to_time = getNow()
-    from_time = to_time - timedelta(hours=20)
+    from_time = to_time - timedelta(minutes=minutes)
     res_json = getactivities_json(to_time,from_time)
     activities_array = (res_json['activities'])
     sorted_act_array = newlist = sorted(activities_array, key=lambda x: x['endTime'] )
