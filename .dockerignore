@@ -1,0 +1,9 @@
+venv/
+tvenv/
+.env
+*.pyc
+*.db
+__pycache__/
+.vscode/
+sa.json
+.git/
