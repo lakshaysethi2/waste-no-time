@@ -21,4 +21,4 @@ jobs:
       - name: install requirements
         run: ssh ls@${{secrets.HOST}} /home/ls/tgb-venv/bin/pip install -r /home/ls/tg/requirements.txt
       - name: restart service
-        run: ssh ls@${{secrets.HOST}} sudo systemctl restart telegram-bot
+        run: echo paused && exit 1 #ssh ls@${{secrets.HOST}} sudo systemctl restart telegram-bot
