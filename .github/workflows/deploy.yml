@@ -18,7 +18,7 @@ jobs:
         run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
       - name: copy all
         run: scp -r ./* ls@${{secrets.HOST}}:/home/ls/tg/
-      - name: install requirements
-        run: ssh ls@${{secrets.HOST}} /home/ls/tgb-venv/bin/pip install -r /home/ls/tg/requirements.txt
+      - name: build new image
+        run: ssh ls@${{secrets.HOST}} sudo docker build -t tgb /home/ls/tg
       - name: restart service
-        run: echo paused && exit 1 #ssh ls@${{secrets.HOST}} sudo systemctl restart telegram-bot
+        run: "ssh ls@${{secrets.HOST}} sudo docker rm -f tgb && sudo docker run -d -v /keyval.db:/app/keyval.db --name tgb tgb"
