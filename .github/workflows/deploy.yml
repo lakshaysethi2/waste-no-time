@@ -19,8 +19,8 @@ jobs:
       - name: copy all
         run: scp -r ./* ls@${{secrets.HOST}}:/home/ls/tg/
       - name: build new image
-        run: ssh ls@${{secrets.HOST}} sudo newgrp docker && ssh ls@${{secrets.HOST}} docker build -t lak.nz/tgb:local /home/ls/tg
+        run: ssh ls@${{secrets.HOST}} sudo docker build -t lak.nz/tgb:local /home/ls/tg
       - name: remove old container
-        run: ssh ls@${{secrets.HOST}} docker rm -f tgb
+        run: ssh ls@${{secrets.HOST}} sudo docker rm -f tgb
       - name: init a new container
-        run: "ssh ls@${{secrets.HOST}} docker run -d -v /keyval.db:/app/keyval.db --name tgb lak.nz/tgb:local"
+        run: "ssh ls@${{secrets.HOST}} sudo docker run -d -v /keyval.db:/app/keyval.db --name tgb lak.nz/tgb:local"
