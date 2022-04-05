@@ -71,11 +71,22 @@ def new_goals(message):
 	bot.send_message(LAKSHAY_CID,text = 'which goal do you want to work on?')#,reply_markup=rm)
 
 
+def modify_add_checkbox(text):
+	new_text = "<pre>"
+	for line in text.split('\n'):
+		new_text += line + "<input type='checkbox'>"+"\n"
+	new_text += "</pre>"
+	return new_text
+
 @bot.message_handler(commands=["top"])
 def manictime(message):
 	days= float(eval(message.text.split('/top')[1])/24)
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
+	modified_text=modify_add_checkbox(text)
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'top-{getNow()}.html', modified_text)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 	
 def get_evening_text(days):
 	now = getNow()
