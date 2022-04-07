@@ -74,7 +74,8 @@ def new_goals(message):
 def modify_add_checkbox(text):
 	new_text = "<pre>"
 	for line in text.split('\n'):
-		new_text += line + "<input type='checkbox'>"+"\n"
+		new_text += line + "<input type='checkbox'>"
+		new_text+= '<textarea></textarea>'+"\n"
 	new_text += "</pre>"
 	return new_text
 
