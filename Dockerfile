@@ -1,5 +1,5 @@
 FROM python:alpine
 COPY . /app
 WORKDIR /app
-RUN pip install -r requirements-real.txt
-CMD ["python","/app/main.py"]
+RUN pip install -r requirements-real.txt && chmod +x ./start.sh
+CMD ["/bin/bash" , "./start.sh"]
