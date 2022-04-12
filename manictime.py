@@ -321,7 +321,7 @@ def get_graph_html_for_timesheet(act_arr, tag):
     labels = [ ]
     data = [ ]
     for act in act_arr:
-        lables.append( get_nice_date_and_time(act.starttime))
+        labels.append( get_nice_date_and_time(act.starttime))
         data.append((act.duration.seconds)/60)
 
     graph_html += f'''
@@ -372,7 +372,8 @@ def group_by_day(act_arr):
         for act in act_arr:
             if act.starttime.day  == grouped_act.starttime.day and grouped_act.starttime.month==act.starttime.month and grouped_act.starttime.year==act.starttime.year:
                 grouped_act.duration += timedelta(seconds=act.duration.seconds)
-    return grouped_by_day_act_arr.sort(key=sort_criteria_group_by_day)
+    grouped_by_day_act_arr.sort(key=sort_criteria_group_by_day)
+    return grouped_by_day_act_arr
 
 def get_report_for_tag(tag_name,start,end):
     to_time = end
