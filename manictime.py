@@ -318,7 +318,12 @@ def get_timesheet_html(tag,days,minimum_minutes=30):
 def get_graph_html_for_timesheet(act_arr, tag):
     act_arr = group_by_day(act_arr)
     graph_html =""
-    labels = [get_nice_date_and_time(act.starttime) for act in act_arr]
+    labels = [ ]
+    data = [ ]
+    for act in act_arr:
+        lables.append( get_nice_date_and_time(act.starttime))
+        data.append((act.duration.seconds)/60)
+
     graph_html += f'''
         <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" integrity="sha256-Y26AMvaIfrZ1EQU49pf6H4QzVTrOI8m9wQYKkftBt4s=" crossorigin="anonymous"></script>
 
@@ -333,7 +338,7 @@ def get_graph_html_for_timesheet(act_arr, tag):
                 labels: labels,
                 datasets: [{{
                     label: '{tag}',
-                    data: {[(act.duration.seconds)/60 for act in act_arr]},
+                    data: {data},
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
@@ -352,8 +357,10 @@ def get_distinct_days(act_arr):
         days.append(act.starttime)
     return set(days)
 
-def group_by_day(act_arr):
+def sort_criteria_group_by_day(datetimeobj):
+  return datetimeobj.starttime.timestamp()
 
+def group_by_day(act_arr):
     grouped_by_day_act_arr = []
     distinct_days = get_distinct_days(act_arr)
     for day in distinct_days:
@@ -365,7 +372,7 @@ def group_by_day(act_arr):
         for act in act_arr:
             if act.starttime.day  == grouped_act.starttime.day and grouped_act.starttime.month==act.starttime.month and grouped_act.starttime.year==act.starttime.year:
                 grouped_act.duration += timedelta(seconds=act.duration.seconds)
-    return grouped_by_day_act_arr
+    return grouped_by_day_act_arr.sort(key=sort_criteria_group_by_day)
 
 def get_report_for_tag(tag_name,start,end):
     to_time = end
