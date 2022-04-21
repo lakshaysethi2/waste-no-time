@@ -21,6 +21,8 @@ activities_markup = [
 	'/key ci, 20',
 	'/now ctek',
 	'/now cleaning',
+	'/now linux',
+	'/top 24*7',
 	'/now programming',
 	'/now doing phone',
 	'/now goal setting',
