@@ -351,8 +351,10 @@ def new_tag(message):
 		now = getNow()	
 		dto = now - timedelta(minutes=int(message.text.split(",")[2]))
 		duration = int(message.text.split(",")[3]) *60
-		create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration)
-		bot.send_message(LAKSHAY_CID,text=f"{tag_name} tag made",disable_notification=True)
+		if create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration):
+			bot.send_message(LAKSHAY_CID,text=f"{tag_name} tag made",disable_notification=True)
+		else:
+			bot.send_message(LAKSHAY_CID,text=f"Error please try again",disable_notification=True)
 	except Exception as e:
 		logging.exception('Caught an error')
 		bot.send_message(LAKSHAY_CID,text= f"{e} tn nte ago durmin")
@@ -405,13 +407,18 @@ def now(message):
 	dto = getNow()
 	if LAKSHAY_CID == message.chat.id:
 		if notes !='':
-			create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
+			pass
 		else:
-			create_activity_tag(tag,"",datetimeObj=dto,duration=1)
-		bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
-		fixmt(message)
-		time_spent_on_tag = get_time_spent_today(tag)
-		bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True)
+			notes=""
+		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
+			bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
+			fixmt(message)
+			time_spent_on_tag = get_time_spent_today(tag)
+			bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True)
+		else:
+			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True)
+			create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
+		
 
 @bot.message_handler(commands=['budget'])
 def budget(message):
@@ -430,7 +437,7 @@ def there_is_no_tag(from_time,to_time)->bool:
 @bot.message_handler(commands=['fixmt'])
 def fixmt(message):
 	fix_manictime()
-	text = "all fixed"
+	text = "attempted fix all"
 	bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
 
 

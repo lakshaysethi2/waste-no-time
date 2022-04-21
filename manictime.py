@@ -400,6 +400,8 @@ def get_report_for_tag(tag_name,start,end):
 
 def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
+    if response.status_code != 200:
+        return False
     timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
         if timeline['timelineType']['typeName'] =="ManicTime/Tags":
@@ -424,6 +426,9 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
     }
     response = requests.post(url=f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities',data=post_json,headers=headers1)
     print(response.text)
+    if response.status_code == 200:
+        return True
+    return False
 
 
 
