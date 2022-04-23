@@ -44,6 +44,7 @@ activities_markup = [
 	'/now ecl',
 	'/now YouTube',
 	'/now shopping',
+	'/now data',
 
 
 ]
