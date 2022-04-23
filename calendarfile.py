@@ -32,7 +32,7 @@ def getStyle(tag:str):
      'data' : 'red',
      'doing phone' : 'red',
      'family' : 'red',
-     'shopping' : 'red',
+     #'shopping' : 'red',
      'bio' : "pink",
      'sick' : 'red',
      'flatmates' : 'red',
