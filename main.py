@@ -37,7 +37,6 @@ activities_markup = [
 	'/now reading',
 	'/now udemy',
 	'/now bio',
-	'/now eye candy',
 	'/now manictime',
 	'/now thinking',
 	'/now family',
