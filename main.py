@@ -43,6 +43,7 @@ activities_markup = [
 	'/now family',
 	'/now ecl',
 	'/now YouTube',
+	'/now shopping',
 
 
 ]
