@@ -16,6 +16,7 @@ activities_markup = [
 	'/now uber',
 	'/now walking',
 	'/now exercise',
+	'/key ci, 0',
 	'/key ci, 2',
 	'/key mt, on',
 	'/key mt, off',
