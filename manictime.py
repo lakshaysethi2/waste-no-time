@@ -78,7 +78,7 @@ def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
     unique_activities = get_unique_activities(to_time,from_time,simple_summary_wanted)
     total = timedelta(hours=0)
     for index,ua in enumerate(unique_activities):
-        if index < 10:
+        if index < 15:
             total += ua["totalTime"]
             if not simple_summary_wanted:
                 interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
