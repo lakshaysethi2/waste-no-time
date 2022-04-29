@@ -25,6 +25,7 @@ def getStyle(tag:str):
      'job apply' : f'{green}',
      'walking' : f'{green}',
      'plantme' : f'{green}',
+     'exercise' : f'{green}',
      'ecl' : f'{green}',
      'ctek' : f'{green}',
      'sleep' : '#373837',
