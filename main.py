@@ -10,7 +10,7 @@ import threading
 from assistant import *
 from calendarfile import get_calendar_html
 
-CHECKINTERVAL=2
+CHECKINTERVAL=30
 activities_markup = [
 	'/now driving',
 	'/now uber',
@@ -643,8 +643,8 @@ def run_continuously(interval=5):
 def stsrt():
 	#bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
 	rc = run_continuously()
-	schedule.every(CHECKINTERVAL).minutes.do(check)
-	schedule.every(5).seconds.do(dailynotification)
+	schedule.every(CHECKINTERVAL).seconds.do(check)
+	#schedule.every(5).seconds.do(dailynotification)
 	while 1:
 		try:
 			#telebot.apihelper.RETRY_ON_ERROR = True
