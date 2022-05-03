@@ -80,7 +80,7 @@ def new_goals(message):
 
 
 def modify_add_checkbox(text):
-	new_text = "<head><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body> <pre>"
+	new_text = "<head><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body> <pre>"
 	for line in text.split('\n'):
 		new_text += line + "<input type='checkbox'>"
 		new_text+= '<textarea></textarea>'+"\n"
