@@ -47,6 +47,7 @@ activities_markup = [
 	'/now shopping',
 	'/now data',
 	'/now money',
+	'/now sick',
 
 
 ]
