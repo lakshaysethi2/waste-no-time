@@ -649,8 +649,6 @@ def run_continuously(interval=5):
 
 
 def stsrt():
-	set_value("ci", '1')
-	set_value("mt", 'on')
 	set_value("last_used", '/now manictime')
 
 	#bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
