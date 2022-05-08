@@ -211,7 +211,10 @@ updateDatabase()
 
 def get_value(key):
 	updateDatabase()
-	return database[f'{key}']
+	try:
+		return database[f'{key}']
+	except:
+		return None
      
 
 
@@ -259,7 +262,7 @@ def keyvalue(message):
 		except KeyError:
 			text = 'not found'
 	rm.__init__()
-	rm.add('/check')
+	rm.add('thanks')
 	for key in database.keys():
 		rm.add('/key '+str(key))
 	bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
@@ -549,6 +552,9 @@ def conversation(message):
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
 		rm.__init__()
+		last_used = str(get_value('last_used'))
+		if last_used is not None:
+			rm.add(last_used)
 		for activity in activities_markup:
 			rm.add(activity)
 
@@ -649,8 +655,12 @@ def run_continuously(interval=5):
 
 
 def stsrt():
-	set_value("last_used", '/now manictime')
-
+	if get_value('last_used') is None:
+		set_value("last_used", '/now manictime')
+	if get_value('ci') is None:
+		set_value("ci", '2')
+	if get_value('mt') is None:
+		set_value("mt", 'on')
 	#bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).seconds.do(check)
