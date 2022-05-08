@@ -259,7 +259,7 @@ def keyvalue(message):
 		except KeyError:
 			text = 'not found'
 	rm.__init__()
-	rm.add('thanks')
+	rm.add('/check')
 	for key in database.keys():
 		rm.add('/key '+str(key))
 	bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
