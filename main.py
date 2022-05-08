@@ -54,7 +54,7 @@ activities_markup = [
 # import os
 # TOKEN = os.getenv('TOKEN')
 TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4" # main
-# TOKEN = "5061167346:AAECJdb_-U9jQorMiJRsITRJBRyf-53Ctv4" # conversation bot
+#TOKEN = "5061167346:AAECJdb_-U9jQorMiJRsITRJBRyf-53Ctv4" # conversation bot
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -408,6 +408,8 @@ def say_this(message):
 
 @bot.message_handler(commands=['now'])
 def now(message):
+	last_used=message.text
+	set_value('last_used', last_used)
 	tag = message.text.split('now')[1].split(',')[0]
 	a=message.text.split('now')[1].split(',')
 	notes=''
@@ -458,6 +460,9 @@ def check(message = 'hi'):
 
 	if database['mt'] == 'on':
 		rm.__init__()
+		last_used = str(get_value('last_used'))
+		if last_used is not None:
+			rm.add(last_used)
 		for act in activities_markup:
 			rm.add(act)
 		now = getNow()
@@ -644,6 +649,10 @@ def run_continuously(interval=5):
 
 
 def stsrt():
+	set_value("ci", '1')
+	set_value("mt", 'on')
+	set_value("last_used", '/now manictime')
+
 	#bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).seconds.do(check)
