@@ -10,6 +10,7 @@ def getStyle(tag:str):
      # 'uber' : '#656664',
      'uber' : f'{green}',
      'gamming' : f'{green}',
+     'marketing' : f'{green}',
      'writing' :  f'{green}',
      'goal setting' : f'{green}',
      'cleaning' : f'{green}',
