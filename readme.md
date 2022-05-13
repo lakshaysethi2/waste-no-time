@@ -26,3 +26,6 @@ https://api.telegram.org/bot1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4/sendD
 
 firebase-admin \
 peewee pyTelegramBotAPI schedule requests reload 
+
+#### Python TDD course used
+https://www.linkedin.com/learning/unit-testing-and-test-driven-development-in-python/example-tdd-session-the-fizzbuzz-kata?autoplay=true&u=92735081

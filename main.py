@@ -221,8 +221,8 @@ def get_value(key):
 def set_value(key,value):
 	text = "new created"
 	try:
-		kvp= KeyValuePair.get(key = key)
-		kvp.value = value
+		kvp= KeyValuePair.get(key = str(key))
+		kvp.value = str(value)
 		kvp.save()
 		text = "updated"
 	except Exception as e:
@@ -412,7 +412,9 @@ def say_this(message):
 @bot.message_handler(commands=['now'])
 def now(message):
 	last_used=message.text
+	last_to_last_used=get_value("last_used")
 	set_value('last_used', last_used)
+	set_value('last_to_last_used', last_to_last_used)
 	tag = message.text.split('now')[1].split(',')[0]
 	a=message.text.split('now')[1].split(',')
 	notes=''
@@ -456,18 +458,23 @@ def fixmt(message):
 	bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
 
 
+def get_reply_markup_for_now():
+	rm.__init__()
+	last_used = str(get_value('last_used'))
+	last_to_last_used=str(get_value("last_to_last_used"))
+	if last_used is not None and last_to_last_used is not None:
+		rm.add(last_used)
+		rm.add(last_to_last_used)
+	for act in activities_markup:
+		rm.add(act)
+	return rm 
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
 	CHECKINTERVAL = int(database['ci'])
 
 	if database['mt'] == 'on':
-		rm.__init__()
-		last_used = str(get_value('last_used'))
-		if last_used is not None:
-			rm.add(last_used)
-		for act in activities_markup:
-			rm.add(act)
+		rm = get_reply_markup_for_now()
 		now = getNow()
 		to_time = now
 		from_time = to_time - timedelta(minutes=CHECKINTERVAL)
