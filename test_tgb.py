@@ -4,6 +4,8 @@ import pytest
 def setup_for_last_used():
     if get_value('last_used'):
         set_value('last_used', "")
+    if get_value('last_to_last_used'):
+        set_value('last_to_last_used', "")
     test_reply_markup_before = get_reply_markup_for_now()
     chat =  telebot.types.Chat(LAKSHAY_CID, 'type')
     message = telebot.types.Message(123, 'from_user', getNow(),chat , content_type='text', options=[], json_string='')

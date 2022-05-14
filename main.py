@@ -413,8 +413,9 @@ def say_this(message):
 def now(message):
 	last_used=message.text
 	last_to_last_used=get_value("last_used")
+	if last_used != last_to_last_used:
+		set_value('last_to_last_used', last_to_last_used)
 	set_value('last_used', last_used)
-	set_value('last_to_last_used', last_to_last_used)
 	tag = message.text.split('now')[1].split(',')[0]
 	a=message.text.split('now')[1].split(',')
 	notes=''
