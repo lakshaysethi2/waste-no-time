@@ -574,12 +574,7 @@ def conversation(message):
 		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
-		rm.__init__()
-		last_used = str(get_value('last_used'))
-		if last_used is not None:
-			rm.add(last_used)
-		for activity in activities_markup:
-			rm.add(activity)
+		rm = get_reply_markup_for_now()
 
 	elif 'programming' ==  message.text.lower() :
 		if LAKSHAY_CID == LAKSHAY_CID:
