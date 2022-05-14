@@ -2,10 +2,12 @@ from main import *
 import pytest
 
 def setup_for_last_used():
-    if get_value('last_used'):
-        set_value('last_used', "")
-    if get_value('last_to_last_used'):
-        set_value('last_to_last_used', "")
+
+    set_value('last_used', "")
+    set_value('last_to_last_used', "")
+    set_value('last_to_last_to_last_used', "")
+    set_value('last_to_last_to_last_to_last_used', "")
+
     test_reply_markup_before = get_reply_markup_for_now()
     chat =  telebot.types.Chat(LAKSHAY_CID, 'type')
     message = telebot.types.Message(123, 'from_user', getNow(),chat , content_type='text', options=[], json_string='')
@@ -26,7 +28,7 @@ def test_last_used_array_is_unique():
     assert test_reply_markup_now.keyboard[0] == [{'text':'/now programming'}]
     assert test_reply_markup_now.keyboard[1] != [{'text':'/now programming'}]
 
-def test_last_used_array_works():
+def test_last_used_array_works_with_last_2():
     """
     runs /now prog 
     then /now test 
@@ -41,3 +43,29 @@ def test_last_used_array_works():
     test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] == [{'text':'/now testing'}]
     assert test_reply_markup_now.keyboard[1] == [{'text':'/now programming'}]
+
+def test_last_used_array_works_with_last4():
+    """
+    runs /now prog 
+    then /now test 
+    then /now Trying or setting up
+    then /now cleaning
+    and tests if reply markup has /now prog then /now test then .. and then the default array
+    """
+    message = setup_for_last_used()
+    message.text = '/now programming'
+    now(message)
+    sleep(1)
+    message.text = '/now testing'
+    now(message)
+    sleep(1)
+    message.text = '/now Trying or setting up'
+    now(message)
+    sleep(1)
+    message.text = '/now cleaning'
+    now(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    assert test_reply_markup_now.keyboard[0] == [{'text':'/now cleaning'}]
+    assert test_reply_markup_now.keyboard[1] == [{'text':'/now Trying or setting up'}]
+    assert test_reply_markup_now.keyboard[2] == [{'text':'/now testing'}]
+    assert test_reply_markup_now.keyboard[3] == [{'text':'/now programming'}]
