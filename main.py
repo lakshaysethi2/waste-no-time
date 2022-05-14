@@ -678,8 +678,15 @@ def run_continuously(interval=5):
 
 
 def stsrt():
-	if get_value('last_used') is None:
+	if get_value("last_used") is None:
 		set_value("last_used", '/now manictime')
+	if get_value("last_to_last_used") is None:
+		set_value('last_to_last_used', "")
+	if get_value("last_to_last_to_last_used") is None:
+		set_value('last_to_last_to_last_used', "")
+	if get_value("last_to_last_to_last_to_last_used") is None:
+		set_value('last_to_last_to_last_to_last_used', "")
+	
 	if get_value('ci') is None:
 		set_value("ci", '2')
 	if get_value('mt') is None:
