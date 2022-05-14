@@ -574,7 +574,7 @@ def conversation(message):
 		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
-		rm = get_reply_markup_for_now()
+		get_reply_markup_for_now()
 
 	elif 'programming' ==  message.text.lower() :
 		if LAKSHAY_CID == LAKSHAY_CID:
