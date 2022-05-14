@@ -14,7 +14,7 @@ def setup_for_last_used():
     message.chat.id = LAKSHAY_CID
     return message
 
-def test_last_used_array_is_unique():
+def test_last_2_used_are_unique():
     """
     runs /now prog 
     then /now prog 
@@ -28,21 +28,6 @@ def test_last_used_array_is_unique():
     assert test_reply_markup_now.keyboard[0] == [{'text':'/now programming'}]
     assert test_reply_markup_now.keyboard[1] != [{'text':'/now programming'}]
 
-def test_last_used_array_works_with_last_2():
-    """
-    runs /now prog 
-    then /now test 
-    and tests if reply markup has /now prog then /now test then the default array
-    """
-    message = setup_for_last_used()
-    message.text = '/now programming'
-    now(message)
-    message.text = '/now testing'
-    sleep(5)
-    now(message)
-    test_reply_markup_now = get_reply_markup_for_now()
-    assert test_reply_markup_now.keyboard[0] == [{'text':'/now testing'}]
-    assert test_reply_markup_now.keyboard[1] == [{'text':'/now programming'}]
 
 def test_last_used_array_works_with_last4():
     """
@@ -53,19 +38,23 @@ def test_last_used_array_works_with_last4():
     and tests if reply markup has /now prog then /now test then .. and then the default array
     """
     message = setup_for_last_used()
-    message.text = '/now programming'
+    msg_txt1 = '/now programming, tgb can do 1 '
+    msg_txt2 = '/now programming, tgb can do 2'
+    msg_txt3 = '/now testing, tbb can do 3'
+    msg_txt4 = '/now testing, tbb can do 4'
+    message.text = msg_txt1
     now(message)
     sleep(1)
-    message.text = '/now testing'
+    message.text = msg_txt2
     now(message)
     sleep(1)
-    message.text = '/now Trying or setting up'
+    message.text = msg_txt3
     now(message)
     sleep(1)
-    message.text = '/now cleaning'
+    message.text = msg_txt4
     now(message)
     test_reply_markup_now = get_reply_markup_for_now()
-    assert test_reply_markup_now.keyboard[0] == [{'text':'/now cleaning'}]
-    assert test_reply_markup_now.keyboard[1] == [{'text':'/now Trying or setting up'}]
-    assert test_reply_markup_now.keyboard[2] == [{'text':'/now testing'}]
-    assert test_reply_markup_now.keyboard[3] == [{'text':'/now programming'}]
+    assert test_reply_markup_now.keyboard[3] == [{'text':msg_txt1}]
+    assert test_reply_markup_now.keyboard[2] == [{'text':msg_txt2}]
+    assert test_reply_markup_now.keyboard[1] == [{'text':msg_txt3}]
+    assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt4}]
