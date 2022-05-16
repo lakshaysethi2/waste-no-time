@@ -83,7 +83,7 @@ def new_goals(message):
 def modify_add_checkbox(text):
 	new_text = """<head><meta name='viewport' content='width=device-width, initial-scale=1.0'></head> 
 <style>
-body{ background-color:"black";}
+body{ background-color:black;}
 </style>
 <body> <pre>"""
 	for line in text.split('\n'):
