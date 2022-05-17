@@ -34,14 +34,15 @@ def test_last_4_used_are_unique():
     assert test_reply_markup_now.keyboard[0] != test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[2] != test_reply_markup_now.keyboard[3]
     message.text = msg_txt1
     now(message)
+    message.text = msg_txt2
+    now(message)
     message.text = msg_txt1
     now(message)
     message.text = msg_txt2
     now(message)
-    message.text = msg_txt2
-    now(message)
     test_reply_markup_now = get_reply_markup_for_now()
-    assert test_reply_markup_now.keyboard[0] != test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[2] != test_reply_markup_now.keyboard[3]
+    assert test_reply_markup_now.keyboard[0] != test_reply_markup_now.keyboard[2] 
+    assert test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[3]
     
 def test_last_used_array_works_with_last4():
     message = setup_for_last_used()
