@@ -416,15 +416,13 @@ def say_this(message):
 def set_reply_markup_last_used(message):
 	last_used=message.text
 	last_to_last_used=get_value("last_used")
-
 	last_to_last_to_last_used=get_value("last_to_last_used")
 	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_used")
-	if last_used != last_to_last_used:
+	if last_used != last_to_last_used !=last_to_last_to_last_used!=last_to_last_to_last_to_last_used:
 		set_value('last_to_last_used', last_to_last_used)
-	if last_to_last_used != last_to_last_to_last_used:
 		set_value('last_to_last_to_last_used', last_to_last_to_last_used)
-	if last_to_last_to_last_used != last_to_last_to_last_to_last_used:
 		set_value('last_to_last_to_last_to_last_used', last_to_last_to_last_to_last_used)
+	# always
 	set_value('last_used', last_used)
 
 @bot.message_handler(commands=['now'])
@@ -680,11 +678,11 @@ def stsrt():
 	if get_value("last_used") is None:
 		set_value("last_used", '/now manictime')
 	if get_value("last_to_last_used") is None:
-		set_value('last_to_last_used', "")
+		set_value('last_to_last_used', "/now programming")
 	if get_value("last_to_last_to_last_used") is None:
-		set_value('last_to_last_to_last_used', "")
+		set_value('last_to_last_to_last_used', "/now testing")
 	if get_value("last_to_last_to_last_to_last_used") is None:
-		set_value('last_to_last_to_last_to_last_used', "")
+		set_value('last_to_last_to_last_to_last_used', "/now reading")
 	
 	if get_value('ci') is None:
 		set_value("ci", '2')
