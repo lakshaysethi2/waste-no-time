@@ -422,8 +422,7 @@ def set_reply_markup_last_used(message):
 		set_value('last_to_last_used', last_to_last_used)
 		set_value('last_to_last_to_last_used', last_to_last_to_last_used)
 		set_value('last_to_last_to_last_to_last_used', last_to_last_to_last_to_last_used)
-	# always
-	set_value('last_used', last_used)
+		set_value('last_used', last_used)
 
 @bot.message_handler(commands=['now'])
 def now(message):
