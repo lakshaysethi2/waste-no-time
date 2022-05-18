@@ -457,7 +457,7 @@ def budget(message):
 	bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today')
 
 @bot.message_handler(commands=['budgets'])
-def budgets():
+def budgets(message=null):
 	tags_array = ['bio', 'family','food', 'driving','sleep']
 	for tag in tags_array:
 		time_spent_on_tag = get_time_spent_today(tag)
