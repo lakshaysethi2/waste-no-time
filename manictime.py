@@ -568,6 +568,6 @@ def get_time_spent_today(tag):
     for act in unique_acts:
         if (act['name']).strip().lower() == tag.strip().lower():
             return act['totalTime']
-    return ""
+    return "0m"
 
    

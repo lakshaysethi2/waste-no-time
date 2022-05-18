@@ -454,12 +454,28 @@ def now(message):
 def budget(message):
 	tag = message.text.split('budget')[1]
 	time_spent_on_tag = get_time_spent_today(tag)
-	bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today')
+	bot.send_message(LAKSHAY_CID,text=f'on {tag} \n spent {time_spent_on_tag} today')
 
 @bot.message_handler(commands=['budgets'])
 def budgets(message):
-	tags_array = ['bio', 'family','food', 'driving','sleep']
+	tags_array = [
+		'family',
+		'food',
+		'driving',
+		'bio',
+		'sleep',
+		'ctek',
+		'uber',
+		'writing',
+		'programming',
+		'goal setting',
+		
+		
+
+
+		 ]
 	for tag in tags_array:
+		sleep(1)
 		time_spent_on_tag = get_time_spent_today(tag)
 		bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today')	
 
