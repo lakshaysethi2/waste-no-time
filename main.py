@@ -418,7 +418,7 @@ def set_reply_markup_last_used(message):
 	last_to_last_used=get_value("last_used")
 	last_to_last_to_last_used=get_value("last_to_last_used")
 	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_used")
-	if last_used != last_to_last_used and last_used != last_to_last_to_last_used and last_to_last_used != last_to_last_to_last_to_last_used:
+	if last_used != last_to_last_used and last_used != last_to_last_to_last_used and last_to_last_used != last_to_last_to_last_to_last_used != last_used:
 		set_value('last_to_last_used', last_to_last_used)
 		set_value('last_to_last_to_last_used', last_to_last_to_last_used)
 		set_value('last_to_last_to_last_to_last_used', last_to_last_to_last_to_last_used)
