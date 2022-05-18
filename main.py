@@ -475,7 +475,7 @@ def budgets(message):
 
 		 ]
 	for tag in tags_array:
-		sleep(1)
+		sleep(5)
 		message.text = f'/budget {tag}'
 		budget(message)
 
