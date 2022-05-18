@@ -476,8 +476,8 @@ def budgets(message):
 		 ]
 	for tag in tags_array:
 		sleep(1)
-		time_spent_on_tag = get_time_spent_today(tag)
-		bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today')	
+		message.text = f'/budget {tag}'
+		budget(message)
 
 def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false
