@@ -469,6 +469,8 @@ def budgets(message):
 		'writing',
 		'programming',
 		'goal setting',
+		'walking',
+		'exercise',
 		
 		
 
