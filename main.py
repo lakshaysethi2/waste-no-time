@@ -58,15 +58,15 @@ TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4" # main
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-	
 	rm.__init__()
 	rm.add("/n add new goal(s)","/l list out my goals", "/manictime today vs yesterday manictime" )
-	
-	
 	print(message.text)
-	bot.send_message(LAKSHAY_CID,text=f"Hi,{message.from_user.first_name} Welcome - please choose from the following options",reply_markup= rm)
+	bot.send_message(message.chat.id,text=f"Hi,{message.from_user.first_name} {message.from_user.last_name} Welcome -  Thanks for checking out my Goals App Bot , it is not ready for public use yet, but you can still use my goals app website at https://goals.lak.nz to set and achieve your goals -Lakshay")
+	bot.send_message(LAKSHAY_CID,text=f"Hi,{message.from_user.first_name} {message.from_user.last_name} Welcome -  Thanks for checking out my Goals App Bot , it is not ready for public use yet, but you can still use my goals app website at https://goals.lak.nz to set and achieve your goals \n -Lakshay {message.text} {message.chat.id}")
+
 @bot.message_handler(commands=["n"])
 def new_goals(message):
 	
