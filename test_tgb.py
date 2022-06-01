@@ -52,3 +52,22 @@ def test_last_used_array_works_with_last4():
     assert test_reply_markup_now.keyboard[2] == [{'text':msg_txt2}]
     assert test_reply_markup_now.keyboard[1] == [{'text':msg_txt3}]
     assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt4}]
+
+
+def test_top_reply_button_is_always_last_used():
+    message = setup_for_last_used()
+    send_basic_messages(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    message.text = msg_txt3
+    now(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
+
+def test_app_does_not_break_if_same_is_supplied_twice():
+    message = setup_for_last_used()
+    message.text = msg_txt3
+    now(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    now(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
