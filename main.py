@@ -413,35 +413,16 @@ def say_this(message):
 	bot.send_message(LAKSHAY_CID,text=message.text.split('/s')[1])
 	bot.delete_message(LAKSHAY_CID, message.id)
 
-def swap_last_used(last_used_str):
-	assert get_value("last_used") != last_used_str
-	last_to_last_used=get_value("last_to_last_used")
-	last_to_last_to_last_used=get_value("last_to_last_to_last_used")
-	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_to_last_used")
-	if last_to_last_used == last_used_str:
-		set_value("last_to_last_used",get_value("last_used"))
-	elif last_to_last_to_last_used == last_used_str:
-		set_value("last_to_last_to_last_used",get_value("last_used"))
-	elif last_to_last_to_last_to_last_used == last_used_str:
-		set_value("last_to_last_to_last_to_last_used",get_value("last_used"))
-	set_value("last_used",last_used_str)
-
-def all_are_unique(last_used, last_to_last_used, last_to_last_to_last_used , last_to_last_to_last_to_last_used):
-	the_set= set([last_used, last_to_last_used, last_to_last_to_last_used , last_to_last_to_last_to_last_used])
-	return the_set == {last_used, last_to_last_used, last_to_last_to_last_used , last_to_last_to_last_to_last_used}
-
 def set_reply_markup_last_used(message):
 	last_used=message.text
 	last_to_last_used=get_value("last_used")
 	last_to_last_to_last_used=get_value("last_to_last_used")
 	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_used")
-	if all_are_unique(last_used, last_to_last_used, last_to_last_to_last_used , last_to_last_to_last_to_last_used):
+	if last_used != last_to_last_used and last_used != last_to_last_to_last_used and last_to_last_used != last_to_last_to_last_to_last_used != last_used:
 		set_value('last_to_last_used', last_to_last_used)
 		set_value('last_to_last_to_last_used', last_to_last_to_last_used)
 		set_value('last_to_last_to_last_to_last_used', last_to_last_to_last_to_last_used)
 		set_value('last_used', last_used)
-	else:
-		swap_last_used(last_used)
 
 @bot.message_handler(commands=['now'])
 def now(message):
