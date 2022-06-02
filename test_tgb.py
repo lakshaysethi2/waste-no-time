@@ -71,3 +71,4 @@ def test_app_does_not_break_if_same_is_supplied_twice():
     now(message)
     test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
+    assert test_reply_markup_now.keyboard[1] != [{'text':msg_txt3}]
