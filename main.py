@@ -11,7 +11,7 @@ from assistant import *
 from calendarfile import get_calendar_html
 
 # keep tags in this array in lower case
-array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone']
+array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone','food']
 CHECKINTERVAL=30
 activities_markup = [
 	'/now driving',
@@ -531,7 +531,7 @@ def check(message = 'hi'):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
-			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been INVESTING in ?'
+			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been INVESTING your ATTENTION in ?'
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
 
