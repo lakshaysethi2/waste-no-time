@@ -12,6 +12,7 @@ def setup_for_last_used():
     set_value('last_to_last_to_last_used', "/now testing")
     set_value('last_to_last_to_last_to_last_used', "/now reading")
 
+def create_message_obj():
     chat =  telebot.types.Chat(LAKSHAY_CID, 'type')
     message = telebot.types.Message(123, 'from_user', getNow(),chat , content_type='text', options=[], json_string='')
     message.chat.id = LAKSHAY_CID
@@ -28,7 +29,8 @@ def send_basic_messages(message):
     now(message)
 
 def test_last_4_used_are_unique():
-    message = setup_for_last_used()
+    message = create_message_obj()
+    setup_for_last_used()
     send_basic_messages(message)
     test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] != test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[2] != test_reply_markup_now.keyboard[3]
@@ -45,7 +47,8 @@ def test_last_4_used_are_unique():
     assert test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[3]
     
 def test_last_used_array_works_with_last4():
-    message = setup_for_last_used()
+    message = create_message_obj()
+    setup_for_last_used()
     send_basic_messages(message)
     test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[3] == [{'text':msg_txt1}]
@@ -55,7 +58,8 @@ def test_last_used_array_works_with_last4():
 
 
 def test_top_reply_button_is_always_last_used():
-    message = setup_for_last_used()
+    message = create_message_obj()
+    setup_for_last_used()
     send_basic_messages(message)
     test_reply_markup_now = get_reply_markup_for_now()
     message.text = msg_txt3
@@ -64,7 +68,8 @@ def test_top_reply_button_is_always_last_used():
     assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
 
 def test_app_does_not_break_if_same_is_supplied_twice():
-    message = setup_for_last_used()
+    message = create_message_obj()
+    setup_for_last_used()
     message.text = msg_txt3
     now(message)
     test_reply_markup_now = get_reply_markup_for_now()
@@ -72,3 +77,10 @@ def test_app_does_not_break_if_same_is_supplied_twice():
     test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
     assert test_reply_markup_now.keyboard[1] != [{'text':msg_txt3}]
+
+def test_require_notes():
+    message = create_message_obj()
+    message.text = f'/now trying or setting up'
+    assert now(message) is False
+    message.text = f'/now testing, testing notes required'
+    assert now(message) is True

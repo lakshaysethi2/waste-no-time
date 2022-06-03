@@ -10,6 +10,8 @@ import threading
 from assistant import *
 from calendarfile import get_calendar_html
 
+# keep tags in this array in lower case
+array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone']
 CHECKINTERVAL=30
 activities_markup = [
 	'/now driving',
@@ -434,6 +436,10 @@ def now(message):
 	if len(a)>1:
 		notes = a[1]
 		notes+= get_formated_time(getNow())
+	if tag.lower().strip() in array_of_tags_for_which_notes_are_required:
+		if notes == '':
+			bot.send_message(LAKSHAY_CID,text=f'Err: Please provide notes')
+			return False
 	dto = getNow()
 	if LAKSHAY_CID == message.chat.id:
 		if notes !='':
@@ -448,6 +454,7 @@ def now(message):
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True)
 			create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
+	return True
 		
 
 @bot.message_handler(commands=['budget'])
@@ -728,5 +735,5 @@ def stsrt():
 			time.sleep(1)
 			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 
-
-stsrt()
+if __name__ == "__main__":
+	stsrt()
