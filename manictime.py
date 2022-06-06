@@ -560,14 +560,17 @@ def update_activity_start(activity,new_start_time,delta):
     print('making manictime request')
     response = requests.put(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities/{act_id}', headers=headers1,data=payload)
 
-def get_time_spent_today(tag):
+def get_time_spent_today(tag,days=0):
     now = getNow()
-    from_time = now - timedelta(hours=now.hour,minutes=now.minute,seconds=now.second)
+    from_time = now - timedelta(days=days,hours=now.hour,minutes=now.minute,seconds=now.second)
     to_time = now
     unique_acts = get_unique_activities(to_time,from_time)
     for act in unique_acts:
         if (act['name']).strip().lower() == tag.strip().lower():
-            return act['totalTime']
+            total_hours =  get_hours_from_time_delta(act['totalTime'])
+            return total_hours
     return "0m"
 
    
+def get_hours_from_time_delta(time_delta):
+    return f"{round(time_delta.total_seconds()/3600,2)}h"

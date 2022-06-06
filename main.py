@@ -463,32 +463,39 @@ def now(message):
 def budget(message):
 	tag = message.text.split('budget')[1]
 	time_spent_on_tag = get_time_spent_today(tag)
-	bot.send_message(LAKSHAY_CID,text=f'on {tag} \n spent {time_spent_on_tag} today')
+	time_spent_on_tag_last_7days = get_time_spent_today(tag,7)
+	bot.send_message(LAKSHAY_CID,text=f'on {tag} \n spent {time_spent_on_tag} today \n \
+		and {time_spent_on_tag_last_7days} in the last 7 days')
 
 @bot.message_handler(commands=['budgets'])
 def budgets(message):
 	tags_array = [
-		'family',
-		'food',
-		'driving',
-		'bio',
-		'sleep',
-		'ctek',
-		'uber',
-		'writing',
-		'programming',
-		'goal setting',
-		'walking',
-		'exercise',
+		#[tag,daily budget,weekly budget]
+		['sleep',7*60,42*60],
+		['family',20,180],
+		['food',40,6*60],
+		['driving',30,4*60],
+		['bio',40,7*60],
+		['ctek',0,0],
+		['uber',0,0],
+		['writing',0,0],
+		['programming',0,0],
+		['goal setting',0,0],
+		['walking',0,0],
+		['exercise',0,0],
 		
 		
 
 
 		 ]
 	for tag in tags_array:
-		sleep(5)
-		message.text = f'/budget {tag}'
+		message.text = f'/budget {tag[0]}'
+		if tag[1] !=0:
+			daily = get_hours_from_time_delta(timedelta(minutes=tag[1]))
+			weekly =get_hours_from_time_delta(timedelta(minutes=tag[2]))
+			bot.send_message(LAKSHAY_CID, f'{tag[0]}: \n daily:{daily}\n weekly: {weekly}')
 		budget(message)
+		sleep(2)
 
 def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false

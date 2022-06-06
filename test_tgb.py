@@ -84,3 +84,7 @@ def test_require_notes():
     assert now(message) is False
     message.text = f'/now testing, testing notes required'
     assert now(message) is True
+
+def test_budget():
+    message = create_message_obj()
+    budgets(message)
