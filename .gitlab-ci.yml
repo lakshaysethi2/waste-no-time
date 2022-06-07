@@ -3,18 +3,21 @@ stages:
   - test
   - deploy
 
-rules:
+.triggers_all:
+  rules:
   - if: "$CI_COMMIT_BRANCH == 'main'"
     when: always
   - when: never
 
 build-job:
+  extends: .triggers_all
   stage: build
   script:
     - echo "Compiling the code..."
     - echo "Compile complete."
 
 unit-test-job: 
+  extends: .triggers_all
   stage: test  
   script:
     - echo "Running unit tests... This will take about 60 seconds."
@@ -22,6 +25,7 @@ unit-test-job:
     - echo "Code coverage is 90%"
 
 lint-test-job: 
+  extends: .triggers_all
   stage: test  
   script:
     - echo "Linting code... This will take about 10 seconds."
@@ -29,6 +33,7 @@ lint-test-job:
     - echo "No lint issues found."
 
 deploy-job:    
+  extends: .triggers_all
   stage: deploy
   script:
     - echo "Deploying application..."
