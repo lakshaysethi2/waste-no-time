@@ -3,6 +3,11 @@ stages:
   - test
   - deploy
 
+rules:
+  - if: "$CI_COMMIT_BRANCH == 'main'"
+    when: always
+  - when: never
+
 build-job:
   stage: build
   script:
