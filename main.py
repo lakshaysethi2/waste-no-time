@@ -513,19 +513,24 @@ def fixmt(message):
 
 
 def get_reply_markup_for_now():
-	rm.__init__()
+	array_of_arrays = []
+	small_array = []
 	last_used = str(get_value('last_used'))
 	last_to_last_used=str(get_value("last_to_last_used"))
 	last_to_last_to_last_used=str(get_value("last_to_last_to_last_used"))
 	last_to_last_to_last_to_last_used=str(get_value("last_to_last_to_last_to_last_used"))
 	if last_used is not None and last_to_last_used is not None and last_to_last_to_last_used is not None and last_to_last_to_last_to_last_used is not None :
-		rm.add(last_used)
-		rm.add(last_to_last_used)
-		rm.add(last_to_last_to_last_used)
-		rm.add(last_to_last_to_last_to_last_used)
-	for act in activities_markup:
-		rm.add(act)
-	return rm 
+		array_of_arrays.append([last_used])
+		array_of_arrays.append([last_to_last_used])
+		array_of_arrays.append([last_to_last_to_last_used])
+		array_of_arrays.append([last_to_last_to_last_to_last_used])
+	for index,tag in enumerate(activities_markup):
+		small_array.append(tag)
+		if index%2 is 1:
+			array_of_arrays.append(small_array)
+			small_array = []
+	if len(small_array)>0: array_of_arrays.append(small_array)
+	return json.dumps({'keyboard':array_of_arrays})
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
