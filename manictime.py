@@ -1,28 +1,14 @@
-
-from datetime import timezone
-import re
-from time import sleep
-from operator import itemgetter
-import math
-SERVER_LINK = 'https://manictime.lak.nz'
-AUTH_TOKEN = "5989585dc24846a6aaf2febe48e37879"
-tags_timeline_id = ''
 import requests
 import json
 from datetime import datetime,timedelta,timezone
 LAKSHAY_CID =1040271347
 from types import SimpleNamespace
 
-try:
-    from keyvalue import *
-except:
-    from .keyvalue import *
-
-newzealnd = 12
-headers = {
-    'Accept': 'application/vnd.manictime.v2+json',
-    'Authorization': f'Bearer {AUTH_TOKEN}',
-}
+from datetime import timezone
+import re
+from time import sleep
+from operator import itemgetter
+import math
 
 def get_token(username,password):
 
@@ -34,11 +20,30 @@ def get_token(username,password):
     data = {
     'grant_type': 'password',
     'username': username,
-    'password': passsword,
+    'password': password,
     }
 
     print('making manictime request')
     resp=  requests.post(f'{SERVER_LINK}/api/token', headers=headers,data=data)
+    return json.loads(resp.text)['token']
+
+SERVER_LINK = 'https://manictime.lak.nz'
+# SERVER_LINK = 'http://localhost:8090'
+AUTH_TOKEN = os.environ.get('MANICTIME_AUTH_TOKEN')
+# AUTH_TOKEN = get_token('admin@example.com','password4321')
+
+tags_timeline_id = ''
+
+try:
+    from keyvalue import *
+except:
+    from .keyvalue import *
+
+newzealnd = 12
+headers = {
+    'Accept': 'application/vnd.manictime.v2+json',
+    'Authorization': f'Bearer {AUTH_TOKEN}',
+}
 
 def getactivities_json(to_time,from_time):
     print('making manictime request')
