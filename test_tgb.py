@@ -5,6 +5,10 @@ msg_txt1 = '/now programming, tgb can do 1 '
 msg_txt2 = '/now programming, tgb can do 2'
 msg_txt3 = '/now testing, tbb can do 3'
 msg_txt4 = '/now testing, tbb can do 4'
+msg_txt5 = '/now tag5'
+msg_txt6 = '/now tag6'
+msg_txt7 = '/now tag7'
+msg_txt8 = '/now tag8'
 
 def setup_for_last_used():
     set_value("last_used", '/now manictime')
@@ -88,3 +92,41 @@ def test_require_notes():
 def test_budget():
     message = create_message_obj()
     budgets(message)
+
+def test_notes_should_not_show_up_in_reply_markup():
+    message = create_message_obj()
+    setup_for_last_used()
+    message.text = "/now abc"
+    now(message)
+    message.text = "/now abc, hi"
+    now(message)
+    # assert that /now programming, hi is not in reply markup
+    test_reply_markup_now = get_reply_markup_for_now()
+    assert test_reply_markup_now["keyboard"][0] == ['/now abc']
+    assert test_reply_markup_now["keyboard"][0] != ['/now abc,hi']
+    assert test_reply_markup_now["keyboard"][1] != ['/now abc,hi']
+    assert test_reply_markup_now["keyboard"][2] != ['/now abc'] # should really be does not contain?
+    assert test_reply_markup_now["keyboard"][3] != ['/now abc']
+    assert test_reply_markup_now["keyboard"][4] != ['/now abc']
+    
+
+
+def test_last_x_used_in_reply_markup():
+    message = create_message_obj()
+    setup_for_last_used()
+    message.text = msg_txt4
+    now(message)
+    message.text = msg_txt5
+    now(message)
+    message.text = msg_txt6
+    now(message)
+    message.text = msg_txt7
+    now(message)
+    message.text = msg_txt8
+    now(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    assert test_reply_markup_now["keyboard"][3] == [msg_txt5]
+    assert test_reply_markup_now["keyboard"][2] == [msg_txt6]
+    assert test_reply_markup_now["keyboard"][1] == [msg_txt7]
+    assert test_reply_markup_now["keyboard"][0] == [msg_txt8]
+    assert test_reply_markup_now["keyboard"][4] == [msg_txt4]
