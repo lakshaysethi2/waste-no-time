@@ -7,5 +7,5 @@ docker run --rm -v `pwd`/manictime/Data:/app/Data --entrypoint dotnet  manictime
 # run local testing server
 
 ```
-docker run --rm -v `pwd`/manictime/Data:/app/Data -p 8080:8080 manictime/manictimeserver
+docker run --name manic_test --rm -v `pwd`/manictime/Data:/app/Data -p 8090:8080 manictime/manictimeserver
 ```

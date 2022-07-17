@@ -406,14 +406,7 @@ def get_report_for_tag(tag_name,start,end):
 
 
 def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
-    print('making manictime request')
-    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
-    if response.status_code != 200:
-        return False
-    timelines = json.loads(response.text)
-    for timeline in timelines['timelines']:
-        if timeline['timelineType']['typeName'] =="ManicTime/Tags":
-            tags_timeline_id = timeline['timelineId']
+    tags_timeline_id = get_tags_timeline_id()
     start = f"{datetimeObj.isoformat()}+{newzealnd}:00"
     if datetimestr !='':
         start = str(datetimestr)
@@ -440,6 +433,20 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
 
 
 
+def get_tags_timeline_id():
+    tags_timeline_id = get_value("tags_timeline_id")
+    if tags_timeline_id is not None:
+        return tags_timeline_id
+    print('making manictime request')
+    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
+    if response.status_code != 200:
+        return False
+    timelines = json.loads(response.text)
+    for timeline in timelines['timelines']:
+        if timeline['timelineType']['typeName'] =="ManicTime/Tags":
+            tags_timeline_id = timeline['timelineId']
+            set_value("tags_timeline_id",tags_timeline_id )
+            return tags_timeline_id
 
 
 def getNow():
