@@ -36,7 +36,7 @@ def test_last_4_used_are_unique():
     message = create_message_obj()
     setup_for_last_used()
     send_basic_messages(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] != test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[2] != test_reply_markup_now.keyboard[3]
     message.text = msg_txt1
     now(message)
@@ -46,7 +46,7 @@ def test_last_4_used_are_unique():
     now(message)
     message.text = msg_txt2
     now(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] != test_reply_markup_now.keyboard[2] 
     assert test_reply_markup_now.keyboard[1] != test_reply_markup_now.keyboard[3]
     
@@ -54,7 +54,7 @@ def test_last_used_array_works_with_last4():
     message = create_message_obj()
     setup_for_last_used()
     send_basic_messages(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[3] == [{'text':msg_txt1}]
     assert test_reply_markup_now.keyboard[2] == [{'text':msg_txt2}]
     assert test_reply_markup_now.keyboard[1] == [{'text':msg_txt3}]
@@ -65,10 +65,10 @@ def test_top_reply_button_is_always_last_used():
     message = create_message_obj()
     setup_for_last_used()
     send_basic_messages(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     message.text = msg_txt3
     now(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
 
 def test_app_does_not_break_if_same_is_supplied_twice():
@@ -76,9 +76,9 @@ def test_app_does_not_break_if_same_is_supplied_twice():
     setup_for_last_used()
     message.text = msg_txt3
     now(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     now(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now.keyboard[0] == [{'text':msg_txt3}]
     assert test_reply_markup_now.keyboard[1] != [{'text':msg_txt3}]
 
@@ -101,7 +101,7 @@ def test_notes_should_not_show_up_in_reply_markup():
     message.text = "/now abc, hi"
     now(message)
     # assert that /now programming, hi is not in reply markup
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now["keyboard"][0] == ['/now abc']
     assert test_reply_markup_now["keyboard"][0] != ['/now abc,hi']
     assert test_reply_markup_now["keyboard"][1] != ['/now abc,hi']
@@ -124,59 +124,9 @@ def test_last_x_used_in_reply_markup():
     now(message)
     message.text = msg_txt8
     now(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now["keyboard"][3] == [msg_txt5]
     assert test_reply_markup_now["keyboard"][2] == [msg_txt6]
     assert test_reply_markup_now["keyboard"][1] == [msg_txt7]
     assert test_reply_markup_now["keyboard"][0] == [msg_txt8]
     assert test_reply_markup_now["keyboard"][4] == [msg_txt4]
-
-def test_manictime_is_working():
-    message = create_message_obj()
-    setup_for_last_used()
-    message.text = msg_txt4
-    now(message)
-    message.text = msg_txt5
-    now(message)
-
-def test_be_able_set_number_of_last_used():
-    # set_number_ of last used
-    # set it to 6
-    set_value("number_of_last_used","6")
-    message = create_message_obj()
-    setup_for_last_used()
-    message.text = msg_txt1
-    now(message)
-    message.text = msg_txt2
-    now(message)
-    message.text = msg_txt3
-    now(message)
-    message.text = msg_txt4
-    now(message)
-    message.text = msg_txt5
-    now(message)
-    message.text = msg_txt6
-    now(message)
-    message.text = msg_txt7
-    now(message)
-    message.text = msg_txt8
-    now(message)    
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == [msg_txt8] #1
-    assert test_reply_markup_now["keyboard"][1] == [msg_txt7] #2
-    assert test_reply_markup_now["keyboard"][2] == [msg_txt6] #3
-    assert test_reply_markup_now["keyboard"][3] == [msg_txt5]
-    assert test_reply_markup_now["keyboard"][4] == [msg_txt4]
-    assert test_reply_markup_now["keyboard"][5] == [msg_txt3] #6
-    assert test_reply_markup_now["keyboard"][6] != [msg_txt4]
-    assert test_reply_markup_now["keyboard"][7] != [msg_txt1]
-    set_value("number_of_last_used","8")
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == [msg_txt8] #1
-    assert test_reply_markup_now["keyboard"][1] == [msg_txt7] #2
-    assert test_reply_markup_now["keyboard"][2] == [msg_txt6] #3
-    assert test_reply_markup_now["keyboard"][3] == [msg_txt5]
-    assert test_reply_markup_now["keyboard"][4] == [msg_txt4]
-    assert test_reply_markup_now["keyboard"][5] == [msg_txt3] #6
-    assert test_reply_markup_now["keyboard"][6] == [msg_txt2]
-    assert test_reply_markup_now["keyboard"][7] == [msg_txt1]
