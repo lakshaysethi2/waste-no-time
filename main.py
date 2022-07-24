@@ -22,6 +22,8 @@ activities_markup = [
 	'/now exercise',
 	'/key ci, 0',
 	'/key ci, 1',
+	'/key ci, 2',
+	'/key ci, 10',
 	'/key mt, on',
 	'/key mt, off',
 	'/key ci, 20',
@@ -450,13 +452,14 @@ def now(message):
 			pass
 		else:
 			notes=""
+		rm=get_reply_markup_for_now()
 		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
 			bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 			fixmt(message)
 			time_spent_on_tag = get_time_spent_today(tag)
-			bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True)
+			bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True,reply_markup=rm)
 		else:
-			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True)
+			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
 			create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
 	return True
 		
@@ -476,6 +479,7 @@ def budgets(message):
 		['sleep',7*60,42*60],
 		['family',20,180],
 		['food',40,6*60],
+		['trying or setting up',50,5*60],
 		['driving',30,4*60],
 		['bio',40,7*60],
 		['ctek',0,0],
@@ -623,27 +627,7 @@ def conversation(message):
 		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
-		get_reply_markup_for_now()
-
-	elif 'programming' ==  message.text.lower() :
-		if LAKSHAY_CID == LAKSHAY_CID:
-			create_activity_tag("programming","from telegram",datetimeObj=now,duration=6)
-			text = "progamming tag made for now"
-	elif 'doing phone' ==  message.text.lower() :
-		if LAKSHAY_CID == LAKSHAY_CID:
-			create_activity_tag("doing phone","from telegram",datetimeObj=now,duration=6)
-			text = "doing phone tag made for now"
-	elif 'not good' in  message.text.lower() :
-		if LAKSHAY_CID == LAKSHAY_CID:
-			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
-		text = 'humm why ? what happened?'
-		rm.__init__()
-		rm.add('i feel like shit :(')
-	
-	elif 'shit' in  message.text.lower() :
-		if LAKSHAY_CID == LAKSHAY_CID:
-			create_activity_tag("depression","said not good in telegram",datetimeObj=now,duration=6)
-		text = 'why ?'	
+		rm = get_reply_markup_for_now()
 	elif 'what are my goals' in message.text.lower() :
 		goals_list = get_goals_list()
 		text = 'here is a list of your goals \n' + goals_list 	

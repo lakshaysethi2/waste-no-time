@@ -29,7 +29,8 @@ def get_token(username,password):
 
 SERVER_LINK = 'https://manictime.lak.nz'
 # SERVER_LINK = 'http://localhost:8090'
-AUTH_TOKEN = os.environ.get('MANICTIME_AUTH_TOKEN')
+#AUTH_TOKEN = os.environ.get('MANICTIME_AUTH_TOKEN')
+AUTH_TOKEN = "5989585dc24846a6aaf2febe48e37879"
 # AUTH_TOKEN = get_token('admin@example.com','password4321')
 
 tags_timeline_id = ''
