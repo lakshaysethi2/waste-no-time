@@ -444,8 +444,8 @@ def now(message):
 		notes+= get_formated_time(getNow())
 	if tag.lower().strip() in array_of_tags_for_which_notes_are_required:
 		if notes == '':
-			bot.send_message(LAKSHAY_CID,text=f'Err: Please provide notes')
-			return False
+			bot.send_message(LAKSHAY_CID,text=f'Wrn: Please provide notes')
+			# return False # soft error or hard error toggle
 	dto = getNow()
 	if LAKSHAY_CID == message.chat.id:
 		if notes !='':
