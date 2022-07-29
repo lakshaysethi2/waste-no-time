@@ -464,13 +464,14 @@ def getLastfewHours(notes_needed,hours_wanted=12):
         notes = ""
         if notes_needed == True:
             try: 
-                notes = "\n Notes:"+ activity['textData'].split('Notes')[1]
+                notes = activity['textData'].split('Notes')[1]
                 notes = notes.replace('>',"")
                 notes = notes.replace('</',"")
+                notes = notes.strip()
             except Exception as e:
                 notes = ""
 
-        text += f'{activity["startTime"].split("T")[1].split("+")[0][0:5]} - {activity["endTime"].split("T")[1].split("+")[0][0:5]} - {duration} - {activity["displayName"]}  {notes} \n'
+        text += f'{activity["startTime"].split("T")[1].split("+")[0][0:5]} - {activity["endTime"].split("T")[1].split("+")[0][0:5]} - {duration} - {activity["displayName"]} - n:{notes} ;;'
     return text 
 
 
