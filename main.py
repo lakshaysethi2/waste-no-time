@@ -354,7 +354,7 @@ def last(message):
 
 
 @bot.message_handler(commands=['last'])
-def last(message):
+def last_as_text(message):
 	text = 'from - to - activity\n'
 	notes_needed = False
 	try:

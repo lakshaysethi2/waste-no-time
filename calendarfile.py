@@ -49,9 +49,9 @@ def getStyle(tag:str):
 def get_calendar_html(hours=24):
     if hours == '':
         hours = 24
-    text = getLastfewHours(False,int(hours)) 
+    text = getLastfewHours(True,int(hours)) 
     # this text we need to parse and write an html file 
-    lines = text.split('\n')
+    lines = text.split(';;')
     activities = []
     for line in lines:
         if 'from - to - activity' not in line and line !='':
@@ -60,6 +60,7 @@ def get_calendar_html(hours=24):
             act.to_time = line.split(' - ')[1]
             act.duration = line.split(' - ')[2]
             act.tag = line.split(' - ')[3].strip()
+            act.notes = line.split(' - ')[4].strip()
             act.style = getStyle(act.tag)
             activities.append(act)
 
@@ -86,6 +87,7 @@ def getHtml(activities):
         name = act.tag
         height = getHeight(act.duration)
         duration = act.duration
+        notes = act.notes
         dur_int = int(duration.split(":")[0])
         if name == "sleep" and dur_int > 2  : act_div += f"</div> \
             <div class='col-sm-12 col-md-6 col-lg-4'>"
@@ -94,7 +96,9 @@ def getHtml(activities):
                             {act.from_time} - {name}<br>   
                             ------- {duration}   
                             <div class = "notes">  
-                                <textarea></textarea>
+                                <textarea>
+                                    {notes}
+                                </textarea>
                             </div>
                             <div class="to-time">{act.to_time}</div> 
                         </div>

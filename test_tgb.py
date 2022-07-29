@@ -130,3 +130,8 @@ def test_last_x_used_in_reply_markup():
     assert test_reply_markup_now["keyboard"][1] == [msg_txt7]
     assert test_reply_markup_now["keyboard"][0] == [msg_txt8]
     assert test_reply_markup_now["keyboard"][4] == [msg_txt4]
+
+def test_manual_calendar():
+    message = create_message_obj()
+    message.text = "/calendar"
+    last(message)
