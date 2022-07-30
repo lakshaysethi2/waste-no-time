@@ -101,7 +101,7 @@ body{color:white; background-color:black;}
 	return new_text
 
 @bot.message_handler(commands=["top"])
-def manictime(message):
+def manictime_top(message):
 	days= float(eval(message.text.split('/top')[1])/24)
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
@@ -109,6 +109,7 @@ def manictime(message):
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'top-{getNow()}.html', modified_text)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+	return modified_text
 	
 def get_evening_text(days):
 	now = getNow()

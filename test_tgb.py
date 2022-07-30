@@ -135,3 +135,9 @@ def test_manual_calendar():
     message = create_message_obj()
     message.text = "/calendar"
     last(message)
+
+def test_top_piechart_and_percent():
+    message = create_message_obj()
+    message.text = "/top 24"
+    assert "pie" in str(manictime_top(message))
+    

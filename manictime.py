@@ -82,6 +82,7 @@ def get_unique_activities(to_time,from_time,simple_summary_wanted=False):
     return unique_activities
 
 def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
+    user_requested_total_seconds = get_total_seconds_between(from_time,to_time)
     interval_str = f'FROM {from_time.day}/{from_time.month}/{from_time.year}  TO {to_time.day}/{to_time.month}/{to_time.year}\n'
     unique_activities = get_unique_activities(to_time,from_time,simple_summary_wanted)
     total = timedelta(hours=0)
@@ -89,7 +90,9 @@ def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
         if index < 15:
             total += ua["totalTime"]
             if not simple_summary_wanted:
-                interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m  -  {ua["name"] }\n'''
+                act_total_seconds=(ua["totalTime"].total_seconds())
+                percent = round( (act_total_seconds/user_requested_total_seconds)*100,2 )
+                interval_str += f'''{str(math.floor(ua["totalTime"].total_seconds()/3600)).split(":")[0]}h{str(ua["totalTime"]).split(":")[1]}m {percent}% - {ua["name"] }\n'''
     total= round(total.total_seconds()/3600 ,2) 
     interval_str += '\ntop % - avg per day\n\n'
     for index,ua in enumerate(unique_activities):
