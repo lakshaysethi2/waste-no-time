@@ -140,4 +140,14 @@ def test_top_piechart_and_percent():
     message = create_message_obj()
     message.text = "/top 24"
     assert "pie" in str(manictime_top(message))
-    
+
+def test_no_notes_in_last_used():
+    message = create_message_obj()
+    setup_for_last_used()
+    message.text = "/now food"
+    now(message)
+    message.text = "/now food, bla"
+    now(message)
+    test_reply_markup_now = get_reply_markup_for_now()
+    assert test_reply_markup_now["keyboard"][4] == ["/now food"]
+    assert test_reply_markup_now["keyboard"][3] != ["/now food, bla"]

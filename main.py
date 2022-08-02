@@ -423,7 +423,7 @@ def say_this(message):
 	bot.delete_message(LAKSHAY_CID, message.id)
 
 def set_reply_markup_last_used(message):
-	last_used=message.text
+	last_used=message
 	last_to_last_used=get_value("last_used")
 	last_to_last_to_last_used=get_value("last_to_last_used")
 	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_used")
@@ -435,11 +435,11 @@ def set_reply_markup_last_used(message):
 
 @bot.message_handler(commands=['now'])
 def now(message):
-	set_reply_markup_last_used(message)
-
 	tag = message.text.split('now')[1].split(',')[0]
 	a=message.text.split('now')[1].split(',')
 	notes=''
+	set_reply_markup_last_used("/now"+tag)
+
 	if len(a)>1:
 		notes = a[1]
 		notes+= get_formated_time(getNow())
