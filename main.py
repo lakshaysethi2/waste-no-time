@@ -94,7 +94,9 @@ def modify_add_checkbox(text):
 body{
 	color:white; background-color:black;
 }
-
+textarea{
+	background-color: #2b3030;
+}
 .checkboxRed { background-color:red; display: inline; }
 .checkboxGreen { background-color:green; display: inline; }
 </style>
