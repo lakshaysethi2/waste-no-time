@@ -138,7 +138,7 @@ def test_manual_calendar():
 
 def test_top_piechart_and_percent():
     message = create_message_obj()
-    message.text = "/top 24"
+    message.text = "/top 2"
     assert "pie" in str(manictime_top(message))
 
 def test_no_notes_in_last_used():

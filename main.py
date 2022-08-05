@@ -12,7 +12,7 @@ from calendarfile import get_calendar_html
 
 # keep tags in this array in lower case
 array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone','food',
-'writing',
+#'writing',
 ]
 CHECKINTERVAL=30
 activities_markup = [
@@ -91,11 +91,16 @@ def new_goals(message):
 def modify_add_checkbox(text):
 	new_text = """<head><meta name='viewport' content='width=device-width, initial-scale=1.0'></head> 
 <style>
-body{color:white; background-color:black;}
+body{
+	color:white; background-color:black;
+}
+
+.checkboxRed { background-color:red; display: inline; }
+.checkboxGreen { background-color:green; display: inline; }
 </style>
 <body> <pre>"""
 	for line in text.split('\n'):
-		new_text += line + "<input type='checkbox'>"
+		new_text += line + "<div class='checkboxgreen'><input type='checkbox'></div>"+ "<div class='checkboxRed'><input  type='checkbox'></div>" 
 		new_text+= '<textarea></textarea>'+"\n"
 	new_text += "</pre>"
 	return new_text
@@ -552,7 +557,7 @@ def check(message = 'hi'):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
-			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been INVESTING your ATTENTION in ?'
+			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been INVESTING your ATTENTION in ?\nhttps://goals.lak.nz'
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
 
