@@ -151,3 +151,12 @@ def test_no_notes_in_last_used():
     test_reply_markup_now = get_reply_markup_for_now()
     assert test_reply_markup_now["keyboard"][4] == ["/now food"]
     assert test_reply_markup_now["keyboard"][3] != ["/now food, bla"]
+
+def test_top_more_items():
+    message = create_message_obj()
+    # message.text = "/top 24*300"
+    # manictime_top(message)
+    message.text = "/top 1"
+    manictime_top(message)
+
+

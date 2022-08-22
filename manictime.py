@@ -87,7 +87,7 @@ def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
     unique_activities = get_unique_activities(to_time,from_time,simple_summary_wanted)
     total = timedelta(hours=0)
     for index,ua in enumerate(unique_activities):
-        if index < 15:
+        if index < 25:
             total += ua["totalTime"]
             if not simple_summary_wanted:
                 act_total_seconds=(ua["totalTime"].total_seconds())
