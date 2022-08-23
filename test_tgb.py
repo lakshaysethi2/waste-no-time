@@ -159,4 +159,17 @@ def test_top_more_items():
     message.text = "/top 1"
     manictime_top(message)
 
+def test_toggle_strict_notes_mode():
+    message = create_message_obj()
+    message.text = "/key strict_notes, yes"
+    keyvalue(message)
+    message.text = "/now Trying or setting up"
+    tagmade = now(message)
+    assert tagmade is False
+    message.text = "/key strict_notes, no"
+    keyvalue(message)
+    message.text = "/now Trying or setting up"
+    tagmade = now(message)
+    assert tagmade is True
+
 
