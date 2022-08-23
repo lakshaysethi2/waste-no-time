@@ -453,7 +453,8 @@ def now(message):
 	if tag.lower().strip() in array_of_tags_for_which_notes_are_required:
 		if notes == '':
 			bot.send_message(LAKSHAY_CID,text=f'Wrn: Please provide notes')
-			# return False # soft error or hard error toggle
+			if str(get_value('strict_notes')) == 'yes':
+				return False
 	dto = getNow()
 	if LAKSHAY_CID == message.chat.id:
 		if notes !='':
@@ -466,10 +467,11 @@ def now(message):
 			fixmt(message)
 			time_spent_on_tag = get_time_spent_today(tag)
 			bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True,reply_markup=rm)
+			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
-			create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
-	return True
+			return create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
+	
 		
 
 @bot.message_handler(commands=['budget'])
@@ -722,6 +724,7 @@ def stsrt():
 		set_value('last_to_last_to_last_used', "/now testing")
 	if get_value("last_to_last_to_last_to_last_used") is None:
 		set_value('last_to_last_to_last_to_last_used', "/now reading")
+	set_value('strict_notes', "yes")
 	
 	if get_value('ci') is None:
 		set_value("ci", '2')
