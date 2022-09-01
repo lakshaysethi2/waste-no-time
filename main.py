@@ -27,7 +27,7 @@ activities_markup = [
 	'/key mt, on',
 	'/key mt, off',
 	'/key ci, 20',
-	'/now ctek',
+	'/now pbtech',
 	'/now cleaning',
 	'/now linux',
 	'/top 24',
@@ -56,6 +56,7 @@ activities_markup = [
 	'/now data',
 	'/now money',
 	'/now sick',
+	'/key strict_notes, no',
 
 
 ]
