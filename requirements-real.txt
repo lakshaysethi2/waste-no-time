@@ -7,3 +7,4 @@ requests
 schedule
 # tzlocal
 pytest
+fpdf
