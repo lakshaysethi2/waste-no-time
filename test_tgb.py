@@ -159,6 +159,13 @@ def test_top_more_items():
     message.text = "/top 1"
     manictime_top(message)
 
+
+def test_pdf_works():
+    message = create_message_obj()
+    message.text = "/top 10"
+    manictime_top(message)
+    assert True
+
 def test_toggle_strict_notes_mode():
     message = create_message_obj()
     message.text = "/key strict_notes, yes"

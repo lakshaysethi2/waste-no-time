@@ -40,3 +40,4 @@ tzlocal==3.0
 uritemplate==3.0.1
 urllib3==1.26.6
 watchdog==2.1.5
+fpdf2

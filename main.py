@@ -1,4 +1,5 @@
 import telebot
+from fpdf import FPDF
 from manictime import *
 from goals import *
 import logging
@@ -9,6 +10,7 @@ import time
 import threading
 from assistant import *
 from calendarfile import get_calendar_html
+
 
 # keep tags in this array in lower case
 array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone','food',
@@ -108,6 +110,14 @@ textarea{
 	new_text += "</pre>"
 	return new_text
 
+def make_pdf(text):
+	pdf = FPDF('P','mm','A4')
+	pdf.add_page()
+	pdf.set_font('helvetica','',8)
+	pdf.multi_cell(w=0,h=10,txt=text)
+	pdf.output('top.pdf')
+	return open('top.pdf','rb')
+
 @bot.message_handler(commands=["top"])
 def manictime_top(message):
 	days= float(eval(message.text.split('/top')[1])/24)
@@ -116,6 +126,9 @@ def manictime_top(message):
 	modified_text=modify_add_checkbox(text)
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'top-{getNow()}.html', modified_text)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+	pdf = make_pdf(text)
+	files = {'document': (f'top-{getNow()}.pdf', pdf)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 	return modified_text
 	
