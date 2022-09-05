@@ -341,16 +341,18 @@ def get_graph_html_for_timesheet(act_arr, tag):
 
         <canvas id="myChart" width="400" height="400"></canvas>
         <script>
+            let data = {data}
+            let colors = data.map(x => {{ if(x>50){{ return "red"}}else{{return "green"}} }})
             const ctx = document.getElementById('myChart').getContext('2d');
             const labels = {labels}
             const config ={{
                 type: 'bar',
-                backgroundColor: "yellow",
                 data: {{
                 labels: labels,
                 datasets: [{{
                     label: '{tag}',
-                    data: {data},
+                    backgroundColor: colors,
+                    data: data,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1

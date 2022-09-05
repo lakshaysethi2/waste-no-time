@@ -180,3 +180,8 @@ def test_toggle_strict_notes_mode():
     assert tagmade is True
 
 
+def test_timesheet_test():
+    message = create_message_obj()
+    message.text = "/timesheet driving,100,1"
+    timesheet_html(message)
+   
