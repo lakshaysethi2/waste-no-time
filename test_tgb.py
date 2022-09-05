@@ -185,3 +185,7 @@ def test_timesheet_test():
     message.text = "/timesheet driving,100,1"
     timesheet_html(message)
    
+def test_top_has_piechart():
+    message = create_message_obj()
+    message.text = "/top 10"
+    manictime_top(message)
