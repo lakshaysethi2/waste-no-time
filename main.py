@@ -10,6 +10,7 @@ import time
 import threading
 from assistant import *
 from calendarfile import get_calendar_html
+import random
 
 
 # keep tags in this array in lower case
@@ -105,10 +106,44 @@ textarea{
 </style>
 <body> <pre>"""
 	for line in text.split('\n'):
-		new_text += line + "<div class='checkboxgreen'><input type='checkbox'></div>"+ "<div class='checkboxRed'><input  type='checkbox'></div>" 
-		new_text+= '<textarea></textarea>'+"\n"
+		new_text += "<div class='activity'>" +line + "<div class='checkboxgreen'><input type='checkbox'></div>"+ "<div class='checkboxRed'><input  type='checkbox'></div>" 
+		new_text+= '<textarea></textarea></div>'+"\n"
 	new_text += "</pre>"
 	return new_text
+
+def add_pie_chart(text):
+	activitie_names=[]
+	activitie_hours=[]
+	colors=[]
+	for line in text.split('\n'):
+		if  '- -' in line:
+			line_elements= line.split('-')
+			hours=str(line_elements[3])
+			activity=line_elements[4]
+			activitie_names.append(activity)
+			activitie_hours.append(hours)
+			r = lambda: random.randint(0,255)
+			colors.append(f'#%02X%02X%02X' % (r(),r(),r()))
+	donut_text = f'''   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+		<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+  
+	<script>  
+	const data = {{
+	  	labels: {activitie_names},
+		datasets: [{{
+			label: 'top acts',
+			data: {activitie_hours},
+			backgroundColor: {colors},
+			hoverOffset: 4
+		}}]
+	}};
+	const config = {{
+  	type: 'doughnut',
+  	data: data,
+	}};
+    let myChart = new Chart("myChart", config);
+	</script>'''
+	return donut_text
 
 def make_pdf(text):
 	pdf = FPDF('P','mm','A4')
@@ -124,12 +159,13 @@ def manictime_top(message):
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
 	modified_text=modify_add_checkbox(text)
+	modified_text=modified_text+'\n'+add_pie_chart(text)
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'top-{getNow()}.html', modified_text)}
-	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID,"disable_notification":True})
 	pdf = make_pdf(text)
 	files = {'document': (f'top-{getNow()}.pdf', pdf)}
-	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID,"disable_notification":True})
 	return modified_text
 	
 def get_evening_text(days):
