@@ -125,7 +125,7 @@ def add_pie_chart(text):
 			r = lambda: random.randint(0,255)
 			colors.append(f'#%02X%02X%02X' % (r(),r(),r()))
 	donut_text = f'''   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-		<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+		<canvas id="myChart" style="min-height:30rem"></canvas>
   
 	<script>  
 	const data = {{
