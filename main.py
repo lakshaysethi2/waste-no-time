@@ -19,6 +19,7 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'pbtech',
 'programming',
 'linux',
+'sick',
 ]
 CHECKINTERVAL=30
 activities_markup = [
