@@ -104,7 +104,7 @@ textarea{
 .checkboxRed { background-color:red; display: inline; }
 .checkboxGreen { background-color:green; display: inline; }
 </style>
-<body> <pre>"""
+<pre>"""
 	for line in text.split('\n'):
 		new_text += "<div class='activity'>" +line + "<div class='checkboxgreen'><input type='checkbox'></div>"+ "<div class='checkboxRed'><input  type='checkbox'></div>" 
 		new_text+= '<textarea></textarea></div>'+"\n"
@@ -159,7 +159,7 @@ def manictime_top(message):
 	text = get_top_for_days(days)
 	bot.send_message(LAKSHAY_CID,text=text)
 	modified_text=modify_add_checkbox(text)
-	modified_text=modified_text+'\n'+add_pie_chart(text)
+	modified_text=add_pie_chart(text)+'\n'+modified_text
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'top-{getNow()}.html', modified_text)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID,"disable_notification":True})
