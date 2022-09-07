@@ -8,5 +8,7 @@ build-and-deploy:
         - docker tag tgb:latest tgb:old
         - docker build -t tgb:latest ${CI_PROJECT_DIR}
         - docker run -d --restart unless-stopped --name tgb tgb:latest
+        - echo all done docker container made
+        - docker ps -a
     tags:
         - shell-runner-docker-8001
