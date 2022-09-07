@@ -1,0 +1,12 @@
+build-and-deploy:
+    rules:
+        - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+          when: never
+        - when: never
+    script:
+        - docker rm -f tgb
+        - docker tag tgb:latest tgb:old
+        - docker build -t tgb:latest ${CI_PROJECT_DIR}
+        - docker run -d --restart unless-stopped --name tgb tgb:latest
+    tags:
+        - shell-runner-docker-8001
