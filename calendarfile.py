@@ -31,7 +31,7 @@ def getStyle(tag:str):
      'ecl' : f'{green}',
      'ctek' : f'{green}',
      'sleep' : '#373837',
-     'trying or setting up' : 'red',
+     'trying or setting up' : 'blue',
      'data' : 'red',
      'doing phone' : 'red',
      'family' : 'red',
