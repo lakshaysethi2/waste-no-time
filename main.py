@@ -204,6 +204,14 @@ def manictime(message):
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 
 
+def make_pdf_summary(html_string):
+	pdf = FPDF('P','mm','A4')
+	pdf.add_page()
+	pdf.set_font('helvetica','',8)
+	pdf.multi_cell(w=0,h=10,txt=html_string)
+	pdf.output('summary.pdf')
+	return open('summary.pdf','rb')
+
 @bot.message_handler(commands=["summary"])
 def summary(message):
 	try:
@@ -213,6 +221,9 @@ def summary(message):
 		html_string =  summary_top()
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'summary-{getNow()}.html', html_string)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
+	pdf = make_pdf_summary(html_string)
+	files = {'document': (f'summary-{getNow()}.pdf', pdf)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 
 @bot.message_handler(commands=["ss"])
