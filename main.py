@@ -503,11 +503,10 @@ def set_reply_markup_last_used(message):
 	old_fourth=get_value("last_to_last_to_last_to_last_used")
 	
 	first=last_used
-	second=old_first
-	third=old_second
-	fourth=old_third
-	if last_used==old_first:
-		return
+	second=old_second
+	third=old_third
+	fourth=old_fourth
+
 	if last_used == old_second:
 		second=old_first
 	if last_used == old_third:
