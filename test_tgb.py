@@ -194,3 +194,8 @@ def test_pdf_in_summary():
     message = create_message_obj()
     message.text = "/summary 3"
     summary(message)
+
+def test_manictime_message_updated():
+    message = create_message_obj()
+    message.text = "/now programming, tgb"
+    resp = now(message)
