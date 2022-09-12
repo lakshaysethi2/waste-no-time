@@ -497,32 +497,19 @@ def say_this(message):
 
 def set_reply_markup_last_used(message):
 	last_used=message
-	old_first=get_value("last_used")
-	old_second=get_value("last_to_last_used")
-	old_third=get_value("last_to_last_to_last_used")
-	old_fourth=get_value("last_to_last_to_last_to_last_used")
-	
-	first=last_used
-	second=old_second
-	third=old_third
-	fourth=old_fourth
-
-	if last_used == old_second:
-		second=old_first
-	if last_used == old_third:
-		third=old_first
-	if last_used == old_fourth:
-		fourth=old_first
-	
-	set_value('last_used', first)
-	set_value('last_to_last_used', second)
-	set_value('last_to_last_to_last_used', third)
-	set_value('last_to_last_to_last_to_last_used', fourth)
+	last_to_last_used=get_value("last_used")
+	last_to_last_to_last_used=get_value("last_to_last_used")
+	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_used")
+	if last_used != last_to_last_used and last_used != last_to_last_to_last_used and last_to_last_used != last_to_last_to_last_to_last_used != last_used:
+		set_value('last_to_last_used', last_to_last_used)
+		set_value('last_to_last_to_last_used', last_to_last_to_last_used)
+		set_value('last_to_last_to_last_to_last_used', last_to_last_to_last_to_last_used)
+		set_value('last_used', last_used)
 
 @bot.message_handler(commands=['now'])
-def now(message_obj):
-	tag = message_obj.text.split('now')[1].split(',')[0]
-	a=message_obj.text.split('now')[1].split(',')
+def now(message):
+	tag = message.text.split('now')[1].split(',')[0]
+	a=message.text.split('now')[1].split(',')
 	notes=''
 	set_reply_markup_last_used("/now"+tag)
 
@@ -535,20 +522,17 @@ def now(message_obj):
 			if str(get_value('strict_notes')) == 'yes':
 				return False
 	dto = getNow()
-	if LAKSHAY_CID == message_obj.chat.id:
+	if LAKSHAY_CID == message.chat.id:
 		if notes !='':
 			pass
 		else:
 			notes=""
 		rm=get_reply_markup_for_now()
 		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
-			sent_message_obj=bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
-			fixmt(message_obj,sent_message_obj)
+			bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
+			fixmt(message)
 			time_spent_on_tag = get_time_spent_today(tag)
-			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today'
-			bot.edit_message_text(message_id=sent_message_obj.id,chat_id=LAKSHAY_CID, 
-				text= time_spent_text)
-			bot.send_message(LAKSHAY_CID,text=f'updating reply keyboard',disable_notification=True,reply_markup=rm)
+			bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True,reply_markup=rm)
 			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
@@ -604,14 +588,10 @@ def there_is_no_tag(from_time,to_time)->bool:
 		return True
 	return False
 @bot.message_handler(commands=['fixmt'])
-def fixmt(message,sent_message_obj=None):
+def fixmt(message):
 	fix_manictime()
 	text = "attempted fix all"
-	if sent_message_obj is not None:
-		bot.edit_message_text(text=sent_message_obj.text+'\n'+text,chat_id=LAKSHAY_CID,
-			message_id=sent_message_obj.message_id)
-	else:
-		bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
+	bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
 
 
 def get_reply_markup_for_now():
