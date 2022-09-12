@@ -608,7 +608,7 @@ def get_reply_markup_for_now():
 		array_of_arrays.append([last_to_last_to_last_to_last_used])
 	for index,tag in enumerate(activities_markup):
 		small_array.append(tag)
-		if index%2 is 1:
+		if index%2 == 1:
 			array_of_arrays.append(small_array)
 			small_array = []
 	if len(small_array)>0: array_of_arrays.append(small_array)
