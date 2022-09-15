@@ -352,7 +352,9 @@ def keyvalue(message):
 	rm.add('thanks')
 	for key in database.keys():
 		rm.add('/key '+str(key))
-	bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
+	bot.send_message(LAKSHAY_CID,text=text,
+		# reply_markup=rm,
+		)
 
 
 
