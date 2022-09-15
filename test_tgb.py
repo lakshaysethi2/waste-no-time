@@ -194,3 +194,8 @@ def test_pdf_in_summary():
     message = create_message_obj()
     message.text = "/summary 3"
     summary(message)
+
+def test_key_reply_markup():
+    message = create_message_obj()
+    message.text = "/key ci, 1"
+    assert keyvalue(message).get("reply_markup") is None
