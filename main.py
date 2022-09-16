@@ -531,10 +531,13 @@ def now(message):
 			notes=""
 		rm=get_reply_markup_for_now()
 		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
-			bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
-			fixmt(message)
+			sent_message_obj=bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
+			fixmt(message,sent_message_obj)
 			time_spent_on_tag = get_time_spent_today(tag)
-			bot.send_message(LAKSHAY_CID,text=f'spent {time_spent_on_tag} \non {tag} today',disable_notification=True,reply_markup=rm)
+			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today'
+			bot.edit_message_text(message_id=sent_message_obj.id,chat_id=LAKSHAY_CID,
+				text= sent_message_obj.text+'\n'+time_spent_text)
+			bot.send_message(LAKSHAY_CID,text=f'updating reply keyboard',disable_notification=True,reply_markup=rm)
 			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
@@ -590,10 +593,14 @@ def there_is_no_tag(from_time,to_time)->bool:
 		return True
 	return False
 @bot.message_handler(commands=['fixmt'])
-def fixmt(message):
+def fixmt(message,sent_message_obj=None):
 	fix_manictime()
 	text = "attempted fix all"
-	bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
+	if sent_message_obj is not None:
+		bot.edit_message_text(text=sent_message_obj.text+'\n'+text,chat_id=LAKSHAY_CID,
+			message_id=sent_message_obj.message_id)
+	else:
+		bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)
 
 
 def get_reply_markup_for_now():
