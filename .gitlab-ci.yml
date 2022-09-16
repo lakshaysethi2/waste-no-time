@@ -7,8 +7,18 @@ build-and-deploy:
         - docker rm -f tgb
         - docker tag tgb:latest tgb:old
         - docker build -t tgb:latest ${CI_PROJECT_DIR}
-        - docker run -d --restart unless-stopped --name tgb tgb:latest
+        - docker run -e TELEGRAM_BOT_API_KEY=$TELEGRAM_BOT_API_KEY -d --restart unless-stopped --name tgb tgb:latest
         - echo all done docker container made
         - docker ps -a
-    tags:
-        - shell-runner-docker-8001
+
+build-and-deploy-test:
+    rules:
+        - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+          when: always
+        - when: never
+    script:
+        - docker rm -f tgb-test || echo tried to remove test-contailer but failed
+        - docker rmi tgb-test:latest || echo tried to remove test-image but failed
+        - docker build -t tgb-test:latest ${CI_PROJECT_DIR}
+        - docker run -e TELEGRAM_BOT_API_KEY=$TELEGRAM_TEST_BOT_API_KEY -d --restart unless-stopped --name tgb-test tgb-test:latest
+
