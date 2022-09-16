@@ -68,10 +68,8 @@ activities_markup = [
 
 
 ]
-# import os
-# TOKEN = os.getenv('TOKEN')
-TOKEN = "1937014541:AAEAMxaXzB0ZUmYJdzJ-0W25gPNnH50WFw4" # main
-#TOKEN = "5061167346:AAECJdb_-U9jQorMiJRsITRJBRyf-53Ctv4" # conversation bot
+import os
+TOKEN = os.getenv('TELEGRAM_BOT_API_KEY')
 bot = telebot.TeleBot(TOKEN)
 print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
@@ -529,6 +527,7 @@ def now(message):
 			pass
 		else:
 			notes=""
+		old_rm = get_value("current_rm")
 		rm=get_reply_markup_for_now()
 		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
 			sent_message_obj=bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
@@ -537,7 +536,8 @@ def now(message):
 			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today'
 			bot.edit_message_text(message_id=sent_message_obj.id,chat_id=LAKSHAY_CID,
 				text= sent_message_obj.text+'\n'+time_spent_text)
-			bot.send_message(LAKSHAY_CID,text=f'updating reply keyboard',disable_notification=True,reply_markup=rm)
+			if old_rm != rm:
+				bot.send_message(LAKSHAY_CID,text=f'updating reply keyboard',disable_notification=True,reply_markup=rm)
 			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
@@ -621,7 +621,9 @@ def get_reply_markup_for_now():
 			array_of_arrays.append(small_array)
 			small_array = []
 	if len(small_array)>0: array_of_arrays.append(small_array)
-	return json.dumps({'keyboard':array_of_arrays})
+	reply_markup = json.dumps({'keyboard':array_of_arrays})
+	set_value("current_rm",reply_markup)
+	return reply_markup
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
