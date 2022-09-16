@@ -534,10 +534,18 @@ def now(message):
 			fixmt(message,sent_message_obj)
 			time_spent_on_tag = get_time_spent_today(tag)
 			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today'
+			reply_markup = json.loads('{"inline_keyboard":[[]]}')
+			ik = reply_markup.get('inline_keyboard')
+			ik[0].append({'text': 'Attach photo', 'url': 'idk.lak.nz'})
+			# ik[0].append({'text': 'high', 'callback_data': 'idk.lak.nz'})
+			inline_keyboard = json.dumps(reply_markup)
 			bot.edit_message_text(message_id=sent_message_obj.id,chat_id=LAKSHAY_CID,
+				reply_markup=inline_keyboard,
 				text= sent_message_obj.text+'\n'+time_spent_text)
 			if old_rm != rm:
-				bot.send_message(LAKSHAY_CID,text=f'updating reply keyboard',disable_notification=True,reply_markup=rm)
+				text_content=sent_message_obj.text
+				bot.delete_message(LAKSHAY_CID, sent_message_obj.id)
+				bot.send_message(LAKSHAY_CID,text=text_content,disable_notification=True,reply_markup=rm)
 			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
