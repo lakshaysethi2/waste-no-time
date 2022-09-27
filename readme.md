@@ -1,3 +1,6 @@
+Manictime is a key element of this app so here is how to setup Manictime over https
+cloudflared tunnel run --url=http://localhost:8090   --credentials-file=/home/ubuntu/.cloudflared/uuid-of-tunel.json uuid-of-tunel
+
 https://github.com/eternnoir/pyTelegramBotAPI
 
 https://www.youtube.com/watch?v=NwBWW8cNCP4&ab_channel=CSDojo&loop=0
