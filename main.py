@@ -146,6 +146,14 @@ def add_pie_chart(text):
 	}};
     let myChart = new Chart("myChart", config);
 	</script>'''
+	donut_text +='<pre>'
+	for line in text.split('\n'):
+		if  '- -' in line:
+			line_elements= line.split('-')
+			hours=str(line_elements[3])
+			donut_text += f"<div class='activity' style='height:{hours.strip()}rem; border:solid 2px; overflow:hidden' >" +line + "<div class='checkboxgreen'><input type='checkbox'></div>"+ "<div class='checkboxRed'><input  type='checkbox'></div>" 
+			donut_text+= '</div>'+"\n"
+	donut_text += "</pre>"
 	return donut_text
 
 def make_pdf(text):
