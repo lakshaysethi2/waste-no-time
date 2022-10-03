@@ -97,10 +97,10 @@ def get_activities_for_awareness(to_time,from_time,simple_summary_wanted=False):
     total= round(total.total_seconds()/3600 ,2) 
     interval_str += '\ntop % - avg per day\n\n'
     for index,ua in enumerate(unique_activities):
-        if index<6:
+        if index<10:
             dur_hours=round((ua["totalTime"].total_seconds()/get_total_seconds_between(from_time,to_time))*24,1)
             percent = round( (dur_hours/24)*100,2 )
-            interval_str += f'{percent}% {dur_hours}hr - {ua["name"] }  \n'
+            interval_str += f'{ua["name"] } - {percent}% {dur_hours}hr - {ua["name"] }  \n'
     interval_str += f'total: {total}\n'
     return interval_str 
  
