@@ -14,7 +14,7 @@ build-and-deploy:
 build-and-deploy-test:
     rules:
         - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-          when: manual
+          when: always
         - when: never
     script:
         - docker rm -f tgb-test || echo tried to remove test-contailer but failed
@@ -22,11 +22,3 @@ build-and-deploy-test:
         - docker build -t tgb-test:latest ${CI_PROJECT_DIR}
         - docker run -e TELEGRAM_BOT_API_KEY=$TELEGRAM_TEST_BOT_API_KEY -d --restart unless-stopped --name tgb-test tgb-test:latest
 
-
-stop-test-job:
-    rules:
-        - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-          when: manual
-        - when: never
-    script:
-        - docker rm -f tgb-test || echo tried to remove test-contailer but failed
