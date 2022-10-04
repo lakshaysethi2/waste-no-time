@@ -367,7 +367,7 @@ def keyvalue(message):
 
 @bot.message_handler(commands=['del'])
 def delkeyvalue(message):
-	if LAKSHAY_CID == LAKSHAY_CID:
+	if message.chat_id == LAKSHAY_CID:
 		text = 'deleating...'
 		key = message.text.split('/del')[1].strip()
 		try:
@@ -676,7 +676,7 @@ def schedule_event(message):
 		event['timestamp'] = event_time.timestamp()
 		try:
 			events_array =json.loads( get_value('events'))
-		except KeyError or ValueError:
+		except (KeyError , ValueError):
 			set_value('events',"[]")
 			events_array =json.loads( get_value ('events'))
 		events_array.append(event)
@@ -717,24 +717,17 @@ def timesheet_html(message):
 
 @bot.message_handler(func=lambda m: True)
 def conversation(message):
+	rm=[]
 	text = "no handled"
-	
 	now = getNow() -timedelta(seconds=3)
 	if  message.text.lower() == 'hi':  
 		text = 'Hi! :)'
-		rm.__init__()
-		rm.add('What Should I do now ?')
-	elif 'What Should I do now'.lower() in  message.text.lower():
-		text =  database['what should I do now']
-		rm.__init__()
-		rm.add('thanks')
 	elif 'thanks' in  message.text.lower() :
 		text = 'what have you been up to ?'
 		rm = get_reply_markup_for_now()
 	elif 'what are my goals' in message.text.lower() :
 		goals_list = get_goals_list()
 		text = 'here is a list of your goals \n' + goals_list 	
-	
 	else:
 		return	
 	
