@@ -206,6 +206,10 @@ def get_summary_monthly_html(number_of_months,simple_summary_wanted=False):
         html+="<pre class='col' style='border:solid black 2px;' >"
         html += get_top_activities_for_month(x,simple_summary_wanted)
         html += "</pre>"
+    with open('html/ss.html') as f:
+        all_js_lines= f.readlines()
+    for js_line in all_js_lines:
+        html += str(js_line)
     return html
 
 def get_summary_monthly_csv(number_of_months,simple_summary_wanted=False):
