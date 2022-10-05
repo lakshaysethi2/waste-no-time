@@ -1,0 +1,73 @@
+    <script>
+            function calc_and_update_total(indexi){
+                let id = 'total_div_'+indexi
+                let total_points=0
+                all_the_span_in_block = columns.item(indexi).getElementsByClassName(`points-${indexi}`) 
+                for (let i=0; i< all_the_span_in_block.length;i++){
+                    span = all_the_span_in_block.item(i)
+                    total_points+=parseInt(span.innerText)
+                }
+                document.getElementById(id).innerText = "total points = "+total_points
+            }
+            function add_span_eventlistener(elem, indexi) {
+                elem.addEventListener("click", (event) => {
+                    let points = event.target.value;
+                    points_node = document.createElement('span')
+                    points_node.classList.add(`points-${indexi}`)
+                    points_node.innerText = points
+                    if (event.target.parentElement.children[0].tagName == "SPAN") {
+                        event.target.parentElement.children[0].remove()
+                    }
+                    event.target.parentElement.prepend(points_node)
+                    calc_and_update_total(indexi)
+                })
+            }
+            columns = document.getElementsByClassName('col')
+
+            for (let indexi = 0; indexi < columns.length; indexi++) {
+                let block = columns.item(indexi)
+                let total_points_block = document.createElement('div')
+                let str_to_parse = block.innerHTML
+                block.innerHTML = ""
+                for (let indexj in str_to_parse.split('\n')) {
+                    let line_str = str_to_parse.split('\n')[indexj]
+                    if (line_str.includes(" - -")) {
+                        let line_ele = document.createElement('div')
+                        line_ele.innerText = line_str
+                        let radioG = document.createElement('input')
+                        radioG.classList.add('points_radio')
+                        add_span_eventlistener(radioG, indexi)
+                        radioG.setAttribute('type', 'radio')
+                        radioG.setAttribute('name', `radio-${indexi}-${indexj}`)
+                        radioG.setAttribute('value', indexj - 14)
+                        line_ele.prepend(radioG)
+                        let radioY = document.createElement('input')
+                        radioY.classList.add('points_radio')
+                        add_span_eventlistener(radioY, indexi)
+                        radioY.setAttribute('type', 'radio')
+                        radioY.setAttribute('name', `radio-${indexi}-${indexj}`)
+                        radioY.setAttribute('value', (14 - indexj) / 2)
+                        line_ele.prepend(radioY)
+                        let radioR = document.createElement('input')
+                        radioR.classList.add('points_radio')
+                        add_span_eventlistener(radioR, indexi)
+                        radioR.setAttribute('type', 'radio')
+                        radioR.setAttribute('name', `radio-${indexi}-${indexj}`)
+                        radioR.setAttribute('value', 14 - indexj)
+                        line_ele.prepend(radioR)
+
+                        block.appendChild(line_ele)
+                    } else {
+                        let line_ele = document.createElement('p')
+                        line_ele.innerText = line_str
+                        block.appendChild(line_ele)
+                    }
+                }
+                total_points_block.innerText = `total points=0 `
+                total_points_block.setAttribute('id', 'total_div_'+indexi)
+                block.appendChild(total_points_block)
+            }
+
+
+
+        </script>

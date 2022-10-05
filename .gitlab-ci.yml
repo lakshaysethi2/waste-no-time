@@ -38,6 +38,7 @@ stop-test-job:
         - docker rm -f tgb-test || echo tried to remove test-contailer but failed
 
 SonarQube-check:
+  when: manual
   image: 
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
