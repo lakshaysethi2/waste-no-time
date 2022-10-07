@@ -171,6 +171,10 @@ def manictime_top(message):
 	bot.send_message(LAKSHAY_CID,text=text)
 	modified_text=modify_add_checkbox(text)
 	modified_text=add_pie_chart(text)+'\n'+modified_text
+	awesome_html = get_html_like_ss_for_top(text)
+	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
+	files = {'document': (f'top-with-radio-{getNow()}.html', awesome_html)}
+	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID,"disable_notification":True})
 	url = f'https://api.telegram.org/bot{TOKEN}/sendDocument'
 	files = {'document': (f'top-{getNow()}.html', modified_text)}
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID,"disable_notification":True})

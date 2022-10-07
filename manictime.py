@@ -212,6 +212,21 @@ def get_summary_monthly_html(number_of_months,simple_summary_wanted=False):
         html += str(js_line)
     return html
 
+
+def get_html_like_ss_for_top(interval_str):
+
+    html = BOOTSTRAP_STRING
+    html += "<div class='container'><div class='row'>"
+    html+="<pre class='col' style='border:solid black 2px;' >"
+    html += interval_str
+    html += "</pre>"
+    with open('html/ss.html') as f:
+        all_js_lines= f.readlines()
+    for js_line in all_js_lines:
+        html += str(js_line)
+    return html
+
+
 def get_summary_monthly_csv(number_of_months,simple_summary_wanted=False):
     """gives a csv with month to month extimates"""
     csv = "from-to,top1,top2,top3,top4,top5,top6,top7,top8,top9,top10\n"
