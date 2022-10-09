@@ -363,7 +363,7 @@ def keyvalue(message):
 	for key in database.keys():
 		rm.add('/key '+str(key))
 	bot.send_message(LAKSHAY_CID,text=text,
-		# reply_markup=rm,
+		disable_notification=True,
 		)
 
 
