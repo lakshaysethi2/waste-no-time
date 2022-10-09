@@ -555,7 +555,7 @@ def now(message):
 				reply_markup=inline_keyboard,
 				text= sent_message_obj.text+'\n'+time_spent_text)
 			if old_rm != rm:
-				text_content=sent_message_obj.text
+				text_content=f"{sent_message_obj.text}\n{time_spent_text}"
 				bot.delete_message(LAKSHAY_CID, sent_message_obj.id)
 				bot.send_message(LAKSHAY_CID,text=text_content,disable_notification=True,reply_markup=rm)
 			return True
