@@ -96,7 +96,7 @@ def new_goals(message):
 
 
 def modify_add_checkbox(text):
-	new_text = """<head><meta name='viewport' content='width=device-width, initial-scale=1.0'></head> 
+	new_text = """ 
 <style>
 body{
 	color:white; background-color:black;
