@@ -25,11 +25,12 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 CHECKINTERVAL=10
 activities_markup = [
 	'/now driving',
-	'/now uber',
-	'/now writing',
+	'/now pbtech',
 	'/now reading',
+	'/now writing',
 	'/now walking',
 	'/now exercise',
+	'/now uber',
 	'/key ci, 1',
 	'/key mt, on',
 	'/key ci, 0',
@@ -37,7 +38,6 @@ activities_markup = [
 	'/key ci, 10',
 	'/key ci, 20',
 	'/key mt, off',
-	'/now pbtech',
 	'/now cleaning',
 	'/now linux',
 	'/top 24',
