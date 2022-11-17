@@ -200,6 +200,14 @@ def test_key_reply_markup():
     message.text = "/key ci, 1"
     assert keyvalue(message).get("reply_markup") is None
 
+
+
+def test_dash_lock_unlock():
+    message = create_message_obj()
+    message.text = "/unlockdash"
+    resp = unlockdash(message)
+
+
 def test_manictime_message_updated():
     message = create_message_obj()
     message.text = "/now programming, tgb"
