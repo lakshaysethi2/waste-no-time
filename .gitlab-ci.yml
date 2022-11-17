@@ -9,7 +9,7 @@ build-and-deploy:
         - docker rm -f tgb
         - docker tag tgb:latest tgb:old
         - docker build -t tgb:latest ${CI_PROJECT_DIR}
-        - docker run -e TELEGRAM_BOT_API_KEY=$TELEGRAM_BOT_API_KEY -d --restart unless-stopped --name tgb tgb:latest
+        - docker run -v $MANICTIME_JSON_FILE_PATH:$MANICTIME_JSON_FILE_PATH -e TELEGRAM_BOT_API_KEY=$TELEGRAM_BOT_API_KEY -d --restart unless-stopped --name tgb tgb:latest
         - echo all done docker container made
         - docker ps -a
 
@@ -24,7 +24,7 @@ build-and-deploy-test:
         - docker rm -f tgb-test || echo tried to remove test-contailer but failed
         - docker rmi tgb-test:latest || echo tried to remove test-image but failed
         - docker build -t tgb-test:latest ${CI_PROJECT_DIR}
-        - docker run -e TELEGRAM_BOT_API_KEY=$TELEGRAM_TEST_BOT_API_KEY -d --restart unless-stopped --name tgb-test tgb-test:latest
+        - docker run -v $MANICTIME_JSON_FILE_PATH:$MANICTIME_JSON_FILE_PATH -e TELEGRAM_BOT_API_KEY=$TELEGRAM_TEST_BOT_API_KEY -d --restart unless-stopped --name tgb-test tgb-test:latest
 
 
 stop-test-job:
