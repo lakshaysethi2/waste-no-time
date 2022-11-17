@@ -64,6 +64,8 @@ activities_markup = [
 	'/now data',
 	'/now money',
 	'/now sick',
+	'/unlockdash',
+	'/lockdash',
 	'/key strict_notes, no',
 
 
