@@ -17,7 +17,7 @@ from manictime_dash import get_json_object
 array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone','food',
 'writing',
 'shopping',
-'pbtech',
+'job',
 'programming',
 'linux',
 'sick',
@@ -25,7 +25,7 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 CHECKINTERVAL=10
 activities_markup = [
 	'/now driving',
-	'/now pbtech',
+	'/now job',
 	'/now reading',
 	'/now writing',
 	'/now walking',
