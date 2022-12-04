@@ -24,6 +24,8 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 ]
 CHECKINTERVAL=10
 activities_markup = [
+	'/key mt, on',
+	'/key mt, off',
 	'/now driving',
 	'/now job',
 	'/now reading',
@@ -32,12 +34,10 @@ activities_markup = [
 	'/now exercise',
 	'/now uber',
 	'/key ci, 1',
-	'/key mt, on',
 	'/key ci, 0',
 	'/key ci, 2',
 	'/key ci, 10',
 	'/key ci, 20',
-	'/key mt, off',
 	'/now cleaning',
 	'/now linux',
 	'/top 24',
@@ -66,7 +66,6 @@ activities_markup = [
 	'/now sick',
 	'/unlockdash',
 	'/lockdash',
-	'/key strict_notes, no',
 
 
 ]
@@ -645,6 +644,7 @@ def get_reply_markup_for_now():
 		array_of_arrays.append([last_to_last_used])
 		array_of_arrays.append([last_to_last_to_last_used])
 		array_of_arrays.append([last_to_last_to_last_to_last_used])
+		array_of_arrays.append(['/key strict_notes, no'])
 	for index,tag in enumerate(activities_markup):
 		small_array.append(tag)
 		if index%2 == 1:

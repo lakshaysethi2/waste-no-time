@@ -1,3 +1,8 @@
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
+
 build-and-deploy:
     tags:
       - shell-runner-docker-8001
