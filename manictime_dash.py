@@ -5,8 +5,6 @@ import json
 import datetime
 import os
 from manictime  import AUTH_TOKEN,SERVER_LINK
-# AUTH_TOKEN=os.environ.get("MANICTIME_AUTH_TOKEN")
-# SERVER_LINK = os.environ.get("MANICTIME_SERVER_LINK")
 path_to_file = "/home/ubuntu/code/dashboard/frontend/src/manictime.json"
 
 def getactivities_json(to_time,from_time):
