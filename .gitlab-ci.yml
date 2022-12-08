@@ -1,4 +1,3 @@
-
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
@@ -33,13 +32,15 @@ build-and-deploy-test:
 
 
 stop-test-job:
+    timeout: 15m 
     tags:
       - shell-runner-docker-8001
     rules:
         - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-          when: manual
+          when: always
         - when: never
     script:
+        - sleep 600
         - docker rm -f tgb-test || echo tried to remove test-contailer but failed
 
 SonarQube-check:
