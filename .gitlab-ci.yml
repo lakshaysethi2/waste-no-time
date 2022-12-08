@@ -2,6 +2,11 @@ workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
 
+run-tests:
+  script:
+    - docker build -t test:tgbtest .
+  allow_failure: true
+
 build-and-deploy:
     tags:
       - shell-runner-docker-8001
