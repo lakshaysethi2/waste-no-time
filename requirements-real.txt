@@ -7,3 +7,4 @@ fpdf
 wheel
 Flask
 Flask-SQLAlchemy
+sentry-sdk

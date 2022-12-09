@@ -12,6 +12,7 @@ from assistant import *
 from calendarfile import get_calendar_html
 import random
 from manictime_dash import get_json_object
+import sentry_sdk
 
 # keep tags in this array in lower case
 array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or setting up','doing phone','food',
@@ -847,4 +848,8 @@ def stsrt():
 			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 
 if __name__ == "__main__":
+	sentry_sdk.init(
+		dsn="https://1c5ee8adcfe1468b95718f124b970547@o4504297777004544.ingest.sentry.io/4504297778184192",
+		traces_sample_rate=1.0
+	)
 	stsrt()
