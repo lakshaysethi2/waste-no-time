@@ -830,8 +830,10 @@ def stsrt():
 		set_value('last_usedc', "/now goal setting")
 	if get_value("last_usedd") is None:
 		set_value('last_usedd', "/now reading")
-	set_value('strict_notes', "yes")
-	set_value("ci", '2')
+	if get_value('mt') is None:
+		set_value('strict_notes', "yes")
+	if get_value('mt') is None:
+		set_value("ci", '2')
 	if get_value('mt') is None:
 		set_value("mt", 'on')
 	#bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
