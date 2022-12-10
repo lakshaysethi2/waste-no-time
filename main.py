@@ -32,6 +32,7 @@ the_activities_markup = [
 	'/key ci, 2',
 	'/key ci, 20',
 	'/key ci, 0',
+	'/key ci, 5',
 	'/now reading',
 	'/now job',
 	'/now writing',
