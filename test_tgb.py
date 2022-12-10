@@ -108,22 +108,22 @@ def test_budget():
 
 def test_notes_should_not_show_up_in_reply_markup():
     setup_for_last_used()
-    message = "/now abc"
+    message = "/now programming"
     set_reply_markup_last_used(message)
-    message = "/now abc, hi"
-    set_reply_markup_last_used(message)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == ['/now abc']
-    assert test_reply_markup_now["keyboard"][0] != ['/now abc,hi']
-    message = "/now abcd"
-    set_reply_markup_last_used(message)
-    message = "/now abcd, hi"
+    message = "/now programming, hi"
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == ['/now abcd']
-    assert test_reply_markup_now["keyboard"][0] != ['/now abc,hi']
-    assert test_reply_markup_now["keyboard"][1] == ['/now abc']
-    assert test_reply_markup_now["keyboard"][1] != ['/now abc,hi']
+    assert test_reply_markup_now["keyboard"][0] == ['/now programming']
+    assert test_reply_markup_now["keyboard"][0] != ['/now programming,hi']
+    message = "/now linux"
+    set_reply_markup_last_used(message)
+    message = "/now linux, hi"
+    set_reply_markup_last_used(message)
+    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    assert test_reply_markup_now["keyboard"][0] == ['/now linux']
+    assert test_reply_markup_now["keyboard"][0] != ['/now linux,hi']
+    assert test_reply_markup_now["keyboard"][1] == ['/now programming']
+    assert test_reply_markup_now["keyboard"][1] != ['/now programming,hi']
 
 
 @pytest.mark.skip(reason="not implemented yet")
