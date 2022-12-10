@@ -24,7 +24,7 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'sick',
 ]
 CHECKINTERVAL=10
-activities_markup = [
+the_activities_markup = [
 	'/key mt, on',
 	'/key mt, off',
 	'/key ci, 1',
@@ -518,15 +518,23 @@ def say_this(message):
 	bot.delete_message(LAKSHAY_CID, message.id)
 
 def set_reply_markup_last_used(message):
-	last_used=message
-	last_to_last_used=get_value("last_used")
-	last_to_last_to_last_used=get_value("last_to_last_used")
-	last_to_last_to_last_to_last_used=get_value("last_to_last_to_last_used")
-	if last_used != last_to_last_used and last_used != last_to_last_to_last_used and last_to_last_used != last_to_last_to_last_to_last_used != last_used:
-		set_value('last_to_last_used', last_to_last_used)
-		set_value('last_to_last_to_last_used', last_to_last_to_last_used)
-		set_value('last_to_last_to_last_to_last_used', last_to_last_to_last_to_last_used)
-		set_value('last_used', last_used)
+	true_last_used=message.split(",")[0]
+	if true_last_used == get_value("last_useda"):
+		return
+	elif get_value("last_usedb") == true_last_used:
+		set_value('last_usedb', get_value("last_useda"))
+		set_value('last_useda', true_last_used)
+	elif get_value("last_usedc") == true_last_used:
+		set_value('last_usedc', get_value("last_useda"))
+		set_value('last_useda', true_last_used)
+	elif get_value("last_usedd") == true_last_used:
+		set_value('last_usedd', get_value("last_useda"))
+		set_value('last_useda', true_last_used)
+	else:
+		set_value('last_usedd', get_value("last_usedc"))
+		set_value('last_usedc', get_value("last_usedb"))
+		set_value('last_usedb', get_value("last_useda"))
+		set_value('last_useda', true_last_used)
 
 @bot.message_handler(commands=['now'])
 def now(message):
@@ -636,22 +644,18 @@ def fixmt(message,sent_message_obj=None):
 def get_reply_markup_for_now():
 	array_of_arrays = []
 	small_array = []
-	last_used = str(get_value('last_used'))
-	last_to_last_used=str(get_value("last_to_last_used"))
-	last_to_last_to_last_used=str(get_value("last_to_last_to_last_used"))
-	last_to_last_to_last_to_last_used=str(get_value("last_to_last_to_last_to_last_used"))
-	if last_used is not None and last_to_last_used is not None and last_to_last_to_last_used is not None and last_to_last_to_last_to_last_used is not None :
-		array_of_arrays.append([last_used])
-		array_of_arrays.append([last_to_last_used])
-		array_of_arrays.append([last_to_last_to_last_used])
-		array_of_arrays.append([last_to_last_to_last_to_last_used])
-		array_of_arrays.append(['/key strict_notes, no'])
-	for index,tag in enumerate(activities_markup):
+	array_of_arrays.append([str(get_value('last_useda'))])
+	array_of_arrays.append([str(get_value('last_usedb'))])
+	array_of_arrays.append([str(get_value('last_usedc'))])
+	array_of_arrays.append([str(get_value('last_usedd'))])
+	array_of_arrays.append(['/key strict_notes, no'])
+	for index,tag in enumerate(the_activities_markup):
 		small_array.append(tag)
 		if index%2 == 1:
 			array_of_arrays.append(small_array)
 			small_array = []
 	if len(small_array)>0: array_of_arrays.append(small_array)
+	assert array_of_arrays[0] == [str(get_value('last_useda'))]
 	reply_markup = json.dumps({'keyboard':array_of_arrays})
 	set_value("current_rm",reply_markup)
 	return reply_markup
@@ -817,14 +821,14 @@ def run_continuously(interval=5):
 
 
 def stsrt():
-	if get_value("last_used") is None:
-		set_value("last_used", '/now manictime')
-	if get_value("last_to_last_used") is None:
-		set_value('last_to_last_used', "/now programming")
-	if get_value("last_to_last_to_last_used") is None:
-		set_value('last_to_last_to_last_used', "/now testing")
-	if get_value("last_to_last_to_last_to_last_used") is None:
-		set_value('last_to_last_to_last_to_last_used', "/now reading")
+	if get_value("last_useda") is None:
+		set_value("last_useda", '/now manictime')
+	if get_value("last_usedb") is None:
+		set_value('last_usedb', "/now programming")
+	if get_value("last_usedc") is None:
+		set_value('last_usedc', "/now goal setting")
+	if get_value("last_usedd") is None:
+		set_value('last_usedd', "/now reading")
 	set_value('strict_notes', "yes")
 	
 	if get_value('ci') is None:
