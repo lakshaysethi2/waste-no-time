@@ -23,7 +23,7 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'linux',
 'sick',
 ]
-CHECKINTERVAL=10
+CHECKINTERVAL=20
 the_activities_markup = [
 	'/key mt, on',
 	'/key mt, off',
