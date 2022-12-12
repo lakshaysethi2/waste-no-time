@@ -1,11 +1,4 @@
-from main import keyvalue, last, manictime_top, set_value, set_reply_markup_last_used, summary, timesheet_html, unlockdash
-from main import get_reply_markup_for_now
-from main import budgets
-import json
-import telebot
-from manictime import LAKSHAY_CID
-from manictime import getNow
-
+from main import *
 import pytest
 
 msg_txt1 = '/now programming'
@@ -108,7 +101,6 @@ def test_require_notes():
     assert set_reply_markup_last_used(message) is False
     message.text = f'/now testing, testing notes required'
     assert set_reply_markup_last_used(message) is True
-
 @pytest.mark.skip(reason="not implemented yet")
 def test_budget():
     message = create_message_obj()
@@ -133,24 +125,6 @@ def test_notes_should_not_show_up_in_reply_markup():
     assert test_reply_markup_now["keyboard"][1] == ['/now programming']
     assert test_reply_markup_now["keyboard"][1] != ['/now programming,hi']
 
-@pytest.mark.skip(reason="not implemented yet")
-def test_last_used_should_be_stack():
-    pass
-
-@pytest.mark.skip(reason="not implemented yet")
-def test_5_last_used():
-    setup_for_last_used()
-    set_reply_markup_last_used(msg_txt1)
-    set_reply_markup_last_used(msg_txt2)
-    set_reply_markup_last_used(msg_txt3)
-    set_reply_markup_last_used(msg_txt4)
-    set_reply_markup_last_used(msg_txt5)
-    test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][4] == [msg_txt1]
-    assert test_reply_markup_now["keyboard"][3] == [msg_txt2]
-    assert test_reply_markup_now["keyboard"][2] == [msg_txt3]
-    assert test_reply_markup_now["keyboard"][1] == [msg_txt4]
-    assert test_reply_markup_now["keyboard"][0] == [msg_txt5]
 
 @pytest.mark.skip(reason="not implemented yet")
 def test_last_x_used_in_reply_markup():
