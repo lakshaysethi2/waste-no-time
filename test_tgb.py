@@ -28,7 +28,7 @@ def send_basic_messages():
     set_reply_markup_last_used(msg_txt3)
     set_reply_markup_last_used(msg_txt4)
 
-def test_last_4_used_are_unique():
+def test_last_5_used_are_unique():
     setup_for_last_used()
     send_basic_messages()
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
@@ -51,20 +51,23 @@ def test_last_4_used_are_unique():
     assert test_reply_markup_now['keyboard'][2] != test_reply_markup_now['keyboard'][3]
 
 
-def test_last_used_array_works_with_last4():
+def test_last_used_array_works_with_last5():
     set_reply_markup_last_used('/now sdtgfsdg1')
     set_reply_markup_last_used('/now sdtgfsdg2')
     set_reply_markup_last_used('/now sdtgfsdg3')
     set_reply_markup_last_used('/now sdtgfsdg4')
+    set_reply_markup_last_used('/now sdtgfsdg5')
     set_reply_markup_last_used(msg_txt1)
     set_reply_markup_last_used(msg_txt2)
     set_reply_markup_last_used(msg_txt3)
     set_reply_markup_last_used(msg_txt4)
+    set_reply_markup_last_used(msg_txt5)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt4]
-    assert test_reply_markup_now['keyboard'][1] == [msg_txt3]
-    assert test_reply_markup_now['keyboard'][2] == [msg_txt2]
-    assert test_reply_markup_now['keyboard'][3] == [msg_txt1]
+    assert test_reply_markup_now['keyboard'][0] == [msg_txt5]
+    assert test_reply_markup_now['keyboard'][1] == [msg_txt4]
+    assert test_reply_markup_now['keyboard'][2] == [msg_txt3]
+    assert test_reply_markup_now['keyboard'][3] == [msg_txt2]
+    assert test_reply_markup_now['keyboard'][4] == [msg_txt1]
 
 def test_top_reply_button_is_always_last_used():
     setup_for_last_used()
