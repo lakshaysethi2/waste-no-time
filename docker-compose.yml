@@ -12,6 +12,8 @@ services:
       - MANICTIME_ADMIN_EMAIL=${MANICTIME_ADMIN_EMAIL:?err}
       - MANICTIME_PASSWORD=${MANICTIME_PASSWORD:?err}
       - TELEGRAM_BOT_API_KEY=${TELEGRAM_BOT_API_KEY:?err}
+      - DEBUG=${DEBUG:?err}
+      - PRODUCTION=${PRODUCTION:?err}
 
   db:
     image: manictime/manictimeserver
