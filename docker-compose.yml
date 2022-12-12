@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  telegram-bot:
+    image: tgb
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      - MANICTIME_SERVER_LINK=${MANICTIME_SERVER_LINK:?err}
+      - MANICTIME_ADMIN_EMAIL=${MANICTIME_ADMIN_EMAIL:?err}
+      - MANICTIME_PASSWORD=${MANICTIME_PASSWORD:?err}
+      - TELEGRAM_BOT_API_KEY=${TELEGRAM_BOT_API_KEY:?err}
+
+  db:
+    image: manictime/manictimeserver
+    volumes:
+      - ./manictimeserver/Data:/app/Data
+    ports:
+      - 8080:8080
+    command: dotnet ManicTimeServer.dll addadmin -u ${MANICTIME_ADMIN_EMAIL} -p ${MANICTIME_PASSWORD} && dotnet Setup.dll -publicurl
+    environment:
+      - MANICTIME_ADMIN_EMAIL=${MANICTIME_ADMIN_EMAIL:?err}
+      - MANICTIME_PASSWORD=${MANICTIME_PASSWORD:?err}
+      
+    
