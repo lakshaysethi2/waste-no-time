@@ -835,14 +835,10 @@ def stsrt():
 		set_value("ci", '2')
 	if get_value('mt') is None:
 		set_value("mt", 'on')
-	#bot.send_message(LAKSHAY_CID,text='starting..',disable_notification=True)
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).seconds.do(check)
-	#schedule.every(5).seconds.do(dailynotification)
 	while 1:
 		try:
-			#telebot.apihelper.RETRY_ON_ERROR = True
-
 			bot.polling()
 
 		except Exception as e:
