@@ -8,3 +8,5 @@ __pycache__/
 sa.json
 manictime/
 .envs
+.env
+manictimeserver/Data
