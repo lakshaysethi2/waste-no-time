@@ -74,6 +74,7 @@ the_activities_markup = [
 import os
 TOKEN = os.getenv('TELEGRAM_BOT_API_KEY')
 bot = telebot.TeleBot(TOKEN)
+print('started')
 rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
 
 @bot.message_handler(commands=['start'])
