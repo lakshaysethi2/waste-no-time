@@ -4,6 +4,6 @@
 
 tasks:
   - init: pip install -r requirements-real.txt
-    command: pytest test_db_server.py
+    command: pytest && cp .env.sample .env && docker-compose up 
 
 

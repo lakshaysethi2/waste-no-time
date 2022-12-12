@@ -1,4 +1,5 @@
 import telebot
+import os
 from fpdf import FPDF
 from manictime import *
 from goals import *
@@ -24,6 +25,8 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'sick',
 ]
 CHECKINTERVAL=20
+PRODUCTION=os.environ.get('PRODUCTION')
+
 the_activities_markup = [
 	'/key mt, on',
 	'/key mt, off',
@@ -530,7 +533,11 @@ def set_reply_markup_last_used(message):
 	elif get_value("last_usedd") == true_last_used:
 		set_value('last_usedd', get_value("last_useda"))
 		set_value('last_useda', true_last_used)
+	elif get_value("last_usede") == true_last_used:
+		set_value('last_usede', get_value("last_useda"))
+		set_value('last_useda', true_last_used)
 	else:
+		set_value('last_usede', get_value("last_usedd"))
 		set_value('last_usedd', get_value("last_usedc"))
 		set_value('last_usedc', get_value("last_usedb"))
 		set_value('last_usedb', get_value("last_useda"))
@@ -648,6 +655,7 @@ def get_reply_markup_for_now():
 	array_of_arrays.append([str(get_value('last_usedb'))])
 	array_of_arrays.append([str(get_value('last_usedc'))])
 	array_of_arrays.append([str(get_value('last_usedd'))])
+	array_of_arrays.append([str(get_value('last_usede'))])
 	array_of_arrays.append(['/key strict_notes, no'])
 	for index,tag in enumerate(the_activities_markup):
 		small_array.append(tag)
@@ -820,7 +828,7 @@ def run_continuously(interval=5):
     return cease_continuous_run
 
 
-def stsrt():
+def start_bot():
 	if get_value("last_useda") is None:
 		set_value("last_useda", '/now manictime')
 	if get_value("last_usedb") is None:
@@ -829,12 +837,25 @@ def stsrt():
 		set_value('last_usedc', "/now goal setting")
 	if get_value("last_usedd") is None:
 		set_value('last_usedd', "/now reading")
-	if get_value('mt') is None:
+	if get_value("last_usede") is None:
+		set_value('last_usede', "/now writing")
+	if get_value('strict_notes') is None:
 		set_value('strict_notes', "yes")
-	if get_value('mt') is None:
+	if get_value('ci') is None:
 		set_value("ci", '2')
 	if get_value('mt') is None:
 		set_value("mt", 'on')
+	text = f''' just restarted 
+	key - val
+	last_useda -{ get_value("last_useda")}
+	last_usedb - {get_value("last_usedb")}
+	last_usedc - {get_value("last_usedc")}
+	last_usedd - {get_value("last_usedd")}
+	strict_notes - {get_value("strict_notes")}
+	ci - {get_value("ci")}
+	mt - {get_value("mt")}
+	'''
+	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text)	
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).seconds.do(check)
 	while 1:
@@ -848,8 +869,11 @@ def stsrt():
 			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 
 if __name__ == "__main__":
-	sentry_sdk.init(
-		dsn="https://1c5ee8adcfe1468b95718f124b970547@o4504297777004544.ingest.sentry.io/4504297778184192",
-		traces_sample_rate=1.0
-	)
-	stsrt()
+	if AUTH_TOKEN == "":
+		AUTH_TOKEN = get_token(os.environ.get('MANICTIME_ADMIN_EMAIL'),os.environ.get('MANICTIME_PASSWORD'))
+	if PRODUCTION=="1":
+		sentry_sdk.init(
+			dsn="https://1c5ee8adcfe1468b95718f124b970547@o4504297777004544.ingest.sentry.io/4504297778184192",
+			traces_sample_rate=1.0
+		)
+	start_bot()

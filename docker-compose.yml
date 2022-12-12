@@ -1,6 +1,6 @@
 version: '3.7'
 services:
-  telegram-bot:
+  tgb:
     image: tgb
     build: .
     volumes:
