@@ -28,6 +28,16 @@ def send_basic_messages():
     set_reply_markup_last_used(msg_txt3)
     set_reply_markup_last_used(msg_txt4)
 
+
+def test_last_n_used_are_unique():
+    n = 7
+    for i in range(1, n+1):
+        set_reply_markup_last_used('/now sdtgfsdg' + str(i))
+    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    for i in range(0, n):
+        for j in range(i+1, n):
+            assert test_reply_markup_now['keyboard'][i] != test_reply_markup_now['keyboard'][j]
+
 def test_last_5_used_are_unique():
     setup_for_last_used()
     send_basic_messages()
