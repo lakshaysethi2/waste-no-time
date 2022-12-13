@@ -38,10 +38,6 @@ stop-test-job:
     timeout: 15m 
     tags:
       - shell-runner-docker-8001
-    rules:
-        - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-          when: always
-        - when: never
     script:
         - docker rm -f tgb-test || echo tried to remove test-contailer but failed
 
