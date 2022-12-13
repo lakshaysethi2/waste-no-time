@@ -71,11 +71,9 @@ def test_last_5_used_are_unique():
 
 
 def test_last_used_array_works_with_last5():
-    set_reply_markup_last_used('/now sdtgfsdg1')
-    set_reply_markup_last_used('/now sdtgfsdg2')
-    set_reply_markup_last_used('/now sdtgfsdg3')
-    set_reply_markup_last_used('/now sdtgfsdg4')
-    set_reply_markup_last_used('/now sdtgfsdg5')
+    n = 5
+    for i in range(0, n):
+        set_reply_markup_last_used(the_arr[i])
     set_reply_markup_last_used(msg_txt1)
     set_reply_markup_last_used(msg_txt2)
     set_reply_markup_last_used(msg_txt3)
