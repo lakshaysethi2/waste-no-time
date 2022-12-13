@@ -522,26 +522,20 @@ def say_this(message):
 
 def set_reply_markup_last_used(message):
 	true_last_used=message.split(",")[0]
-	if true_last_used == get_value("last_useda"):
+	if get_value("last_used_array") is None:
+		set_value("last_used_array",json.dumps([true_last_used]))
+	last_used_array = json.loads(get_value("last_used_array"))
+	if true_last_used == last_used_array[0]:
 		return
-	elif get_value("last_usedb") == true_last_used:
-		set_value('last_usedb', get_value("last_useda"))
-		set_value('last_useda', true_last_used)
-	elif get_value("last_usedc") == true_last_used:
-		set_value('last_usedc', get_value("last_useda"))
-		set_value('last_useda', true_last_used)
-	elif get_value("last_usedd") == true_last_used:
-		set_value('last_usedd', get_value("last_useda"))
-		set_value('last_useda', true_last_used)
-	elif get_value("last_usede") == true_last_used:
-		set_value('last_usede', get_value("last_useda"))
-		set_value('last_useda', true_last_used)
-	else:
-		set_value('last_usede', get_value("last_usedd"))
-		set_value('last_usedd', get_value("last_usedc"))
-		set_value('last_usedc', get_value("last_usedb"))
-		set_value('last_usedb', get_value("last_useda"))
-		set_value('last_useda', true_last_used)
+	for i in range(len(last_used_array)):
+		if true_last_used == last_used_array[i]:
+			last_used_array.pop(i)
+			break
+	last_used_array.insert(0,true_last_used)
+	if len(last_used_array)>10:
+		last_used_array.pop()
+	set_value("last_used_array",json.dumps(last_used_array))
+	
 
 @bot.message_handler(commands=['now'])
 def now(message):
@@ -651,11 +645,9 @@ def fixmt(message,sent_message_obj=None):
 def get_reply_markup_for_now():
 	array_of_arrays = []
 	small_array = []
-	array_of_arrays.append([str(get_value('last_useda'))])
-	array_of_arrays.append([str(get_value('last_usedb'))])
-	array_of_arrays.append([str(get_value('last_usedc'))])
-	array_of_arrays.append([str(get_value('last_usedd'))])
-	array_of_arrays.append([str(get_value('last_usede'))])
+	last_used_array = json.loads(get_value('last_used_array'))
+	for reply_btn_text in last_used_array:
+		array_of_arrays.append([reply_btn_text])
 	array_of_arrays.append(['/key strict_notes, no'])
 	for index,tag in enumerate(the_activities_markup):
 		small_array.append(tag)
@@ -663,8 +655,8 @@ def get_reply_markup_for_now():
 			array_of_arrays.append(small_array)
 			small_array = []
 	if len(small_array)>0: array_of_arrays.append(small_array)
-	assert array_of_arrays[0] == [str(get_value('last_useda'))]
-	reply_markup = json.dumps({'keyboard':array_of_arrays})
+	assert array_of_arrays[0] == [last_used_array[0]]
+	reply_markup = json.dumps({'keyboard':array_of_arrays,'resize_keyboard':True})
 	set_value("current_rm",reply_markup)
 	return reply_markup
 
@@ -829,16 +821,6 @@ def run_continuously(interval=5):
 
 
 def start_bot():
-	if get_value("last_useda") is None:
-		set_value("last_useda", '/now manictime')
-	if get_value("last_usedb") is None:
-		set_value('last_usedb', "/now programming")
-	if get_value("last_usedc") is None:
-		set_value('last_usedc', "/now goal setting")
-	if get_value("last_usedd") is None:
-		set_value('last_usedd', "/now reading")
-	if get_value("last_usede") is None:
-		set_value('last_usede', "/now writing")
 	if get_value('strict_notes') is None:
 		set_value('strict_notes', "yes")
 	if get_value('ci') is None:
@@ -846,11 +828,6 @@ def start_bot():
 	if get_value('mt') is None:
 		set_value("mt", 'on')
 	text = f''' just restarted 
-	key - val
-	last_useda -{ get_value("last_useda")}
-	last_usedb - {get_value("last_usedb")}
-	last_usedc - {get_value("last_usedc")}
-	last_usedd - {get_value("last_usedd")}
 	strict_notes - {get_value("strict_notes")}
 	ci - {get_value("ci")}
 	mt - {get_value("mt")}
