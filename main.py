@@ -827,12 +827,13 @@ def start_bot():
 		set_value("ci", '2')
 	if get_value('mt') is None:
 		set_value("mt", 'on')
+	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text)	
 	text = f''' just restarted 
+	production is {PRODUCTION}
 	strict_notes - {get_value("strict_notes")}
 	ci - {get_value("ci")}
 	mt - {get_value("mt")}
 	'''
-	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text)	
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).seconds.do(check)
 	while 1:
