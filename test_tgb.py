@@ -1,14 +1,23 @@
 from main import *
 import pytest
 
-msg_txt1 = '/now programming'
-msg_txt2 = '/now manictime'
-msg_txt3 = '/now reading'
-msg_txt4 = '/now walking'
-msg_txt5 = '/now writing'
-msg_txt6 = '/now exercise'
-msg_txt7 = '/now udemy'
-msg_txt8 = '/now linux'
+the_arr = [msg_txt1,
+msg_txt2,
+msg_txt3,
+msg_txt4,
+msg_txt5,
+msg_txt6,
+msg_txt7,
+msg_txt8] = [
+    '/now programming',
+'/now manictime',
+'/now reading',
+'/now walking',
+'/now writing',
+'/now exercise',
+'/now udemy',
+'/now linux',
+]
 
 def setup_for_last_used():
     set_value("last_useda", msg_txt1)
@@ -30,9 +39,9 @@ def send_basic_messages():
 
 
 def test_last_n_used_are_unique():
-    n = 7
-    for i in range(1, n+1):
-        set_reply_markup_last_used('/now sdtgfsdg' + str(i))
+    n = 8
+    for i in range(0, n):
+        set_reply_markup_last_used(the_arr[i])
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
     for i in range(0, n):
         for j in range(i+1, n):
