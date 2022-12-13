@@ -834,6 +834,7 @@ def start_bot():
 	ci - {get_value("ci")}
 	mt - {get_value("mt")}
 	'''
+	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)	
 	rc = run_continuously()
 	schedule.every(CHECKINTERVAL).seconds.do(check)
 	while 1:
