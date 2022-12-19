@@ -24,7 +24,7 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'linux',
 'sick',
 ]
-CHECKINTERVAL=20
+
 PRODUCTION=os.environ.get('PRODUCTION')
 
 the_activities_markup = [
@@ -664,13 +664,13 @@ def get_reply_markup_for_now():
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
-	CHECKINTERVAL = int(database['ci'])
+	CHECKINTERVAL_seconds = int(database['ci'])
 
 	if database['mt'] == 'on':
 		rm = get_reply_markup_for_now()
 		now = getNow()
 		to_time = now
-		from_time = to_time - timedelta(minutes=CHECKINTERVAL)
+		from_time = to_time - timedelta(seconds=int(CHECKINTERVAL_seconds))
 		if there_is_no_tag(from_time, to_time):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
@@ -826,7 +826,7 @@ def start_bot():
 	if get_value('strict_notes') is None:
 		set_value('strict_notes', "yes")
 	if get_value('ci') is None:
-		set_value("ci", '2')
+		set_value("ci", '60')
 	if get_value('mt') is None:
 		set_value("mt", 'on')
 	text = f''' just restarted 
@@ -835,9 +835,10 @@ def start_bot():
 	ci - {get_value("ci")}
 	mt - {get_value("mt")}
 	'''
+	CHECKINTERVAL_seconds=int(get_value('ci'))
 	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)	
 	rc = run_continuously()
-	schedule.every(CHECKINTERVAL).seconds.do(check)
+	schedule.every(CHECKINTERVAL_seconds).seconds.do(check)
 	while 1:
 		try:
 			bot.polling()
