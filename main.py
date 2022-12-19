@@ -24,18 +24,18 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'linux',
 'sick',
 ]
-
+CHECKINTERVAL_seconds=60
 PRODUCTION=os.environ.get('PRODUCTION')
 
 the_activities_markup = [
 	'/key mt, on',
 	'/key mt, off',
-	'/key ci, 1',
-	'/key ci, 10',
-	'/key ci, 2',
+	'/key ci, 60',
+	'/key ci, 600',
+	'/key ci, 120',
+	'/key ci, 1200',
 	'/key ci, 20',
-	'/key ci, 0',
-	'/key ci, 5',
+	'/key ci, 300',
 	'/now reading',
 	'/now job',
 	'/now writing',
@@ -664,7 +664,7 @@ def get_reply_markup_for_now():
 
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
-	CHECKINTERVAL_seconds = int(database['ci'])
+	CHECKINTERVAL_seconds = int(get_value("ci"))
 
 	if database['mt'] == 'on':
 		rm = get_reply_markup_for_now()
@@ -676,6 +676,7 @@ def check(message = 'hi'):
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
 			text = f'{from_time_str} to {to_time_str} \nno tag mate!\n\n what have you been INVESTING your ATTENTION in ?\nhttps://goals.lak.nz'
+			set_value("ci", 15)
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
 
