@@ -30,7 +30,7 @@ PRODUCTION=os.environ.get('PRODUCTION')
 the_activities_markup = [
 	'/key mt, on',
 	'/key mt, off',
-	'/key ci, 60',
+	'/key ci, 40',
 	'/key ci, 600',
 	'/key ci, 120',
 	'/key ci, 1200',
