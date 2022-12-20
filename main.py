@@ -628,6 +628,7 @@ def budgets(message):
 def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false
 	so can be used like if there_is_no_tag"""
+	set_value("manictime_check" , f'{time.time()}' )
 	res_json  = getactivities_json(to_time,from_time)
 	activities = res_json['activities']
 	if len(activities)<1:
@@ -666,6 +667,8 @@ def get_reply_markup_for_now():
 def check(message = 'hi'):
 	CHECKINTERVAL_seconds = int(get_value("ci"))
 
+	if  (int(float(time.time()*1000)) -int(float(get_value("manictime_check")))*1000 ) < CHECKINTERVAL_seconds:
+		return
 	if database['mt'] == 'on':
 		rm = get_reply_markup_for_now()
 		now = getNow()
@@ -824,6 +827,8 @@ def run_continuously(interval=5):
 
 
 def start_bot():
+	if get_value("manictime_check") is None:
+		set_value('manictime_check', f"{time.time()}")
 	if get_value('strict_notes') is None:
 		set_value('strict_notes', "yes")
 	if get_value('ci') is None:
@@ -839,7 +844,7 @@ def start_bot():
 	CHECKINTERVAL_seconds=int(get_value('ci'))
 	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)	
 	rc = run_continuously()
-	schedule.every(CHECKINTERVAL_seconds).seconds.do(check)
+	schedule.every(5).seconds.do(check)
 	while 1:
 		try:
 			bot.polling()
