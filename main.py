@@ -533,7 +533,7 @@ def set_reply_markup_last_used(message):
 			break
 	last_used_array.insert(0,true_last_used)
 	if get_value('number_of_last_used') is None:
-		set_value('number_of_last_used', "11")
+		set_value('number_of_last_used', "30")
 	if len(last_used_array)>int(get_value("number_of_last_used")):
 		last_used_array.pop()
 	set_value("last_used_array",json.dumps(last_used_array))
