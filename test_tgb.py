@@ -19,6 +19,8 @@ msg_txt8] = [
 '/now linux',
 ]
 
+first=2
+
 def setup_for_last_used():
     set_value("last_useda", msg_txt1)
     set_value('last_usedb', msg_txt2)
@@ -45,29 +47,29 @@ def test_last_n_used_are_unique():
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
     for i in range(0, n):
         for j in range(i+1, n):
-            assert test_reply_markup_now['keyboard'][i] != test_reply_markup_now['keyboard'][j]
+            assert test_reply_markup_now['keyboard'][first+i] != test_reply_markup_now['keyboard'][first+j]
 
 def test_last_5_used_are_unique():
     setup_for_last_used()
     send_basic_messages()
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] != test_reply_markup_now['keyboard'][1]
-    assert test_reply_markup_now['keyboard'][0] != test_reply_markup_now['keyboard'][2]
-    assert test_reply_markup_now['keyboard'][0] != test_reply_markup_now['keyboard'][3]
-    assert test_reply_markup_now['keyboard'][1] != test_reply_markup_now['keyboard'][2]
-    assert test_reply_markup_now['keyboard'][1] != test_reply_markup_now['keyboard'][3]
-    assert test_reply_markup_now['keyboard'][2] != test_reply_markup_now['keyboard'][3]
+    assert test_reply_markup_now['keyboard'][first+0] != test_reply_markup_now['keyboard'][first+1]
+    assert test_reply_markup_now['keyboard'][first+0] != test_reply_markup_now['keyboard'][first+2]
+    assert test_reply_markup_now['keyboard'][first+0] != test_reply_markup_now['keyboard'][first+3]
+    assert test_reply_markup_now['keyboard'][first+1] != test_reply_markup_now['keyboard'][first+2]
+    assert test_reply_markup_now['keyboard'][first+1] != test_reply_markup_now['keyboard'][first+3]
+    assert test_reply_markup_now['keyboard'][first+2] != test_reply_markup_now['keyboard'][first+3]
     set_reply_markup_last_used( msg_txt1)
     set_reply_markup_last_used( msg_txt2)
     set_reply_markup_last_used( msg_txt1)
     set_reply_markup_last_used( msg_txt2)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] != test_reply_markup_now['keyboard'][1]
-    assert test_reply_markup_now['keyboard'][0] != test_reply_markup_now['keyboard'][2]
-    assert test_reply_markup_now['keyboard'][0] != test_reply_markup_now['keyboard'][3]
-    assert test_reply_markup_now['keyboard'][1] != test_reply_markup_now['keyboard'][2]
-    assert test_reply_markup_now['keyboard'][1] != test_reply_markup_now['keyboard'][3]
-    assert test_reply_markup_now['keyboard'][2] != test_reply_markup_now['keyboard'][3]
+    assert test_reply_markup_now['keyboard'][first+0] != test_reply_markup_now['keyboard'][first+1]
+    assert test_reply_markup_now['keyboard'][first+0] != test_reply_markup_now['keyboard'][first+2]
+    assert test_reply_markup_now['keyboard'][first+0] != test_reply_markup_now['keyboard'][first+3]
+    assert test_reply_markup_now['keyboard'][first+1] != test_reply_markup_now['keyboard'][first+2]
+    assert test_reply_markup_now['keyboard'][first+1] != test_reply_markup_now['keyboard'][first+3]
+    assert test_reply_markup_now['keyboard'][first+2] != test_reply_markup_now['keyboard'][first+3]
 
 
 def test_last_used_array_works_with_last5():
@@ -80,11 +82,11 @@ def test_last_used_array_works_with_last5():
     set_reply_markup_last_used(msg_txt4)
     set_reply_markup_last_used(msg_txt5)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt5]
-    assert test_reply_markup_now['keyboard'][1] == [msg_txt4]
-    assert test_reply_markup_now['keyboard'][2] == [msg_txt3]
-    assert test_reply_markup_now['keyboard'][3] == [msg_txt2]
-    assert test_reply_markup_now['keyboard'][4] == [msg_txt1]
+    assert test_reply_markup_now['keyboard'][first+0] == [msg_txt5]
+    assert test_reply_markup_now['keyboard'][first+1] == [msg_txt4]
+    assert test_reply_markup_now['keyboard'][first+2] == [msg_txt3]
+    assert test_reply_markup_now['keyboard'][first+3] == [msg_txt2]
+    assert test_reply_markup_now['keyboard'][first+4] == [msg_txt1]
 
 def test_top_reply_button_is_always_last_used():
     setup_for_last_used()
@@ -92,16 +94,16 @@ def test_top_reply_button_is_always_last_used():
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
     set_reply_markup_last_used(msg_txt3)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt3]
+    assert test_reply_markup_now['keyboard'][first+0] == [msg_txt3]
     set_reply_markup_last_used(msg_txt2)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt2]
+    assert test_reply_markup_now['keyboard'][first+0] == [msg_txt2]
     set_reply_markup_last_used(msg_txt1)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt1]
+    assert test_reply_markup_now['keyboard'][first+0] == [msg_txt1]
     set_reply_markup_last_used(msg_txt4)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt4]
+    assert test_reply_markup_now['keyboard'][first+0] == [msg_txt4]
 
 
 def test_app_does_not_break_if_same_is_supplied_twice():
@@ -111,8 +113,8 @@ def test_app_does_not_break_if_same_is_supplied_twice():
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now['keyboard'][0] == [msg_txt3]
-    assert test_reply_markup_now['keyboard'][1] != [msg_txt3]
+    assert test_reply_markup_now['keyboard'][first+0] == [msg_txt3]
+    assert test_reply_markup_now['keyboard'][first+1] != [msg_txt3]
 
 @pytest.mark.skip(reason="not implemented yet")
 def test_require_notes():
@@ -121,6 +123,7 @@ def test_require_notes():
     assert set_reply_markup_last_used(message) is False
     message.text = f'/now testing, testing notes required'
     assert set_reply_markup_last_used(message) is True
+
 @pytest.mark.skip(reason="not implemented yet")
 def test_budget():
     message = create_message_obj()
@@ -133,17 +136,17 @@ def test_notes_should_not_show_up_in_reply_markup():
     message = "/now programming, hi"
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == ['/now programming']
-    assert test_reply_markup_now["keyboard"][0] != ['/now programming,hi']
+    assert test_reply_markup_now["keyboard"][first+0] == ['/now programming']
+    assert test_reply_markup_now["keyboard"][first+0] != ['/now programming,hi']
     message = "/now linux"
     set_reply_markup_last_used(message)
     message = "/now linux, hi"
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == ['/now linux']
-    assert test_reply_markup_now["keyboard"][0] != ['/now linux,hi']
-    assert test_reply_markup_now["keyboard"][1] == ['/now programming']
-    assert test_reply_markup_now["keyboard"][1] != ['/now programming,hi']
+    assert test_reply_markup_now["keyboard"][first+0] == ['/now linux']
+    assert test_reply_markup_now["keyboard"][first+0] != ['/now linux,hi']
+    assert test_reply_markup_now["keyboard"][first+1] == ['/now programming']
+    assert test_reply_markup_now["keyboard"][first+1] != ['/now programming,hi']
 
 
 @pytest.mark.skip(reason="not implemented yet")
@@ -161,11 +164,11 @@ def test_last_x_used_in_reply_markup():
     message.text = msg_txt8
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][3] == [msg_txt5]
-    assert test_reply_markup_now["keyboard"][2] == [msg_txt6]
-    assert test_reply_markup_now["keyboard"][1] == [msg_txt7]
-    assert test_reply_markup_now["keyboard"][0] == [msg_txt8]
-    assert test_reply_markup_now["keyboard"][4] == [msg_txt4]
+    assert test_reply_markup_now["keyboard"][first+3] == [msg_txt5]
+    assert test_reply_markup_now["keyboard"][first+2] == [msg_txt6]
+    assert test_reply_markup_now["keyboard"][first+1] == [msg_txt7]
+    assert test_reply_markup_now["keyboard"][first+0] == [msg_txt8]
+    assert test_reply_markup_now["keyboard"][first+4] == [msg_txt4]
 @pytest.mark.skip(reason="not implemented yet")
 def test_manual_calendar():
     message = create_message_obj()
@@ -185,8 +188,8 @@ def test_no_notes_in_last_used():
     message.text = "/now food, bla"
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][4] == ["/now food"]
-    assert test_reply_markup_now["keyboard"][3] != ["/now food, bla"]
+    assert test_reply_markup_now["keyboard"][first+4] == ["/now food"]
+    assert test_reply_markup_now["keyboard"][first+3] != ["/now food, bla"]
 @pytest.mark.skip(reason="not implemented yet")
 def test_top_more_items():
     message = create_message_obj()
@@ -248,3 +251,25 @@ def test_manictime_message_updated():
     message = create_message_obj()
     message.text = "/now programming, tgb"
     resp = set_reply_markup_last_used(message)
+
+
+def test_top_2_reply_markup_are_mt_on_off():
+    setup_for_last_used()
+    message = "/now programming"
+    set_reply_markup_last_used(message)
+    message = "/now programming, hi"
+    set_reply_markup_last_used(message)
+    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    assert test_reply_markup_now["keyboard"][0] == ['/key mt, on']
+    assert test_reply_markup_now["keyboard"][1] == ['/key mt, off']
+    message = "/now linux"
+    set_reply_markup_last_used(message)
+    message = "/now linux, hi"
+    set_reply_markup_last_used(message)
+    test_reply_markup_now = json.loads(get_reply_markup_for_now())
+    assert test_reply_markup_now["keyboard"][0] == ['/key mt, on']
+    assert test_reply_markup_now["keyboard"][1] == ['/key mt, off']
+    assert test_reply_markup_now["keyboard"][first+0] == ['/now linux']
+    assert test_reply_markup_now["keyboard"][first+0] != ['/now linux,hi']
+    assert test_reply_markup_now["keyboard"][first+1] == ['/now programming']
+    assert test_reply_markup_now["keyboard"][first+1] != ['/now programming,hi']

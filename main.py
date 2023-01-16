@@ -28,8 +28,6 @@ CHECKINTERVAL_seconds=60
 PRODUCTION=os.environ.get('PRODUCTION')
 
 the_activities_markup = [
-	'/key mt, on',
-	'/key mt, off',
 	'/key ci, 40',
 	'/key ci, 600',
 	'/key ci, 120',
@@ -649,6 +647,8 @@ def get_reply_markup_for_now():
 	array_of_arrays = []
 	small_array = []
 	last_used_array = json.loads(get_value('last_used_array'))
+	array_of_arrays.append(['/key mt, on'])
+	array_of_arrays.append(['/key mt, off'])
 	for reply_btn_text in last_used_array:
 		array_of_arrays.append([reply_btn_text])
 	array_of_arrays.append(['/key strict_notes, no'])
@@ -658,7 +658,7 @@ def get_reply_markup_for_now():
 			array_of_arrays.append(small_array)
 			small_array = []
 	if len(small_array)>0: array_of_arrays.append(small_array)
-	assert array_of_arrays[0] == [last_used_array[0]]
+	assert array_of_arrays[2] == [last_used_array[0]]
 	reply_markup = json.dumps({'keyboard':array_of_arrays,'resize_keyboard':True})
 	set_value("current_rm",reply_markup)
 	return reply_markup
