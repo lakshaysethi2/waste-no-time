@@ -23,7 +23,7 @@ def get_token(username,password):
     'password': password,
     }
 
-    print('making manictime request')
+    print('making manictime post token request')
     resp=  requests.post(f'{SERVER_LINK}/api/token', headers=headers,data=data)
     return json.loads(resp.text)['token']
 
@@ -47,7 +47,7 @@ headers = {
 }
 
 def getactivities_json(to_time,from_time):
-    print('making manictime request')
+    print('making manictime get activities request')
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     try:
         timelines = json.loads(response.text)
@@ -57,7 +57,7 @@ def getactivities_json(to_time,from_time):
     for timeline in timelines['timelines']:
         if timeline['timelineType']['typeName'] =="ManicTime/Tags":
             tags_timeline_id = timeline['timelineId']
-    print('making manictime request')
+    print('making manictime get activities from timeline request')
     response = requests.get(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities?fromTime={from_time}&toTime={to_time}', headers=headers)
     res_json = json.loads(response.text)
     return res_json
@@ -432,7 +432,7 @@ def get_report_for_tag(tag_name,start,end):
 
 
 def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
-    print('making manictime request')
+    print('making manictime get for create act request')
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     if response.status_code != 200:
         return False
@@ -458,7 +458,7 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
         'Content-Type': 'application/vnd.manictime.v3+json',
         'Authorization': f'Bearer {AUTH_TOKEN}',
     }
-    print('making manictime request')
+    print('making manictime post activity request')
     response = requests.post(url=f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities',data=post_json,headers=headers1)
     if response.status_code == 200:
         return True
@@ -546,7 +546,7 @@ def merge_activities(act1,act2):
 
 def deleteActivity(act):
     act_id = act['activityId']
-    print('making manictime request')
+    print('making manictime get for del act request')
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
@@ -557,12 +557,12 @@ def deleteActivity(act):
         'Content-Type': 'application/vnd.manictime.v3+json',
         'Authorization': f'Bearer {AUTH_TOKEN}',
     }
-    print('making manictime request')
+    print('making manictime delete request')
     response = requests.delete(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities/{act_id}', headers=headers1)
 
 def update_activity_start(activity,new_start_time,delta):
     act_id = activity['activityId']
-    print('making manictime request')
+    print('making manictime get timelines request')
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     timelines = json.loads(response.text)
     for timeline in timelines['timelines']:
@@ -589,7 +589,7 @@ def update_activity_start(activity,new_start_time,delta):
         'Content-Type': 'application/vnd.manictime.v3+json',
         'Authorization': f'Bearer {AUTH_TOKEN}',
     }
-    print('making manictime request')
+    print('making manictime update activity request')
     response = requests.put(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities/{act_id}', headers=headers1,data=payload)
 
 def get_time_spent_today(tag,days=0):
