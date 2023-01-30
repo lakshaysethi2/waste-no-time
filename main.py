@@ -24,7 +24,6 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 'linux',
 'sick',
 ]
-CHECKINTERVAL_seconds=60
 PRODUCTION=os.environ.get('PRODUCTION')
 
 the_activities_markup = [
@@ -609,10 +608,6 @@ def budgets(message):
 		['goal setting',0,0],
 		['walking',0,0],
 		['exercise',0,0],
-		
-		
-
-
 		 ]
 	for tag in tags_array:
 		message.text = f'/budget {tag[0]}'
@@ -663,17 +658,23 @@ def get_reply_markup_for_now():
 	set_value("current_rm",reply_markup)
 	return reply_markup
 
+
+def called_manictime_long_time_ago():
+	time_now = int(float(time.time()*1000))
+	last_called = int(float(get_value("manictime_check")))*1000 
+	if (time_now - last_called ) > int(get_value('ci'))*1000:
+		print((time_now - last_called), "is greater than ",int(get_value('ci')) )
+		return True
+	return False
+
+
 @bot.message_handler(commands=['check'])
 def check(message = 'hi'):
-	CHECKINTERVAL_seconds = int(get_value("ci"))
-
-	if  (int(float(time.time()*1000)) -int(float(get_value("manictime_check")))*1000 ) < CHECKINTERVAL_seconds:
-		return
-	if database['mt'] == 'on':
+	if  called_manictime_long_time_ago() and (database['mt'] == 'on'):
 		rm = get_reply_markup_for_now()
 		now = getNow()
 		to_time = now
-		from_time = to_time - timedelta(seconds=int(CHECKINTERVAL_seconds))
+		from_time = to_time - timedelta(seconds=int(get_value('ci')))
 		if there_is_no_tag(from_time, to_time):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
@@ -840,7 +841,6 @@ def start_bot():
 	ci - {get_value("ci")}
 	mt - {get_value("mt")}
 	'''
-	CHECKINTERVAL_seconds=int(get_value('ci'))
 	if PRODUCTION=="1": bot.send_message(LAKSHAY_CID,text=text,disable_notification=True)	
 	rc = run_continuously()
 	schedule.every(5).seconds.do(check)
