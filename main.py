@@ -560,6 +560,7 @@ def now(message):
 		old_rm = get_value("current_rm")
 		rm=get_reply_markup_for_now()
 		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
+			set_value("manictime_check" , f'{time.time()}' )
 			sent_message_obj=bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 			fixmt(message,sent_message_obj)
 			time_spent_on_tag = get_time_spent_today(tag)
@@ -621,7 +622,7 @@ def budgets(message):
 def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false
 	so can be used like if there_is_no_tag"""
-	set_value("manictime_check" , f'{time.time()}' )
+	
 	res_json  = getactivities_json(to_time,from_time)
 	activities = res_json['activities']
 	if len(activities)<1:
