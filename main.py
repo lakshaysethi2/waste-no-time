@@ -27,12 +27,10 @@ array_of_tags_for_which_notes_are_required = ['plantme','fliss', 'trying or sett
 PRODUCTION=os.environ.get('PRODUCTION')
 
 the_activities_markup = [
-	'/key ci, 40',
 	'/key ci, 600',
 	'/key ci, 120',
 	'/key ci, 1200',
 	'/key ci, 20',
-	'/key ci, 300',
 	'/now reading',
 	'/now job',
 	'/now writing',
@@ -648,8 +646,8 @@ def get_reply_markup_for_now():
 	array_of_arrays = []
 	small_array = []
 	last_used_array = json.loads(get_value('last_used_array'))
-	array_of_arrays.append(['/key mt, on'])
-	array_of_arrays.append(['/key mt, off'])
+	array_of_arrays.append(['/key mt, on','/key mt, off'])
+	array_of_arrays.append(['/key ci, 40','/key ci, 300'])
 	for reply_btn_text in last_used_array:
 		array_of_arrays.append([reply_btn_text])
 	array_of_arrays.append(['/key strict_notes, no'])
