@@ -540,7 +540,7 @@ def now(message):
 	a=message.text.split('now')[1].split(',')
 	notes=''
 	set_reply_markup_last_used("/now"+tag)
-	must_wait_min_sec=30
+	must_wait_min_sec=10
 	time_now = int(float(time.time()*1000))
 	last_called = int(float(get_value("manictime_check")))*1000
 	if (time_now - last_called ) < must_wait_min_sec*1000:
