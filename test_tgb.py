@@ -253,22 +253,22 @@ def test_manictime_message_updated():
     resp = set_reply_markup_last_used(message)
 
 
-def test_top_2_reply_markup_are_mt_on_off():
+def test_top_2_reply_markup_are_mt_on_off_and_ci_seters():
     setup_for_last_used()
     message = "/now programming"
     set_reply_markup_last_used(message)
     message = "/now programming, hi"
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == ['/key mt, on']
-    assert test_reply_markup_now["keyboard"][1] == ['/key mt, off']
+    assert test_reply_markup_now["keyboard"][0] == ['/key mt, on','/key mt, off']
+    assert test_reply_markup_now["keyboard"][1] == ['/key ci, 40','/key ci, 300']
     message = "/now linux"
     set_reply_markup_last_used(message)
     message = "/now linux, hi"
     set_reply_markup_last_used(message)
     test_reply_markup_now = json.loads(get_reply_markup_for_now())
-    assert test_reply_markup_now["keyboard"][0] == ['/key mt, on']
-    assert test_reply_markup_now["keyboard"][1] == ['/key mt, off']
+    assert test_reply_markup_now["keyboard"][0] == ['/key mt, on','/key mt, off']
+    assert test_reply_markup_now["keyboard"][1] == ['/key ci, 40','/key ci, 300']
     assert test_reply_markup_now["keyboard"][first+0] == ['/now linux']
     assert test_reply_markup_now["keyboard"][first+0] != ['/now linux,hi']
     assert test_reply_markup_now["keyboard"][first+1] == ['/now programming']
