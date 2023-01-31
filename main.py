@@ -647,7 +647,7 @@ def get_reply_markup_for_now():
 	small_array = []
 	last_used_array = json.loads(get_value('last_used_array'))
 	array_of_arrays.append(['/key mt, on','/key mt, off'])
-	array_of_arrays.append(['/key ci, 40','/key ci, 300'])
+	array_of_arrays.append(['/key ci, 40','/key ci, 120','/key ci, 300'])
 	for reply_btn_text in last_used_array:
 		array_of_arrays.append([reply_btn_text])
 	array_of_arrays.append(['/key strict_notes, no'])
