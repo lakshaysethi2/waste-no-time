@@ -14,7 +14,7 @@ the_activities_markup = [
 	'/now doing phone',
 	'/now goal setting',
 	"/now sleep",
-	"/now eye candy",
+	"/now eyec",
 	"/now food",
 	'/now Trying or setting up',
 	'/now other people',
