@@ -1,8 +1,6 @@
 
 the_activities_markup = [
-	'/key ci, 600',
-	'/key ci, 1200',
-	'/key ci, 20',
+
 	'/now reading',
 	'/now job',
 	'/now writing',
