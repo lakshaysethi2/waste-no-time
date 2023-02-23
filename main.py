@@ -29,9 +29,10 @@ rm = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True)
 def send_welcome(message):
 	rm.__init__()
 	rm.add("/n add new goal(s)","/l list out my goals", "/manictime today vs yesterday manictime" )
-	print(message.text)
-	bot.send_message(message.chat.id,text=f"Hi,{message.from_user.first_name} {message.from_user.last_name} Welcome -  Thanks for checking out my Goals App Bot , it is not ready for public use yet, but you can still use my goals app website at https://goals.lak.nz to set and achieve your goals -Lakshay")
-	bot.send_message(LAKSHAY_CID,text=f"Hi,{message.from_user.first_name} {message.from_user.last_name} Welcome -  Thanks for checking out my Goals App Bot , it is not ready for public use yet, but you can still use my goals app website at https://goals.lak.nz to set and achieve your goals \n -Lakshay {message.text} {message.chat.id}")
+	the_text = f"Hi, {message.from_user.first_name}! \n Welcome -  Thanks for checking out @GoalsAppBot, this app is still in development and may not work as expected, for a better experience  please also check out the goals web app at https://goals.lak.nz to set and achieve your goals \n\n-Lakshay :)"
+	bot.send_message(message.chat.id,text=the_text)
+	bot.send_message(LAKSHAY_CID,text= the_text + str(message.chat.id), disable_notification=True)
+	bot.send_message(message.chat.id,text="Lets start with making a list of your goals. \n\nhere are some questions to help you : \n\nWhat do you want? \n\nwhat do you like and want to do more of? \n\nwhat do you not like and want to reduce in your life? \n\nWhat do you really want to do?")
 
 @bot.message_handler(commands=["n"])
 def new_goals(message):
@@ -238,7 +239,7 @@ def mt(message):
 def default_command(message):
 	if message.chat.id == -1001792881544:
 		link = f'https://t.me/c/1792881544/{message.id}'
-		bot.send_message(-1001792881544, f"here is your link:\n\n {link}")
+		bot.send_message(-1001792881544, f"here is your link:\n\n{link}")
 
 database = {}
 
@@ -788,8 +789,7 @@ def start_bot():
 		set_value('strict_notes', "yes")
 	if get_value('ci') is None:
 		set_value("ci", '60')
-	if get_value('mt') is None:
-		set_value("mt", 'on')
+	set_value("mt", 'off')
 	text = f''' just restarted 
 	production is {PRODUCTION}
 	strict_notes - {get_value("strict_notes")}
