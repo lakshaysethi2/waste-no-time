@@ -694,6 +694,22 @@ def timesheet_html(message):
 	response = requests.post(url, files=files,data={"chat_id":LAKSHAY_CID})
 
 
+@bot.message_handler(commands=['dellast'])
+def del_last(message):
+	time_now = int(float(time.time()*1000))
+	time_last_del = int(float(get_value("last_deleted")))*1000
+	if time_last_del != None and (time_now - time_last_del ) < 10000:
+		bot.send_message(LAKSHAY_CID,text='please wait 10 seconds between deleting tags')
+		return
+	set_value("last_deleted" , f'{time.time()}' )
+	bot.send_message(LAKSHAY_CID,text='deleting last tag..')
+	tag = delete_last_tag()
+	if tag != False:
+		bot.send_message(LAKSHAY_CID,text=f'deleted tag {tag}')
+	else:
+		bot.send_message(LAKSHAY_CID,text=f'failed to delete, can only delete tags in last 20 minutes')
+
+
 
 
 @bot.message_handler(func=lambda m: True)
@@ -713,7 +729,6 @@ def conversation(message):
 		return	
 	
 	bot.send_message(LAKSHAY_CID,text=text,reply_markup= rm)
-
 
 def getMyevents():
 	
@@ -783,6 +798,8 @@ def run_continuously(interval=5):
 
 
 def start_bot():
+	if get_value("last_deleted") is None:
+		set_value("last_deleted" , f'{time.time()}' )
 	if get_value("manictime_check") is None:
 		set_value('manictime_check', f"{time.time()}")
 	if get_value('strict_notes') is None:

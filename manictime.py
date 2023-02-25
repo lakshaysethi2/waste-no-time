@@ -559,6 +559,9 @@ def deleteActivity(act):
     }
     print('making manictime delete request')
     response = requests.delete(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities/{act_id}', headers=headers1)
+    if response.status_code == 200:
+        return act['displayName']
+    return False
 
 def update_activity_start(activity,new_start_time,delta):
     act_id = activity['activityId']
@@ -606,3 +609,15 @@ def get_time_spent_today(tag,days=0):
    
 def get_hours_from_time_delta(time_delta):
     return f"{round(time_delta.total_seconds()/3600,2)}h"
+
+
+def delete_last_tag():
+    # returns the name of the deleted tag else false
+    # only deletes the last tag in the last 20 minutes
+    to_time = getNow()
+    from_time = to_time - timedelta(minutes=20)
+    res_json = getactivities_json(to_time,from_time)
+    activities_array = (res_json['activities'])
+    sorted_act_array =  sorted(activities_array, key=lambda x: x['endTime'] )
+    last_activity = sorted_act_array[-1]
+    return deleteActivity(last_activity)
