@@ -16,7 +16,7 @@ build-and-deploy:
     script:
         - docker rm -f tgb
         - docker build -t tgb:latest ${CI_PROJECT_DIR}
-        - docker run -v $MANICTIME_JSON_FILE_PATH:$MANICTIME_JSON_FILE_PATH -e TELEGRAM_BOT_API_KEY=$TELEGRAM_BOT_API_KEY -e PRODUCTION=1 -d --restart unless-stopped --name tgb tgb:latest
+        - docker run -h tgb-prod-container -v $MANICTIME_JSON_FILE_PATH:$MANICTIME_JSON_FILE_PATH -e TELEGRAM_BOT_API_KEY=$TELEGRAM_BOT_API_KEY -e PRODUCTION=1 -d --restart unless-stopped --name tgb tgb:latest
         - echo all done docker container made
         - docker ps -a
 
