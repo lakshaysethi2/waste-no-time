@@ -519,7 +519,7 @@ def now(message):
 			sent_message_obj=bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
 			fixmt(message,sent_message_obj)
 			time_spent_on_tag = get_time_spent_today(tag)
-			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today'
+			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today \n{get_value("ci")} - {get_value("mt")}'
 			reply_markup = json.loads('{"inline_keyboard":[[]]}')
 			ik = reply_markup.get('inline_keyboard')
 			ik[0].append({'text': 'Attach photo', 'url': 'idk.lak.nz'})
