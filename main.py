@@ -512,26 +512,13 @@ def now(message):
 			pass
 		else:
 			notes=""
-		old_rm = get_value("current_rm")
 		rm=get_reply_markup_for_now()
 		if create_activity_tag(tag,notes,datetimeObj=dto,duration=4):
 			set_value("manictime_check" , f'{time.time()}' )
-			sent_message_obj=bot.send_message(LAKSHAY_CID,text=f'{tag} tag made',disable_notification=True)
-			fixmt(message,sent_message_obj)
+			fix_manictime()
 			time_spent_on_tag = get_time_spent_today(tag)
-			time_spent_text= f'spent {time_spent_on_tag} \non {tag} today \n{get_value("ci")} - {get_value("mt")}'
-			reply_markup = json.loads('{"inline_keyboard":[[]]}')
-			ik = reply_markup.get('inline_keyboard')
-			ik[0].append({'text': 'Attach photo', 'url': 'idk.lak.nz'})
-			# ik[0].append({'text': 'high', 'callback_data': 'idk.lak.nz'})
-			inline_keyboard = json.dumps(reply_markup)
-			bot.edit_message_text(message_id=sent_message_obj.id,chat_id=LAKSHAY_CID,
-				reply_markup=inline_keyboard,
-				text= sent_message_obj.text+'\n'+time_spent_text)
-			if old_rm != rm:
-				text_content=f"{sent_message_obj.text}\n{time_spent_text}"
-				bot.delete_message(LAKSHAY_CID, sent_message_obj.id)
-				bot.send_message(LAKSHAY_CID,text=text_content,disable_notification=True,reply_markup=rm)
+			text_content=f'{tag} tag made\nspent {time_spent_on_tag} \n on {tag} today \n{get_value("ci")} - {get_value("mt")}'
+			bot.send_message(LAKSHAY_CID,text=text_content,disable_notification=True,reply_markup=rm)
 			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
