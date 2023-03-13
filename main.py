@@ -503,7 +503,7 @@ def now(message):
 		notes+= get_formated_time(getNow())
 	if tag.lower().strip() in array_of_tags_for_which_notes_are_required:
 		if notes == '':
-			bot.send_message(LAKSHAY_CID,text=f'Wrn: Please provide notes')
+			bot.send_message(LAKSHAY_CID,text=f'Wrn: Please provide notes',disable_notification=True)
 			if str(get_value('strict_notes')) == 'yes':
 				return False
 	dto = getNow()
