@@ -20,6 +20,7 @@ PRODUCTION=os.environ.get('PRODUCTION')
 
 from variables import the_activities_markup
 from variables import array_of_tags_for_which_notes_are_required
+import variables
 import os
 TOKEN = os.getenv('TELEGRAM_BOT_API_KEY')
 bot = telebot.TeleBot(TOKEN)
@@ -586,7 +587,7 @@ def get_reply_markup_for_now():
 	small_array = []
 	last_used_array = json.loads(get_value('last_used_array'))
 	array_of_arrays.append(['/key mt, on','/key mt, off'])
-	array_of_arrays.append(['/key ci, 40','/key ci, 120','/key ci, 300','/key ci, 600','/key ci, 1200'])
+	array_of_arrays.append(variables.rm_2nd_row)
 	for reply_btn_text in last_used_array:
 		array_of_arrays.append([reply_btn_text])
 	array_of_arrays.append(['/key strict_notes, no'])
