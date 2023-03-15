@@ -1,4 +1,3 @@
-
 the_activities_markup = [
 
 	'/now reading',
@@ -36,12 +35,12 @@ the_activities_markup = [
 ]
 # keep tags in this array in lower case
 array_of_tags_for_which_notes_are_required = [
-	'trying or setting up',
-	'doing phone',
-	'food',
-	'writing',
-	'shopping',
-	'programming',
-	'linux',
-	'sick',
+	# 'trying or setting up',
+	# 'doing phone',
+	# 'food',
+	# 'writing',
+	# 'shopping',
+	# 'programming',
+	# 'linux',
+	# 'sick',
 ]
