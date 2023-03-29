@@ -794,7 +794,7 @@ def start_bot():
 		set_value('strict_notes', "yes")
 	if get_value('ci') is None:
 		set_value("ci", '60')
-	if int(get_value('ci')) < 40:
+	if int(get_value('ci')) < 29:
 		set_value("mt", 'off')
 	text = f''' just restarted 
 	production is {PRODUCTION}
