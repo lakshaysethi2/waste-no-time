@@ -30,10 +30,14 @@ the_activities_markup = [
 	'/now money',
 	'/now sick',
 
-
-
 ]
-rm_2nd_row = ['/key ci, 40','/key ci, 61','/key ci, 120','/key ci, 300','/key ci, 600']
+rm_2nd_row = [
+    '/key ci, 30',
+	'/key ci, 61',
+	'/key ci, 120',
+	'/key ci, 300',
+	'/key ci, 600'
+]
 # keep tags in this array in lower case
 array_of_tags_for_which_notes_are_required = [
 	# 'trying or setting up',
@@ -43,5 +47,5 @@ array_of_tags_for_which_notes_are_required = [
 	# 'shopping',
 	# 'programming',
 	# 'linux',
-	# 'sick',
+	'sick',
 ]
