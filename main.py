@@ -523,7 +523,7 @@ def now(message):
 			return True
 		else:
 			bot.send_message(LAKSHAY_CID,text=f'Error occured with manictime please try again',disable_notification=True,reply_markup=rm)
-			return create_activity_tag(tag,notes,datetimeObj=dto,duration=1)
+			return False
 	
 		
 
@@ -817,7 +817,8 @@ def start_bot():
 
 if __name__ == "__main__":
 	if AUTH_TOKEN == "":
-		AUTH_TOKEN = get_token(os.environ.get('MANICTIME_ADMIN_EMAIL'),os.environ.get('MANICTIME_PASSWORD'))
+		print("AUTH_TOKEN not set")
+		exit()
 	if PRODUCTION=="1":
 		sentry_sdk.init(
 			dsn="https://1c5ee8adcfe1468b95718f124b970547@o4504297777004544.ingest.sentry.io/4504297778184192",

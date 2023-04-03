@@ -8,3 +8,4 @@ wheel
 Flask
 Flask-SQLAlchemy
 sentry-sdk
+pytz
