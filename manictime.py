@@ -3,12 +3,16 @@ import json
 from datetime import datetime,timedelta,timezone
 LAKSHAY_CID =1040271347
 from types import SimpleNamespace
-
+import os
 from datetime import timezone
 import re
 from time import sleep
 from operator import itemgetter
 import math
+import pytz
+
+SERVER_LINK = "https://manictime.lak.nz"
+AUTH_TOKEN = os.environ.get('MANICTIME_AUTH_TOKEN')
 
 def get_token(username,password):
 
@@ -27,11 +31,6 @@ def get_token(username,password):
     resp=  requests.post(f'{SERVER_LINK}/api/token', headers=headers,data=data)
     return json.loads(resp.text)['token']
 
-SERVER_LINK = 'https://manictime.lak.nz'
-# SERVER_LINK = 'http://localhost:8090'
-#AUTH_TOKEN = os.environ.get('MANICTIME_AUTH_TOKEN')
-AUTH_TOKEN = "5989585dc24846a6aaf2febe48e37879"
-# AUTH_TOKEN = get_token('admin@example.com','password4321')
 
 tags_timeline_id = ''
 
@@ -40,7 +39,17 @@ try:
 except:
     from .keyvalue import *
 
-newzealnd = 13
+# use the api to get the current new zealand offset
+def getNewZealandOffset():
+    response = requests.get('http://worldtimeapi.org/api/timezone/Pacific/Auckland')
+    if response.status_code == 200:
+        return int(json.loads(response.text)['raw_offset']/3600)
+    else:
+        return 12
+
+newzealnd = getNewZealandOffset()
+print("newzealnd", newzealnd)
+
 headers = {
     'Accept': 'application/vnd.manictime.v2+json',
     'Authorization': f'Bearer {AUTH_TOKEN}',
@@ -429,9 +438,9 @@ def get_report_for_tag(tag_name,start,end):
     return (dur, text)
         
 
-
-
 def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
+    # assert datetimeObj timezone is utc
+    # assert datetimeObj.tzinfo == pytz.utc
     print('making manictime get for create act request')
     response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
     if response.status_code != 200:
@@ -503,7 +512,7 @@ def getLastfewHours(notes_needed,hours_wanted=12):
 def gettimeofact(act):
     return datetime.fromisoformat(act['startTime'])
 
-def fix_manictime(minutes=720):
+def fix_manictime(minutes=60):
     to_time = getNow()
     from_time = to_time - timedelta(minutes=minutes)
     res_json = getactivities_json(to_time,from_time)
