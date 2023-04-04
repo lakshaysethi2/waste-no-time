@@ -512,7 +512,7 @@ def getLastfewHours(notes_needed,hours_wanted=12):
 def gettimeofact(act):
     return datetime.fromisoformat(act['startTime'])
 
-def fix_manictime(minutes=360):
+def fix_manictime(minutes=760):
     to_time = getNow()
     from_time = to_time - timedelta(minutes=minutes)
     res_json = getactivities_json(to_time,from_time)
