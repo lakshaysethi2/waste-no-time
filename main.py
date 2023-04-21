@@ -497,7 +497,7 @@ def now(message):
 	time_now = int(float(time.time()*1000))
 	last_called = int(float(get_value("manictime_check")))*1000
 	if (time_now - last_called ) < must_wait_min_sec*1000:
-		bot.send_message(LAKSHAY_CID,text=f'Please wait atleast {must_wait_min_sec} seconds before making a new tag')
+		bot.send_message(LAKSHAY_CID,text=f'Please wait atleast {must_wait_min_sec} seconds before making a new tag',disable_notification=True)
 		return False
 	if len(a)>1:
 		notes = a[1]
