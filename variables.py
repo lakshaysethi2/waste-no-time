@@ -32,6 +32,7 @@ the_activities_markup = [
 
 ]
 rm_2nd_row = [
+    '/key ci, 15',
     '/key ci, 30',
 	'/key ci, 61',
 	'/key ci, 120',
