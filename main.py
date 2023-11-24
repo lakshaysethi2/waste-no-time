@@ -623,7 +623,7 @@ def check(message = 'hi'):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
-			text = f'{from_time_str} to {to_time_str}\nwhat have you been INVESTING your ATTENTION in ?\nhttps://goals.lak.nz\nIf you had the day to live all over again, what would you do differently?\n{get_value("ci")}'
+			text = f'{from_time_str} to {to_time_str}\nwhat have you been Choosing to invest your Attention  in ?\n why? \n{get_value("ci")}'
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
 
