@@ -417,7 +417,9 @@ def new_tag(message):
 		dto = now - timedelta(minutes=int(message.text.split(",")[2]))
 		duration = int(message.text.split(",")[3]) *60
 		if create_activity_tag(user_tag=tag_name,notes= notes,datetimeObj=dto,duration=duration):
-			bot.send_message(LAKSHAY_CID,text=f"{tag_name} tag made",disable_notification=True)
+			bot.send_message(LAKSHAY_CID,
+				text=f"{tag_name} tag made \n in the present moment, \n now-1s   to  now \n there are no problems",
+				disable_notification=True)
 		else:
 			bot.send_message(LAKSHAY_CID,text=f"Error please try again",disable_notification=True)
 	except Exception as e:
@@ -518,7 +520,9 @@ def now(message):
 			set_value("manictime_check" , f'{time.time()}' )
 			fix_manictime()
 			time_spent_on_tag = get_time_spent_today(tag)
-			text_content=f'{tag} tag made\nspent {time_spent_on_tag} \n on {tag} today \n{get_value("ci")} - {get_value("mt")}'
+			text_content=f'{tag} tag made\nspent {time_spent_on_tag} \n on {tag} today'
+			text_content+=f"\n in the present moment, \n\n now-1s      to     now \n\n there are no problems\n"
+			text_content+=f'\n{get_value("ci")} - {get_value("mt")}'
 			bot.send_message(LAKSHAY_CID,text=text_content,disable_notification=True,reply_markup=rm)
 			return True
 		else:
@@ -623,7 +627,12 @@ def check(message = 'hi'):
 			
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
-			text = f'{from_time_str} to {to_time_str}\nwhat have you been Choosing to invest your Attention  in ?\n why? \n{get_value("ci")}'
+			text = f'{from_time_str} to {to_time_str}\n'
+			text += f'what have you been Choosing to'
+			text += f'invest your Attention  in ?\n why? \n'
+			text += f'{get_value("ci")}'
+			text += f'\n Remember in the present moment \n now-1s to now \n'
+			text += f'there are no problems'
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
 
