@@ -822,7 +822,7 @@ def start_bot():
 			logging.exception('Caught an error')
 			print(e)
 			time.sleep(1)
-			bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
+			# bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 
 if __name__ == "__main__":
 	if AUTH_TOKEN == "":
