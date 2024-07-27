@@ -19,6 +19,7 @@ import sentry_sdk
 PRODUCTION=os.environ.get('PRODUCTION')
 
 from variables import the_activities_markup
+from variables import moc_levels_markup
 from variables import array_of_tags_for_which_notes_are_required
 import variables
 import os
@@ -595,7 +596,7 @@ def get_reply_markup_for_now():
 	for reply_btn_text in last_used_array:
 		array_of_arrays.append([reply_btn_text])
 	array_of_arrays.append(['/key strict_notes, no'])
-	for index,tag in enumerate(the_activities_markup):
+	for index,tag in enumerate(moc_levels_markup):
 		small_array.append(tag)
 		if index%2 == 1:
 			array_of_arrays.append(small_array)
@@ -628,10 +629,9 @@ def check(message = 'hi'):
 			from_time_str = str(from_time).split(' ')[1].split(".")[0]
 			to_time_str = str(to_time).split(' ')[1].split(".")[0]
 			text = f'{from_time_str} to {to_time_str}\n'
-			text += f'what have you been Choosing to'
-			text += f'invest your Attention  in ?\n why? \n'
-			text += f'{get_value("ci")}'
-			text += f'\n Remember in the present moment \n now-1s to now \n'
+			text += f'what is your current level of consciousness? \n'
+			text += f'checking interval is set to {get_value("ci")}s'
+			text += f'\n Remember in the present moment \n now-1ms to now+1ms \n'
 			text += f'there are no problems'
 			bot.send_message(LAKSHAY_CID,text=text,reply_markup=rm)
 	
