@@ -31,6 +31,33 @@ the_activities_markup = [
 	'/now sick',
 
 ]
+
+moc_levels_markup = [
+
+	'/now non-duality',
+	'/now peace',
+	'/now Joy',
+	'/now Love',
+	'/now Wisdom',
+	'/now Acceptance',
+	'/now forgiveness',
+	'/now Willingness',
+	'/now intention',
+	'/now Neutrality',
+	'/now Courage',
+	'/now Pride',
+	'/now Anger',
+	'/now Desire',
+	'/now Fear',
+	'/now Regret',
+	'/now Apathy',
+	'/now Guilt / blame',
+	'/now Shame',
+	
+]
+
+
+
 rm_2nd_row = [
     '/key ci, 15',
     '/key ci, 30',
