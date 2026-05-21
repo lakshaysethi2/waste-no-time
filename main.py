@@ -12,8 +12,7 @@ import threading
 from assistant import *
 from calendarfile import get_calendar_html
 import random
-from manictime_dash import get_json_object
-import sentry_sdk
+from manictime_dash import get_json_objectimport 
 
 
 PRODUCTION=os.environ.get('PRODUCTION')
@@ -828,9 +827,5 @@ if __name__ == "__main__":
 	if AUTH_TOKEN == "":
 		print("AUTH_TOKEN not set")
 		exit()
-	if PRODUCTION=="1":
-		sentry_sdk.init(
-			dsn="https://1c5ee8adcfe1468b95718f124b970547@o4504297777004544.ingest.sentry.io/4504297778184192",
-			traces_sample_rate=1.0
-		)
+	
 	start_bot()
