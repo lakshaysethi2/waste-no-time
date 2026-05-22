@@ -3,7 +3,7 @@ import requests
 import json
 
 base_url = "https://api.telegram.org/bot5061167346:AAECJdb_-U9jQorMiJRsITRJBRyf-53Ctv4"
-LAKSHAY_CID= 1040271347
+
 text = """select your energy level"""
 reply_markup = json.loads('{"inline_keyboard":[[]]}')
 ik = reply_markup.get('inline_keyboard')

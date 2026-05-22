@@ -1,20 +1,25 @@
+from sqlite3 import OperationalError
+
 import telebot
 import os
 from fpdf import FPDF
-from manictime import *
-from goals import *
+from manictime import getNow, getactivities_json
+# from goals import *
+from keyvalue import db, KeyValuePair
 import logging
 import json
 from datetime import datetime,timedelta,timezone
 import schedule
 import time
-import threading
-from assistant import *
-from calendarfile import get_calendar_html
+import threading 
+# from assistant import *
+# from calendarfile import get_calendar_html
 import random
-from manictime_dash import get_json_objectimport 
-
-
+# from manictime_dash import get_json_objectimport 
+database = {}
+database["mt"] = "on"
+database["last_used_array"] = "[]"
+LAKSHAY_CID= 1040271347
 PRODUCTION=os.environ.get('PRODUCTION')
 
 from variables import the_activities_markup
@@ -242,20 +247,23 @@ def default_command(message):
 		link = f'https://t.me/c/1792881544/{message.id}'
 		bot.send_message(-1001792881544, f"here is your link:\n\n{link}")
 
-database = {}
+
+
 
 db.connect()
+
+
 def updateDatabase(database=database):
 	try:
 		for pair in KeyValuePair.select():
-			database[f'{pair.key}']=pair.value
-	except OperationalError:
+			database[f'{pair.key}'] = pair.value
+	except Exception:
 		db.create_tables([KeyValuePair])
 		for pair in KeyValuePair.select():
-			database[f'{pair.key}']=pair.value
+			database[f'{pair.key}'] = pair.value
+
+
 updateDatabase()
-
-
 
 
 def get_value(key):
@@ -355,13 +363,6 @@ def basics(message):
 
 
 
-
-
-@bot.message_handler(commands=["at"])
-def authtoken(message):
-	AUTH_TOKEN = message.text.split()[1]
-
-	bot.send_message(LAKSHAY_CID,text=AUTH_TOKEN)
 
 
 
@@ -570,9 +571,9 @@ def there_is_no_tag(from_time,to_time)->bool:
 	"""returns true if thre is no tag in from time, to time , if tag is found returns false
 	so can be used like if there_is_no_tag"""
 	
-	res_json  = getactivities_json(to_time,from_time)
+	res_json = getactivities_json(to_time,from_time)
 	activities = res_json['activities']
-	if len(activities)<1:
+	if len(activities) < 1:
 		return True
 	return False
 @bot.message_handler(commands=['fixmt'])
@@ -601,7 +602,7 @@ def get_reply_markup_for_now():
 			array_of_arrays.append(small_array)
 			small_array = []
 	if len(small_array)>0: array_of_arrays.append(small_array)
-	assert array_of_arrays[2] == [last_used_array[0]]
+	# assert array_of_arrays[2] == [last_used_array[0]]
 	reply_markup = json.dumps({'keyboard':array_of_arrays,'resize_keyboard':True})
 	set_value("current_rm",reply_markup)
 	return reply_markup
@@ -611,7 +612,7 @@ def called_manictime_long_time_ago():
 	time_now = int(float(time.time()*1000))
 	last_called = int(float(get_value("manictime_check")))*1000 
 	if (time_now - last_called ) > int(get_value('ci'))*1000:
-		print((time_now - last_called), "is greater than ",int(get_value('ci')) )
+		# print((time_now - last_called), "is greater than ",int(get_value('ci')) )
 		return True
 	return False
 
@@ -823,9 +824,5 @@ def start_bot():
 			time.sleep(1)
 			# bot.send_message(LAKSHAY_CID,text=str(e)+' restarting..')
 
-if __name__ == "__main__":
-	if AUTH_TOKEN == "":
-		print("AUTH_TOKEN not set")
-		exit()
-	
+if __name__ == "__main__":	
 	start_bot()

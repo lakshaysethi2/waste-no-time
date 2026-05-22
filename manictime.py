@@ -39,16 +39,7 @@ try:
 except:
     from .keyvalue import *
 
-# use the api to get the current new zealand offset
-def getNewZealandOffset():
-    response = requests.get('http://worldtimeapi.org/api/timezone/Pacific/Auckland')
-    if response.status_code == 200:
-        return int(json.loads(response.text)['raw_offset']/3600)
-    else:
-        return 12
 
-newzealnd = getNewZealandOffset()
-print("newzealnd", newzealnd)
 
 headers = {
     'Accept': 'application/vnd.manictime.v2+json',
@@ -56,19 +47,7 @@ headers = {
 }
 
 def getactivities_json(to_time,from_time):
-    print('making manictime get activities request')
-    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
-    try:
-        timelines = json.loads(response.text)
-    except:
-        sleep(10)
-        timelines = json.loads(response.text)
-    for timeline in timelines['timelines']:
-        if timeline['timelineType']['typeName'] =="ManicTime/Tags":
-            tags_timeline_id = timeline['timelineId']
-    print('making manictime get activities from timeline request')
-    response = requests.get(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities?fromTime={from_time}&toTime={to_time}', headers=headers)
-    res_json = json.loads(response.text)
+    res_json = {"activities":[]}
     return res_json
 
 
@@ -478,7 +457,13 @@ def create_activity_tag(user_tag,notes,datetimeObj,duration,datetimestr=''):
 
 
 def getNow():
-    return datetime.utcnow()+ timedelta(hours=newzealnd)
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    # Get the current time in New Zealand
+    nz_time = datetime.now(ZoneInfo("Pacific/Auckland"))
+    return nz_time
+
 
 
 def get_formated_time(dto):

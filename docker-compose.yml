@@ -4,4 +4,6 @@ services:
     build: .
     volumes:
       - .:/app
-    
+    env_file:
+      - .env.local
+    command: sleep infinity

@@ -11,3 +11,4 @@ manictime/
 .envs
 .env
 manictimeserver/Data
+.env.local

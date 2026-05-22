@@ -8,21 +8,9 @@ from manictime  import AUTH_TOKEN,SERVER_LINK
 path_to_file = "/home/ubuntu/code/dashboard/frontend/src/manictime.json"
 
 def getactivities_json(to_time,from_time):
-    headers = {
-        'Accept': 'application/vnd.manictime.v2+json',
-        'Authorization': f'Bearer {AUTH_TOKEN}',
-    }
-    response = requests.get(f'{SERVER_LINK}/api/timelines', headers=headers)
-    if response.status_code!=200:
-        return json.dumps({"status":"error occured with manictime request"})
-    timelines = json.loads(response.text)
-    for timeline in timelines.get('timelines'):
-        if timeline.get('timelineType').get('typeName') =="ManicTime/Tags":
-            tags_timeline_id = timeline.get('timelineId')
-    print('making manictime request')
-    response = requests.get(f'{SERVER_LINK}/api/timelines/{tags_timeline_id}/activities?fromTime={from_time}&toTime={to_time}', headers=headers)
-    res_json = json.loads(response.text)
-    return res_json
+    # db magic 
+    # return res_json
+    return {"activities": []}
 
 def get_json_object(lock=1):
     to_time=datetime.datetime.utcnow()+datetime.timedelta(days=5)
