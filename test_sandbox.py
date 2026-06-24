@@ -1,5 +1,7 @@
 from test_tgb import create_message_obj
-from main import LAKSHAY_CID, TOKEN, requests, json, the_activities_markup,get_reply_markup_for_now,check
+import requests
+import json
+from main import LAKSHAY_CID, TOKEN, the_activities_markup, get_reply_markup_for_now, check
 from main import set_value
 from main import get_value
 

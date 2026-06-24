@@ -1,64 +1,36 @@
-# workflow:
-#   rules:
-#     - if: '$CI_PIPELINE_SOURCE != "merge_request_event"'
+stages:
+  - test
+  - build
 
-# run-tests:
-#   script:
-#     - docker build -t test:tgbtest .
+variables:
+  DOCKER_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
-# build-and-deploy:
-#     tags:
-#       - shell-runner-docker-8001
-#     rules:
-#         - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-#           when: always
-#         - when: never
-#     script:
-#         - docker rm -f tgb
-#         - docker build -t tgb:latest ${CI_PROJECT_DIR}
-#         - |
-#           docker run -h tgb-prod-container \
-#           -v /data/tgb/keyval.db:/app/keyval.db \
-#           -v $MANICTIME_JSON_FILE_PATH:$MANICTIME_JSON_FILE_PATH \
-#           -e TELEGRAM_BOT_API_KEY=$TELEGRAM_BOT_API_KEY \
-#           -e MANICTIME_AUTH_TOKEN=$AUTH_TOKEN \
-#           -e PRODUCTION=1 \
-#           -d --restart unless-stopped \
-#           --name tgb \
-#           tgb:latest
-#         - echo all done docker container made
-#         - docker ps -a
+test:
+  stage: test
+  image: python:3.11-slim
+  before_script:
+    - pip install --no-cache-dir -r requirements.txt
+  script:
+    - TELEGRAM_BOT_API_KEY=test python -m pytest -v --tb=short
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
+  only:
+    - branches
 
-# build-and-deploy-test:
-#     tags:
-#       - shell-runner-docker-8001
-#     rules:
-#         - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-#           when: always
-#         - when: never
-#     script:
-#         - docker rm -f tgb-test || echo tried to remove test-contailer but failed
-#         - docker rmi tgb-test:latest || echo tried to remove test-image but failed
-#         - docker build -t tgb-test:latest ${CI_PROJECT_DIR}
-#         - |
-#           docker run -h tgb-test-container \
-#           -v /data/tgb-test/keyval.db:/app/keyval.db \
-#           -v $MANICTIME_JSON_FILE_PATH:$MANICTIME_JSON_FILE_PATH \
-#           -e TELEGRAM_BOT_API_KEY=$TELEGRAM_TEST_BOT_API_KEY \
-#           -e MANICTIME_AUTH_TOKEN=$AUTH_TOKEN \
-#           -d --restart unless-stopped \
-#           --name tgb-test \
-#           tgb-test:latest
-
-
-# stop-test-job:
-#   timeout: 15m 
-#   tags:
-#     - shell-runner-docker-8001
-#   script:
-#     - docker rm -f tgb-test || echo tried to remove test-contailer but failed
-#   rules:
-#     - if: "$CI_COMMIT_BRANCH!=$CI_DEFAULT_BRANCH"
-#       when: manual
-#     - when: always
-
+build:
+  stage: build
+  image: docker:20.10
+  services:
+    - docker:dind
+  before_script:
+    - docker info
+  script:
+    - docker build -t $DOCKER_IMAGE_TAG .
+    - docker tag $DOCKER_IMAGE_TAG $CI_REGISTRY_IMAGE:latest
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker push $DOCKER_IMAGE_TAG
+    - docker push $CI_REGISTRY_IMAGE:latest
+  only:
+    - main

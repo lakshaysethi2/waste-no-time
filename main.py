@@ -473,9 +473,11 @@ def say_this(message):
 
 def set_reply_markup_last_used(message):
 	true_last_used=message.split(",")[0]
-	if get_value("last_used_array") is None:
-		set_value("last_used_array",json.dumps([true_last_used]))
-	last_used_array = json.loads(get_value("last_used_array"))
+	raw = get_value("last_used_array")
+	if raw is None or raw == "[]":
+		raw = json.dumps([true_last_used])
+		set_value("last_used_array", raw)
+	last_used_array = json.loads(raw)
 	if true_last_used == last_used_array[0]:
 		return
 	for i in range(len(last_used_array)):

@@ -12,3 +12,4 @@ manictime/
 .env
 manictimeserver/Data
 .env.local
+instance/
