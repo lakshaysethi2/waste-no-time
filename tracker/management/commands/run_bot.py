@@ -7,7 +7,7 @@ import signal
 from datetime import timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -111,7 +111,8 @@ class Command(BaseCommand):
             f"Welcome to Waste No Time! Your Chat ID is {chat_id}.\n"
             "Default categories have been initialized.\n"
             "Use /now <tag> to start an activity.\n"
-            "Type /help to see all commands."
+            "Type /help to see all commands.",
+            reply_markup=ReplyKeyboardRemove()
         )
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
