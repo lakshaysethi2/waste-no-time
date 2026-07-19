@@ -22,7 +22,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Consolidated all persistence into unified `db.sqlite3`.
 - Replaced ManicTime dependency with local retroactive capture logic.
 
-## [Unreleased] — 2026-07-19
+## [Unreleased]
+
+### Fixed
+- Rate limit on `/now` now checks the last Activity's `start_time` in the database instead of the `last_called` KV (which the bot's own periodic check was also writing to, causing false rejections).
+- Duration recalculation on activity merge: `save(update_fields=['end_time'])` skipped the model's custom `save()` so `duration` never updated; now uses full `save()`.
+
+### Changed
+- `/now` response cleaned up: no more activity keyboard after a successful log, keeping the original check prompt intact on button presses.
+- Rate limit errors on inline button presses now show a temporary popup (`show_alert=True`) instead of a new chat message.
+- `/top` now sends an inline doughnut chart (matplotlib) with the text summary. Accepts optional day count e.g. `/top 7`.
+- Activity selection keyboard is now paginated: 6 per page with `<` / `>` navigation and page counter.
+- `Activity.duration` is now a computed `@property` instead of a stored DB column — eliminates stale-data vectors (migration `0002_remove_activity_duration`).
+- `/start` sends `ReplyKeyboardRemove` to clear any stale reply keyboard from the legacy bot.
 
 ## [0.1.0] — Initial Planning Release
 
