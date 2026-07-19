@@ -239,11 +239,13 @@ class Command(BaseCommand):
         await self.log_now(chat_id, tag, notes, update)
 
     async def log_now(self, chat_id, tag, notes, update_or_query):
-        # Rate limit check (10 seconds)
-        last_called = await asyncio.to_thread(self.get_kv, chat_id, "last_called")
+        # Rate limit check (10 seconds) — check last actual Activity, not bot reminder time
+        last_activity = await asyncio.to_thread(
+            lambda: Activity.objects.filter(telegram_chat_id=chat_id).order_by('-start_time').first()
+        )
         now_ts = timezone.now().timestamp()
-        if last_called and (now_ts - float(last_called)) < 10:
-            msg = "Please wait at least 10 seconds between /now calls."
+        if last_activity and last_activity.start_time and (now_ts - last_activity.start_time.timestamp()) < 10:
+            msg = "Please wait at least 10 seconds between entries."
             if hasattr(update_or_query, 'message'):
                 await update_or_query.message.reply_text(msg)
             else:
@@ -254,17 +256,18 @@ class Command(BaseCommand):
         await asyncio.to_thread(self.set_kv, chat_id, "last_called", str(now_ts))
         
         today_total = await asyncio.to_thread(self.get_today_total, chat_id, tag)
-        keyboard = await self.get_keyboard(chat_id)
         
-        text = (f"Started: {tag}\n"
+        text = (f"✅ Started: {tag}\n"
                 f"Start time: {activity.start_time.strftime('%H:%M')}\n"
                 f"Today's total: {today_total}\n\n"
                 "In the present moment, there are no problems.")
         
-        if hasattr(update_or_query, 'message') and update_or_query.message:
-            await update_or_query.message.reply_text(text, reply_markup=keyboard)
-        elif hasattr(update_or_query, 'edit_message_text'):
-            await update_or_query.edit_message_text(text, reply_markup=keyboard)
+        # For button callbacks: edit the original prompt in-place
+        if hasattr(update_or_query, 'edit_message_text'):
+            await update_or_query.edit_message_text(text)
+        # For direct text commands: reply cleanly without re-showing the activity keyboard
+        elif hasattr(update_or_query, 'message') and update_or_query.message:
+            await update_or_query.message.reply_text(text)
 
     async def status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
