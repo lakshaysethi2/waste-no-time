@@ -37,6 +37,65 @@ class GapFillerTest(TestCase):
         self.assertAlmostEqual(activity.end_time.timestamp(), now.timestamp(), delta=1)
         self.assertEqual(activity.name, "Programming")
 
+    def test_merge_same_name_within_10_min(self):
+        # Create an initial activity ending 2 minutes ago
+        past = timezone.now() - timedelta(minutes=2)
+        original = Activity.objects.create(
+            telegram_chat_id=self.chat_id,
+            name="Programming",
+            start_time=past - timedelta(minutes=5),
+            end_time=past
+        )
+
+        # Log the same activity now — should merge (extend) the existing one
+        now = timezone.now()
+        activity = log_activity_gap_filled(self.chat_id, "Programming")
+
+        # Should return the SAME record, with end_time updated
+        self.assertEqual(activity.pk, original.pk)
+        self.assertAlmostEqual(activity.end_time.timestamp(), now.timestamp(), delta=1)
+
+        # Verify only 1 activity exists for this chat
+        count = Activity.objects.filter(telegram_chat_id=self.chat_id).count()
+        self.assertEqual(count, 1)
+
+    def test_no_merge_different_name(self):
+        # Create an initial activity ending 2 minutes ago
+        past = timezone.now() - timedelta(minutes=2)
+        Activity.objects.create(
+            telegram_chat_id=self.chat_id,
+            name="Sleep",
+            start_time=past - timedelta(minutes=30),
+            end_time=past
+        )
+
+        # Log a different activity — should NOT merge
+        activity = log_activity_gap_filled(self.chat_id, "Programming")
+        self.assertEqual(activity.name, "Programming")
+
+        # Verify 2 activities exist
+        count = Activity.objects.filter(telegram_chat_id=self.chat_id).count()
+        self.assertEqual(count, 2)
+
+    def test_no_merge_gap_exceeds_10_min(self):
+        # Create an initial activity ending 15 minutes ago (> 10 min gap)
+        past = timezone.now() - timedelta(minutes=15)
+        original = Activity.objects.create(
+            telegram_chat_id=self.chat_id,
+            name="Programming",
+            start_time=past - timedelta(minutes=30),
+            end_time=past
+        )
+
+        # Log the same activity now — gap > 10 min, should NOT merge
+        activity = log_activity_gap_filled(self.chat_id, "Programming")
+        self.assertNotEqual(activity.pk, original.pk)
+        self.assertEqual(activity.name, "Programming")
+
+        # Verify 2 activities exist
+        count = Activity.objects.filter(telegram_chat_id=self.chat_id).count()
+        self.assertEqual(count, 2)
+
     def test_lookback_limit(self):
         # Create an initial activity ending 800 minutes ago (beyond 760m limit)
         end_time = timezone.now() - timedelta(minutes=800)
