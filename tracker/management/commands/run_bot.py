@@ -18,12 +18,14 @@ from tracker.models import Activity, Goal, KeyValuePair
 from tracker.gap_filler import log_activity_gap_filled
 from tracker.trajectory import get_trajectory
 
-# Configure logging
+# Configure logging — level controlled by LOG_LEVEL env var
+log_level = os.environ.get('LOG_LEVEL', 'INFO').upper()
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    format='%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+    level=getattr(logging, log_level, logging.INFO)
 )
 logger = logging.getLogger(__name__)
+logger.info("Log level set to %s", log_level)
 
 class Command(BaseCommand):
     help = 'Runs the Telegram bot'
@@ -58,6 +60,18 @@ class Command(BaseCommand):
         # Handler for text messages (treating them as /now or notes)
         application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), self.handle_message))
         application.add_handler(CallbackQueryHandler(self.button_callback))
+
+        # Log all non-command text updates for debugging
+        async def log_update(update: Update, context: ContextTypes.DEFAULT_TYPE):
+            chat = update.effective_chat
+            user = update.effective_user
+            if update.message and update.message.text:
+                logger.info("Received: chat_id=%s user=%s text=%s",
+                            chat.id if chat else None,
+                            user.username if user else None,
+                            update.message.text)
+            return
+        application.add_handler(MessageHandler(filters.TEXT, log_update), group=-1)
 
         # Background job for periodic checks
         if application.job_queue:
@@ -116,8 +130,10 @@ class Command(BaseCommand):
 
     async def settings(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
-        ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
-        mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
+        logger.info("Settings command from chat_id=%s", chat_id)
+        try:
+            ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
+            mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
         status_icon = "✅ ON" if mt == "on" else "❌ OFF"
         keyboard = InlineKeyboardMarkup([
             [InlineKeyboardButton(f"Check interval: {ci}s", callback_data="noop")],
@@ -131,14 +147,17 @@ class Command(BaseCommand):
                                      callback_data="toggle:mt"),
             ],
         ])
-        await update.message.reply_text(
-            f"⚙️ *Settings*\n"
-            f"Check interval: `{ci}s`\n"
-            f"Periodic check: {status_icon}\n\n"
-            f"The bot will ask what you're doing every {ci}s if check is on.",
-            reply_markup=keyboard,
-            parse_mode='Markdown'
-        )
+            await update.message.reply_text(
+                f"⚙️ *Settings*\n"
+                f"Check interval: `{ci}s`\n"
+                f"Periodic check: {status_icon}\n\n"
+                f"The bot will ask what you're doing every {ci}s if check is on.",
+                reply_markup=keyboard,
+                parse_mode='Markdown'
+            )
+            logger.info("Settings sent to chat_id=%s (ci=%s, mt=%s)", chat_id, ci, mt)
+        except Exception as e:
+            logger.exception("Settings failed for chat_id=%s: %s", chat_id, e)
 
     async def key_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
