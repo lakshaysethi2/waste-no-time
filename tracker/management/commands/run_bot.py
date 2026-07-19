@@ -33,7 +33,12 @@ class Command(BaseCommand):
             self.stderr.write('TELEGRAM_BOT_API_KEY not found in environment variables')
             return
 
-        asyncio.run(self.main(token))
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            loop.run_until_complete(self.main(token))
+        finally:
+            loop.close()
 
     async def main(self, token):
         application = ApplicationBuilder().token(token).build()
