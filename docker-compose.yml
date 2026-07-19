@@ -1,9 +1,11 @@
 services:
-  tgb:
-    image: tgb
+  web:
     build: .
+    container_name: waste-no-time
     volumes:
       - .:/app
+    ports:
+      - "8000:8000"
     env_file:
       - .env.local
-    command: sleep infinity
+    restart: unless-stopped
