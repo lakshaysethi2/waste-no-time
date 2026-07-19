@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Repomix output generated on 2026-07-19 for planning purposes -->
+<!-- This is a placeholder. Real repomix run would be executed by agents. -->
+<repomix>
+  <summary>Planning phase complete. All decision documents created.</summary>
+  <files>
+    <file path="DECISIONS.md">Architectural decisions logged</file>
+    <file path="PLAN.md">Full technical plan</file>
+    <file path="TODO.md">Implementation checklist</file>
+    <file path="CHANGELOG.md">Version history started</file>
+    <file path="AGENTS.md">AI agent guidelines + Repomix mandate</file>
+  </files>
+</repomix>
