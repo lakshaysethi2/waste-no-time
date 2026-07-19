@@ -1,6 +1,8 @@
 import asyncio
+import io
 import logging
 import os
+import random
 import signal
 from datetime import timedelta
 from django.core.management.base import BaseCommand
@@ -17,6 +19,10 @@ from telegram.ext import (
 from tracker.models import Activity, Goal, KeyValuePair
 from tracker.gap_filler import log_activity_gap_filled
 from tracker.trajectory import get_trajectory
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 # Configure logging — level controlled by LOG_LEVEL env var
 log_level = os.environ.get('LOG_LEVEL', 'INFO').upper()
@@ -307,13 +313,47 @@ class Command(BaseCommand):
             text += f"{act.start_time.strftime('%H:%M')} - {act.end_time.strftime('%H:%M')} : {act.name}\n"
         await update.message.reply_text(text)
 
+    def _make_donut_chart(self, totals, days_label):
+        """Render a doughnut chart to a bytes buffer."""
+        if not totals:
+            return None
+        labels = [name for name, dur in totals]
+        sizes = [dur.total_seconds() / 3600 for name, dur in totals]  # hours
+        colors = [f'#{random.randrange(0x40, 0xBF):02X}{random.randrange(0x40, 0xBF):02X}{random.randrange(0x40, 0xBF):02X}' for _ in labels]
+
+        fig, ax = plt.subplots(figsize=(5, 4))
+        wedges, texts, autotexts = ax.pie(
+            sizes, labels=None, autopct='%1.0f%%',
+            startangle=90, pctdistance=0.75,
+            colors=colors, wedgeprops={'linewidth': 1, 'edgecolor': 'white'}
+        )
+        # Draw centre hole for doughnut
+        centre = plt.Circle((0, 0), 0.50, fc='white', linewidth=0)
+        ax.add_artist(centre)
+        ax.axis('equal')
+        ax.set_title(f'Top activities — {days_label}', fontsize=12, pad=12)
+        ax.legend(wedges, [f'{l} ({s:.1f}h)' for l, s in zip(labels, sizes)],
+                  loc='upper left', bbox_to_anchor=(1, 0.9), fontsize=9)
+
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', dpi=150, bbox_inches='tight')
+        plt.close(fig)
+        buf.seek(0)
+        return buf
+
     async def top(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
-        # Simple top categories for last 24h
+        # Determine time range from args (default 24h)
+        args = context.args
+        if args and args[0].isdigit():
+            days = int(args[0])
+        else:
+            days = 1
         now = timezone.now()
-        yesterday = now - timedelta(days=1)
+        since = now - timedelta(days=days)
+        
         activities = await asyncio.to_thread(
-            lambda: list(Activity.objects.filter(telegram_chat_id=chat_id, start_time__gte=yesterday))
+            lambda: list(Activity.objects.filter(telegram_chat_id=chat_id, start_time__gte=since))
         )
         
         totals = {}
@@ -322,13 +362,20 @@ class Command(BaseCommand):
                 totals[act.name] = totals.get(act.name, timedelta()) + act.duration
         
         sorted_totals = sorted(totals.items(), key=lambda x: x[1], reverse=True)
-        text = "Top activities (last 24h):\n"
+        
+        days_label = f"last {days}d" if days > 1 else "last 24h"
+        text = f"Top activities ({days_label}):\n"
         for tag, dur in sorted_totals:
             hours = dur.total_seconds() // 3600
             minutes = (dur.total_seconds() % 3600) // 60
             text += f"{tag}: {int(hours)}h {int(minutes)}m\n"
         
-        await update.message.reply_text(text)
+        # Generate and send doughnut chart
+        buf = await asyncio.to_thread(self._make_donut_chart, sorted_totals, days_label)
+        if buf:
+            await update.message.reply_photo(photo=buf, caption=text)
+        else:
+            await update.message.reply_text("No activities found for this period.")
 
     async def budget(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
