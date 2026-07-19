@@ -56,12 +56,12 @@ class Command(BaseCommand):
         application.add_handler(CommandHandler("top", self.top))
         application.add_handler(CommandHandler("budget", self.budget))
         application.add_handler(CommandHandler("trajectory", self.trajectory))
+        application.add_handler(CommandHandler("settings", self.settings))
+        application.add_handler(CommandHandler("key", self.key_command))
         
         # Handler for text messages (treating them as /now or notes)
         application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), self.handle_message))
         application.add_handler(CallbackQueryHandler(self.button_callback))
-
-
 
         # Background job for periodic checks
         if application.job_queue:
