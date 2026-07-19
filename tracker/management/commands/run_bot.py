@@ -27,6 +27,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 logger.info("Log level set to %s", log_level)
 
+def human_interval(seconds):
+    """Convert seconds to a human-friendly label."""
+    if seconds < 60:
+        return f"{seconds}s"
+    minutes = seconds // 60
+    return f"{minutes} min"
+
+
 class Command(BaseCommand):
     help = 'Runs the Telegram bot'
 
@@ -112,7 +120,7 @@ class Command(BaseCommand):
             "/trajectory - Show trajectory forecast\n"
             "/undo - Undo last activity\n"
             "/settings - Configure check interval and on/off\n"
-            "/key <key>, <value> - Set a key-value pair\n"
+            "/key <key>, <value> - Set a key-value pair (ci: 15–600s)\n"
             "/help - Show this message\n\n"
             "Just type an activity name to start tracking it.",
             parse_mode='Markdown'
@@ -125,23 +133,30 @@ class Command(BaseCommand):
             ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
             mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
             status_icon = "✅ ON" if mt == "on" else "❌ OFF"
+            ci_int = int(ci)
+            ci_label = human_interval(ci_int)
             keyboard = InlineKeyboardMarkup([
-                [InlineKeyboardButton(f"Check interval: {ci}s", callback_data="noop")],
                 [
-                    InlineKeyboardButton(f"10min", callback_data="key:ci:600"),
-                    InlineKeyboardButton(f"15min", callback_data="key:ci:900"),
-                    InlineKeyboardButton(f"30min", callback_data="key:ci:1800"),
+                    InlineKeyboardButton("15s", callback_data="key:ci:15"),
+                    InlineKeyboardButton("30s", callback_data="key:ci:30"),
+                    InlineKeyboardButton("1 min", callback_data="key:ci:60"),
                 ],
                 [
-                    InlineKeyboardButton(f"⏸ Pause" if mt == "on" else "▶ Resume",
+                    InlineKeyboardButton("2 min", callback_data="key:ci:120"),
+                    InlineKeyboardButton("5 min", callback_data="key:ci:300"),
+                    InlineKeyboardButton("10 min", callback_data="key:ci:600"),
+                ],
+                [
+                    InlineKeyboardButton("⏸ Pause checks" if mt == "on" else "▶ Resume checks",
                                          callback_data="toggle:mt"),
                 ],
             ])
             await update.message.reply_text(
-                f"⚙️ *Settings*\n"
-                f"Check interval: `{ci}s`\n"
-                f"Periodic check: {status_icon}\n\n"
-                f"The bot will ask what you're doing every {ci}s if check is on.",
+                f"⚙️ *Settings*\n\n"
+                f"• Check interval: `{ci}s` ({ci_label})\n"
+                f"• Periodic check: {status_icon}\n\n"
+                f"Or set a custom value with `/key ci, <seconds>`\n"
+                f"Range: 15–600 seconds",
                 reply_markup=keyboard,
                 parse_mode='Markdown'
             )
@@ -155,13 +170,28 @@ class Command(BaseCommand):
         if not text:
             await update.message.reply_text(
                 "Usage: /key <key>, <value>\n"
-                "Example: /key ci, 900  (set check interval to 15 min)\n"
+                "Example: /key ci, 300  (set check interval, range 15–600s)\n"
                 "         /key mt, off  (disable periodic checks)"
             )
             return
         try:
             key = text.split(",")[0].strip()
             value = text.split(",")[1].strip()
+            if key == "ci":
+                ci_int = int(value)
+                if ci_int < 15:
+                    ci_int = 15
+                    await update.message.reply_text(
+                        f"⚠️ `ci` clamped to `15` (minimum allowed)",
+                        parse_mode='Markdown'
+                    )
+                elif ci_int > 600:
+                    ci_int = 600
+                    await update.message.reply_text(
+                        f"⚠️ `ci` clamped to `600` (maximum allowed)",
+                        parse_mode='Markdown'
+                    )
+                value = str(ci_int)
             await asyncio.to_thread(self.set_kv, chat_id, key, value)
             await update.message.reply_text(f"✅ `{key}` = `{value}`", parse_mode='Markdown')
         except (IndexError, ValueError):
@@ -390,7 +420,11 @@ class Command(BaseCommand):
             new_val = "off" if current == "on" else "on"
             await asyncio.to_thread(self.set_kv, chat_id, key, new_val)
             status = "✅ ON" if new_val == "on" else "❌ OFF"
-            await query.message.reply_text(f"Periodic check: {status}", parse_mode='Markdown')
+            await query.message.reply_text(
+                f"*Periodic check:* {status}\n\n"
+                f"{'I will remind you to check in.' if new_val == 'on' else 'No more reminders until you turn it back on.'}",
+                parse_mode='Markdown'
+            )
 
     async def get_keyboard(self, chat_id):
         recent_activities = await asyncio.to_thread(
@@ -433,7 +467,9 @@ class Command(BaseCommand):
             
             last_called = await asyncio.to_thread(self.get_kv, chat_id, "last_called")
             ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
-            
+            ci_val = max(15, min(600, int(ci)))
+            ci = str(ci_val)
+
             now_ts = timezone.now().timestamp()
             if last_called and (now_ts - float(last_called)) > int(ci):
                 keyboard = await self.get_keyboard(chat_id)
