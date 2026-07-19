@@ -4,26 +4,25 @@ All notable changes to the **Waste No Time** personal trajectory and activity tr
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] — 2026-07-19
+## [0.2.0] — 2026-07-19
 
 ### Added
-- Comprehensive planning artifacts: `AGENTS.md`, `DECISIONS.md`, `CHANGELOG.md`, `PLAN.md`, `TODO.md`
-- `repomix-output.xml` (full repository context for AI agents)
-- Mandatory Repomix directive for all future AI agents
-- Detailed architectural decisions and polar-question alignment process
-- Single-container Docker + Makefile operational model (GitLab CE style)
-- Django + SQLite + python-telegram-bot v21+ architecture blueprint
-- Gap-filling logic specification (760-minute lookback, cold-start, strict notes)
+- Initialized Django project `waste_no_time` and `tracker` app.
+- Implemented core models: `Activity`, `Goal`, `KeyValuePair`.
+- Implemented `gap_filler.py` for retroactive activity logging (760m lookback).
+- Implemented `trajectory.py` for exponential recency-weighted pace forecasting.
+- Refactored Telegram bot into Django management command `run_bot` using `python-telegram-bot` v22.
+- Added dynamic inline keyboards for quick activity capture.
+- Integrated Vite/React frontend, served directly by Django.
+- Updated infrastructure: `Dockerfile`, `docker-compose.yml`, `Makefile`, `start.sh`.
+- Added test suites for gap-filling and trajectory engines.
 
 ### Changed
-- Project direction shifted from ManicTime-dependent Flask/Peewee stack to clean Django-based system
-- All future work must follow documented decisions and use Repomix for context
+- Moved legacy files to `legacy/` directory.
+- Consolidated all persistence into unified `db.sqlite3`.
+- Replaced ManicTime dependency with local retroactive capture logic.
 
-### Deprecated / Removed (planned for Phase 1)
-- ManicTime integration (`manictime.py`, `manictime_dash.py`)
-- Fragmented storage (`keyval.db`, `my_database2.db`)
-- Unsafe commands (`/math` with `eval()`)
-- Legacy Flask server and old test files
+## [Unreleased] — 2026-07-19
 
 ## [0.1.0] — Initial Planning Release
 
