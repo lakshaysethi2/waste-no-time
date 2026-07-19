@@ -13,6 +13,12 @@ def log_activity_gap_filled(telegram_chat_id, tag, notes=None, source='telegram'
     ).order_by('-end_time').first()
 
     if last_activity:
+        # Merge: if same name and recent enough (< 10 min gap), extend the last activity
+        if last_activity.name == tag and (now - last_activity.end_time) < timedelta(minutes=10):
+            last_activity.end_time = now
+            last_activity.save(update_fields=['end_time'])
+            return last_activity
+
         if last_activity.end_time >= lookback_limit:
             start_time = last_activity.end_time
         else:
