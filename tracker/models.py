@@ -8,17 +8,17 @@ class Activity(models.Model):
     name = models.CharField(max_length=255)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
-    duration = models.DurationField(null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
     source = models.CharField(max_length=50, default='telegram')
 
     class Meta:
         verbose_name_plural = "Activities"
 
-    def save(self, *args, **kwargs):
+    @property
+    def duration(self):
         if self.start_time and self.end_time:
-            self.duration = self.end_time - self.start_time
-        super().save(*args, **kwargs)
+            return self.end_time - self.start_time
+        return None
 
     def __str__(self):
         return f"{self.name} ({self.start_time} - {self.end_time})"

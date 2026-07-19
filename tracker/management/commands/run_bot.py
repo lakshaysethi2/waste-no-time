@@ -478,7 +478,7 @@ class Command(BaseCommand):
                 parse_mode='Markdown'
             )
 
-    async def get_keyboard(self, chat_id, page=0, per_page=10):
+    async def get_keyboard(self, chat_id, page=0, per_page=6):
         recent_activities = await asyncio.to_thread(
             lambda: list(Activity.objects.filter(telegram_chat_id=chat_id)
                          .order_by('-end_time')
@@ -509,10 +509,10 @@ class Command(BaseCommand):
         # Navigation row
         nav_row = []
         if page > 0:
-            nav_row.append(InlineKeyboardButton("◀️", callback_data=f"nav:{page - 1}"))
+            nav_row.append(InlineKeyboardButton("<", callback_data=f"nav:{page - 1}"))
         nav_row.append(InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="noop"))
         if page < total_pages - 1:
-            nav_row.append(InlineKeyboardButton("▶️", callback_data=f"nav:{page + 1}"))
+            nav_row.append(InlineKeyboardButton(">", callback_data=f"nav:{page + 1}"))
         keyboard.append(nav_row)
         
         return InlineKeyboardMarkup(keyboard)
