@@ -452,6 +452,11 @@ class Command(BaseCommand):
         chat_id = update.effective_chat.id
         if data == "noop":
             return
+        if data.startswith("nav:"):
+            page = int(data.split(":", 1)[1])
+            keyboard = await self.get_keyboard(chat_id, page)
+            await query.edit_message_reply_markup(reply_markup=keyboard)
+            return
         if data.startswith("now:"):
             tag = data.split(":", 1)[1]
             await self.log_now(chat_id, tag, None, query)
@@ -473,7 +478,7 @@ class Command(BaseCommand):
                 parse_mode='Markdown'
             )
 
-    async def get_keyboard(self, chat_id):
+    async def get_keyboard(self, chat_id, page=0, per_page=10):
         recent_activities = await asyncio.to_thread(
             lambda: list(Activity.objects.filter(telegram_chat_id=chat_id)
                          .order_by('-end_time')
@@ -484,18 +489,31 @@ class Command(BaseCommand):
         for tag in recent_activities:
             if tag not in unique_tags:
                 unique_tags.append(tag)
-            if len(unique_tags) >= 6:
-                break
         
         if not unique_tags:
             unique_tags = ["Programming", "Sleep", "Exercise", "Reading", "Food", "Family"]
-
+        
+        total_pages = max(1, (len(unique_tags) + per_page - 1) // per_page)
+        page = max(0, min(page, total_pages - 1))
+        start = page * per_page
+        end = start + per_page
+        page_tags = unique_tags[start:end]
+        
         keyboard = []
-        for i in range(0, len(unique_tags), 2):
-            row = [InlineKeyboardButton(unique_tags[i], callback_data=f"now:{unique_tags[i]}")]
-            if i + 1 < len(unique_tags):
-                row.append(InlineKeyboardButton(unique_tags[i+1], callback_data=f"now:{unique_tags[i+1]}"))
+        for i in range(0, len(page_tags), 2):
+            row = [InlineKeyboardButton(page_tags[i], callback_data=f"now:{page_tags[i]}")]
+            if i + 1 < len(page_tags):
+                row.append(InlineKeyboardButton(page_tags[i+1], callback_data=f"now:{page_tags[i+1]}"))
             keyboard.append(row)
+        
+        # Navigation row
+        nav_row = []
+        if page > 0:
+            nav_row.append(InlineKeyboardButton("◀️", callback_data=f"nav:{page - 1}"))
+        nav_row.append(InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="noop"))
+        if page < total_pages - 1:
+            nav_row.append(InlineKeyboardButton("▶️", callback_data=f"nav:{page + 1}"))
+        keyboard.append(nav_row)
         
         return InlineKeyboardMarkup(keyboard)
 
