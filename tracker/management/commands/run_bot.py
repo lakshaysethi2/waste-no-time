@@ -454,7 +454,12 @@ class Command(BaseCommand):
 
     async def periodic_check(self, context: ContextTypes.DEFAULT_TYPE):
         chat_ids = await asyncio.to_thread(
-            lambda: list(Activity.objects.values_list('telegram_chat_id', flat=True).distinct())
+            lambda: list(
+                set(
+                    list(Activity.objects.values_list('telegram_chat_id', flat=True).distinct())
+                    + list(KeyValuePair.objects.values_list('telegram_chat_id', flat=True).distinct())
+                )
+            )
         )
         
         for chat_id in chat_ids:
@@ -468,10 +473,9 @@ class Command(BaseCommand):
             last_called = await asyncio.to_thread(self.get_kv, chat_id, "last_called")
             ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
             ci_val = max(15, min(600, int(ci)))
-            ci = str(ci_val)
 
             now_ts = timezone.now().timestamp()
-            if last_called and (now_ts - float(last_called)) > int(ci):
+            if not last_called or (now_ts - float(last_called)) > ci_val:
                 keyboard = await self.get_keyboard(chat_id)
                 try:
                     await context.bot.send_message(
