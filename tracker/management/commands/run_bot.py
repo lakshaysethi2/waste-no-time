@@ -48,7 +48,6 @@ class Command(BaseCommand):
         application.add_handler(CommandHandler("start", self.start))
         application.add_handler(CommandHandler("help", self.help_command))
         application.add_handler(CommandHandler("now", self.now))
-        application.add_handler(CommandHandler("stop", self.stop))
         application.add_handler(CommandHandler("status", self.status))
         application.add_handler(CommandHandler("undo", self.undo))
         application.add_handler(CommandHandler("last", self.last))
@@ -102,7 +101,6 @@ class Command(BaseCommand):
             "🧭 *Waste No Time Commands*\n\n"
             "/start - Initialize your account\n"
             "/now <tag>[, notes] - Start a new activity\n"
-            "/stop - Stop current activity\n"
             "/last - Show recent activities\n"
             "/status - Show current activity status\n"
             "/top - Show top activities today\n"
@@ -175,9 +173,6 @@ class Command(BaseCommand):
             await update_or_query.message.reply_text(text, reply_markup=keyboard)
         elif hasattr(update_or_query, 'edit_message_text'):
             await update_or_query.edit_message_text(text, reply_markup=keyboard)
-
-    async def stop(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await update.message.reply_text("All time is assigned up to now. Just use /now for your next activity.")
 
     async def status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
