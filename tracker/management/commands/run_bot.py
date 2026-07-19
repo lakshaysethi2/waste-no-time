@@ -73,7 +73,7 @@ class Command(BaseCommand):
 
         # Background job for periodic checks
         if application.job_queue:
-            application.job_queue.run_repeating(self.periodic_check, interval=60, first=10)
+            application.job_queue.run_repeating(self.periodic_check, interval=10, first=10)
 
         logger.info("Bot started")
 
