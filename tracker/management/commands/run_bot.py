@@ -61,17 +61,7 @@ class Command(BaseCommand):
         application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), self.handle_message))
         application.add_handler(CallbackQueryHandler(self.button_callback))
 
-        # Log all non-command text updates for debugging
-        async def log_update(update: Update, context: ContextTypes.DEFAULT_TYPE):
-            chat = update.effective_chat
-            user = update.effective_user
-            if update.message and update.message.text:
-                logger.info("Received: chat_id=%s user=%s text=%s",
-                            chat.id if chat else None,
-                            user.username if user else None,
-                            update.message.text)
-            return
-        application.add_handler(MessageHandler(filters.TEXT, log_update), group=-1)
+
 
         # Background job for periodic checks
         if application.job_queue:
