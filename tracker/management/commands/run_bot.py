@@ -107,10 +107,62 @@ class Command(BaseCommand):
             "/budget - Show time budgets vs actual\n"
             "/trajectory - Show trajectory forecast\n"
             "/undo - Undo last activity\n"
+            "/settings - Configure check interval and on/off\n"
+            "/key <key>, <value> - Set a key-value pair\n"
             "/help - Show this message\n\n"
             "Just type an activity name to start tracking it.",
             parse_mode='Markdown'
         )
+
+    async def settings(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        chat_id = update.effective_chat.id
+        ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
+        mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
+        status_icon = "✅ ON" if mt == "on" else "❌ OFF"
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton(f"Check interval: {ci}s", callback_data="noop")],
+            [
+                InlineKeyboardButton(f"10min", callback_data="key:ci:600"),
+                InlineKeyboardButton(f"15min", callback_data="key:ci:900"),
+                InlineKeyboardButton(f"30min", callback_data="key:ci:1800"),
+            ],
+            [
+                InlineKeyboardButton(f"⏸ Pause" if mt == "on" else "▶ Resume",
+                                     callback_data="toggle:mt"),
+            ],
+        ])
+        await update.message.reply_text(
+            f"⚙️ *Settings*\n"
+            f"Check interval: `{ci}s`\n"
+            f"Periodic check: {status_icon}\n\n"
+            f"The bot will ask what you're doing every {ci}s if check is on.",
+            reply_markup=keyboard,
+            parse_mode='Markdown'
+        )
+
+    async def key_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        chat_id = update.effective_chat.id
+        text = " ".join(context.args)
+        if not text:
+            await update.message.reply_text(
+                "Usage: /key <key>, <value>\n"
+                "Example: /key ci, 900  (set check interval to 15 min)\n"
+                "         /key mt, off  (disable periodic checks)"
+            )
+            return
+        try:
+            key = text.split(",")[0].strip()
+            value = text.split(",")[1].strip()
+            await asyncio.to_thread(self.set_kv, chat_id, key, value)
+            await update.message.reply_text(f"✅ `{key}` = `{value}`", parse_mode='Markdown')
+        except (IndexError, ValueError):
+            # Get value
+            key = text.split(",")[0].strip()
+            val = await asyncio.to_thread(self.get_kv, chat_id, key)
+            if val is not None:
+                await update.message.reply_text(f"`{key}` = `{val}`", parse_mode='Markdown')
+            else:
+                await update.message.reply_text(f"Key `{key}` not found", parse_mode='Markdown')
 
     def seed_defaults(self, chat_id):
         # Seed default goals if they don't exist
@@ -128,8 +180,9 @@ class Command(BaseCommand):
                 defaults={'target_hours': hours, 'name': f"{name} daily goal"}
             )
         
-        # Set default check interval
+        # Set defaults
         self.set_kv(chat_id, "ci", "600")
+        self.set_kv(chat_id, "mt", "on")
 
     async def now(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
@@ -310,10 +363,25 @@ class Command(BaseCommand):
         await query.answer()
         
         data = query.data
+        chat_id = update.effective_chat.id
+        if data == "noop":
+            return
         if data.startswith("now:"):
             tag = data.split(":", 1)[1]
-            chat_id = update.effective_chat.id
             await self.log_now(chat_id, tag, None, query)
+        elif data.startswith("key:"):
+            parts = data.split(":")
+            key = parts[1]
+            value = parts[2]
+            await asyncio.to_thread(self.set_kv, chat_id, key, value)
+            await query.message.reply_text(f"✅ `{key}` set to `{value}`", parse_mode='Markdown')
+        elif data.startswith("toggle:"):
+            key = data.split(":", 1)[1]
+            current = await asyncio.to_thread(self.get_kv, chat_id, key) or "on"
+            new_val = "off" if current == "on" else "on"
+            await asyncio.to_thread(self.set_kv, chat_id, key, new_val)
+            status = "✅ ON" if new_val == "on" else "❌ OFF"
+            await query.message.reply_text(f"Periodic check: {status}", parse_mode='Markdown')
 
     async def get_keyboard(self, chat_id):
         recent_activities = await asyncio.to_thread(
@@ -348,6 +416,11 @@ class Command(BaseCommand):
         
         for chat_id in chat_ids:
             if not chat_id: continue
+            
+            # Skip if user has disabled periodic checks
+            mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
+            if mt != "on":
+                continue
             
             last_called = await asyncio.to_thread(self.get_kv, chat_id, "last_called")
             ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
