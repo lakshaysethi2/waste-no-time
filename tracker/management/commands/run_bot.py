@@ -74,7 +74,7 @@ async def now_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if len(parts) < 2 or not parts[1].strip():
         await update.message.reply_text("Usage: `/now <tag>, <optional notes>`", parse_mode="Markdown")
         return
-    
+
     args_str = parts[1].strip()
     sub_parts = args_str.split(',', 1)
     tag = sub_parts[0].strip()
@@ -99,7 +99,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     now = timezone.now()
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     acts = Activity.objects.filter(user_id=user_id, end_time__gte=today_start)
-    
+
     summary = {}
     for act in acts:
         st = max(act.start_time, today_start)
@@ -114,7 +114,7 @@ async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         sorted_acts = sorted(summary.items(), key=lambda x: x[1], reverse=True)
         for name, secs in sorted_acts:
             text += f"- **{name}**: {format_duration(secs)}\n"
-            
+
     latest = Activity.objects.filter(user_id=user_id).first()
     if latest:
         text += f"\nLast activity: **{latest.name}** (ended {latest.end_time.strftime('%H:%M:%S')})"
@@ -153,7 +153,7 @@ async def key_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         msg = "🔑 **Key-Value Store:**\n" + "\n".join([f"`{kv.key}` = {kv.value}" for kv in kvs]) or "No keys stored."
         await update.message.reply_text(msg, parse_mode="Markdown")
         return
-    
+
     args = parts[1].strip().split(',', 1)
     key = args[0].strip()
     if len(args) > 1:
@@ -184,7 +184,7 @@ class Command(BaseCommand):
         if not token:
             self.stdout.write(self.style.ERROR('TELEGRAM_BOT_API_KEY environment variable is not set!'))
             return
-        
+
         self.stdout.write(self.style.SUCCESS('Starting Telegram Bot...'))
         application = ApplicationBuilder().token(token).build()
 

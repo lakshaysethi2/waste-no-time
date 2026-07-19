@@ -5,24 +5,20 @@ from .models import Activity
 def create_activity_with_gap_filling(user_id, tag, notes="", now=None):
     if now is None:
         now = timezone.now()
-    
-    # Find most recent activity for user
+
     latest_activity = Activity.objects.filter(user_id=user_id).order_by('-end_time').first()
-    
-    # 760 minutes lookback limit
     lookback_limit = now - timedelta(minutes=760)
-    
+
     if latest_activity and latest_activity.end_time >= lookback_limit:
         start_time = latest_activity.end_time
     else:
-        # Cold start bootstrap: 1 minute prior to now
         start_time = now - timedelta(minutes=1)
-        
+
     if start_time >= now:
         start_time = now - timedelta(seconds=1)
-        
+
     end_time = now
-    
+
     activity = Activity.objects.create(
         user_id=user_id,
         name=tag.strip(),

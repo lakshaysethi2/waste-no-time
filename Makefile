@@ -16,7 +16,7 @@ test:
 
 lint:
 	@echo "Running flake8..."
-	flake8 --max-line-length=120 --ignore=E302,E303,E305,E501,W291,W391 tracker/ waste_no_time/
+	./venv/bin/flake8 --max-line-length=120 --ignore=E302,E303,E305,E501,W291,W391 tracker/ waste_no_time/
 
 backup:
 	cp db.sqlite3 db.sqlite3.bak

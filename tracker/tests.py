@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.utils import timezone
 from datetime import timedelta
 from tracker.models import Activity
-from tracker.gap_filler import create_activity_with_gap_filling, get_time_spent_today_seconds
+from tracker.gap_filler import create_activity_with_gap_filling
 
 class TrackerTests(TestCase):
     def setUp(self):
@@ -20,7 +20,6 @@ class TrackerTests(TestCase):
         now = timezone.now()
         act1 = create_activity_with_gap_filling(self.user_id, "Programming", now=now - timedelta(hours=1))
         act2 = create_activity_with_gap_filling(self.user_id, "Walking", now=now)
-        
         self.assertEqual(act2.start_time, act1.end_time)
 
     def test_multi_tenant_isolation(self):

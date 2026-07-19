@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils import timezone
 
 class Activity(models.Model):
     user_id = models.BigIntegerField(default=1040271347, db_index=True)
