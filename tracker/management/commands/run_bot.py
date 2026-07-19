@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import os
+import signal
 from datetime import timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
@@ -63,7 +64,27 @@ class Command(BaseCommand):
             application.job_queue.run_repeating(self.periodic_check, interval=60, first=10)
 
         logger.info("Bot started")
-        await application.run_polling()
+
+        # Signal handling for graceful shutdown
+        stop_future = asyncio.get_running_loop().create_future()
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            try:
+                asyncio.get_running_loop().add_signal_handler(
+                    sig, lambda: stop_future.set_result(True)
+                )
+            except (NotImplementedError, ValueError):
+                pass
+
+        await application.initialize()
+        await application.start()
+        await application.updater.start_polling()
+
+        try:
+            await stop_future
+        finally:
+            await application.updater.stop()
+            await application.stop()
+            await application.shutdown()
 
     async def start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
