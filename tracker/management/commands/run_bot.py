@@ -16,6 +16,8 @@ from telegram.ext import (
     CallbackQueryHandler,
     filters,
 )
+import pytz
+
 from tracker.models import Activity, Goal, KeyValuePair
 from tracker.gap_filler import log_activity_gap_filled
 from tracker.trajectory import get_trajectory
@@ -71,6 +73,7 @@ class Command(BaseCommand):
         application.add_handler(CommandHandler("budget", self.budget))
         application.add_handler(CommandHandler("trajectory", self.trajectory))
         application.add_handler(CommandHandler("settings", self.settings))
+        application.add_handler(CommandHandler("tz", self.tz_command))
         application.add_handler(CommandHandler("key", self.key_command))
         
         # Handler for text messages (treating them as /now or notes)
@@ -126,7 +129,8 @@ class Command(BaseCommand):
             "/budget - Show time budgets vs actual\n"
             "/trajectory - Show trajectory forecast\n"
             "/undo - Undo last activity\n"
-            "/settings - Configure check interval and on/off\n"
+            "/settings - Configure check interval and timezone\n"
+            "/tz <zone> - Set your timezone (e.g. Pacific/Auckland)\n"
             "/key <key>, <value> - Set a key-value pair (ci: 15–600s)\n"
             "/help - Show this message\n\n"
             "Just type an activity name to start tracking it.",
@@ -139,6 +143,7 @@ class Command(BaseCommand):
         try:
             ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
             mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
+            tz_name = await asyncio.to_thread(self.get_kv, chat_id, "tz") or "UTC"
             status_icon = "✅ ON" if mt == "on" else "❌ OFF"
             ci_int = int(ci)
             ci_label = human_interval(ci_int)
@@ -157,19 +162,70 @@ class Command(BaseCommand):
                     InlineKeyboardButton("⏸ Pause checks" if mt == "on" else "▶ Resume checks",
                                          callback_data="toggle:mt"),
                 ],
+                [
+                    InlineKeyboardButton("UTC", callback_data="key:tz:UTC"),
+                    InlineKeyboardButton("Pacific/Auckland", callback_data="key:tz:Pacific/Auckland"),
+                ],
+                [
+                    InlineKeyboardButton("America/New_York", callback_data="key:tz:America/New_York"),
+                    InlineKeyboardButton("Europe/London", callback_data="key:tz:Europe/London"),
+                ],
+                [
+                    InlineKeyboardButton("Asia/Tokyo", callback_data="key:tz:Asia/Tokyo"),
+                    InlineKeyboardButton("Australia/Sydney", callback_data="key:tz:Australia/Sydney"),
+                ],
             ])
             await update.message.reply_text(
                 f"⚙️ *Settings*\n\n"
                 f"• Check interval: `{ci}s` ({ci_label})\n"
-                f"• Periodic check: {status_icon}\n\n"
+                f"• Periodic check: {status_icon}\n"
+                f"• Timezone: `{tz_name}`\n\n"
                 f"Or set a custom value with `/key ci, <seconds>`\n"
+                f"Set timezone with `/tz <zone>`\n"
                 f"Range: 15–600 seconds",
                 reply_markup=keyboard,
                 parse_mode='Markdown'
             )
-            logger.info("Settings sent to chat_id=%s (ci=%s, mt=%s)", chat_id, ci, mt)
+            logger.info("Settings sent to chat_id=%s (ci=%s, mt=%s, tz=%s)", chat_id, ci, mt, tz_name)
         except Exception as e:
             logger.exception("Settings failed for chat_id=%s: %s", chat_id, e)
+
+    async def tz_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Set the user's timezone, e.g. /tz Pacific/Auckland"""
+        chat_id = update.effective_chat.id
+        text = " ".join(context.args)
+        if not text:
+            current = await asyncio.to_thread(self.get_kv, chat_id, "tz") or "UTC"
+            await update.message.reply_text(
+                f"Your current timezone is `{current}`.\n"
+                f"Usage: `/tz <zone>`\n"
+                f"Example: `/tz Pacific/Auckland`\n"
+                f"Use `/settings` to pick from common timezones.",
+                parse_mode='Markdown'
+            )
+            return
+
+        zone = text.strip()
+        # Validate timezone with pytz
+        if zone not in pytz.all_timezones:
+            await update.message.reply_text(
+                f"❌ Unknown timezone `{zone}`.\n"
+                f"Use a valid timezone like `Pacific/Auckland`, `UTC`, `America/New_York`.\n"
+                f"See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
+                parse_mode='Markdown'
+            )
+            return
+
+        await asyncio.to_thread(self.set_kv, chat_id, "tz", zone)
+        tz = pytz.timezone(zone)
+        now_utc = timezone.now()
+        now_local = now_utc.astimezone(tz)
+        abbr = now_local.strftime('%Z')
+        await update.message.reply_text(
+            f"✅ Timezone set to `{zone}` (`{abbr}`).\n"
+            f"Current local time: {now_local.strftime('%H:%M %Z')}",
+            parse_mode='Markdown'
+        )
 
     async def key_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
@@ -264,8 +320,9 @@ class Command(BaseCommand):
         
         today_total = await asyncio.to_thread(self.get_today_total, chat_id, tag)
         
+        start_str = self._format_time(activity.start_time, chat_id)
         text = (f"✅ Started: {tag}\n"
-                f"Start time: {activity.start_time.strftime('%H:%M')}\n"
+                f"Start time: {start_str}\n"
                 f"Today's total: {today_total}\n\n"
                 "In the present moment, there are no problems.")
         
@@ -282,9 +339,10 @@ class Command(BaseCommand):
             await update.message.reply_text("No activities recorded yet.")
             return
 
+        finished_str = self._format_time(last_activity.end_time, chat_id)
         await update.message.reply_text(
             f"Last activity: {last_activity.name}\n"
-            f"Finished at: {last_activity.end_time.strftime('%H:%M')}\n"
+            f"Finished at: {finished_str}\n"
             f"Duration: {last_activity.duration}"
         )
 
@@ -311,7 +369,9 @@ class Command(BaseCommand):
         
         text = "Last 10 activities:\n"
         for act in activities:
-            text += f"{act.start_time.strftime('%H:%M')} - {act.end_time.strftime('%H:%M')} : {act.name}\n"
+            start_str = self._format_time(act.start_time, chat_id)
+            end_str = self._format_time(act.end_time, chat_id)
+            text += f"{start_str} - {end_str} : {act.name}\n"
         await update.message.reply_text(text)
 
     def _make_donut_chart(self, totals, days_label):
@@ -364,7 +424,12 @@ class Command(BaseCommand):
         
         sorted_totals = sorted(totals.items(), key=lambda x: x[1], reverse=True)
         
-        days_label = f"last {days}d" if days > 1 else "last 24h"
+        tz_name = await asyncio.to_thread(self.get_kv, chat_id, "tz") or "UTC"
+        try:
+            tz_label = pytz.timezone(tz_name).localize(timezone.now()).strftime('%Z')
+        except Exception:
+            tz_label = "UTC"
+        days_label = f"last {days}d ({tz_label})" if days > 1 else f"last 24h ({tz_label})"
         text = f"Top activities ({days_label}):\n"
         for tag, dur in sorted_totals:
             hours = dur.total_seconds() // 3600
@@ -552,6 +617,26 @@ class Command(BaseCommand):
                     await asyncio.to_thread(self.set_kv, chat_id, "last_called", str(now_ts))
                 except Exception as e:
                     logger.error(f"Failed to send periodic check to {chat_id}: {e}")
+
+    def _format_time(self, dt, chat_id):
+        """Convert a UTC datetime to the user's timezone and format with abbreviation.
+
+        Returns a string like "14:30 NZST" or "02:15 UTC".
+        """
+        if dt is None:
+            return None
+        tz_name = self.get_kv(chat_id, "tz") or "UTC"
+        try:
+            tz = pytz.timezone(tz_name)
+        except Exception:
+            tz = pytz.UTC
+        # dt is naive or UTC-aware; make it timezone-aware in UTC first
+        if timezone.is_naive(dt):
+            utc_dt = pytz.UTC.localize(dt)
+        else:
+            utc_dt = dt.astimezone(pytz.UTC)
+        local_dt = utc_dt.astimezone(tz)
+        return local_dt.strftime('%H:%M %Z')
 
     def get_today_total(self, chat_id, tag):
         now = timezone.now()
