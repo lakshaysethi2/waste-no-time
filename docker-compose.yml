@@ -1,9 +1,17 @@
 services:
-  tgb:
-    image: tgb
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - TELEGRAM_BOT_API_KEY=${TELEGRAM_BOT_API_KEY:-123456:test}
+    command: python manage.py runserver 0.0.0.0:8000
+  bot:
     build: .
     volumes:
       - .:/app
-    env_file:
-      - .env.local
-    command: sleep infinity
+    environment:
+      - TELEGRAM_BOT_API_KEY=${TELEGRAM_BOT_API_KEY:-123456:test}
+    command: python manage.py run_bot
