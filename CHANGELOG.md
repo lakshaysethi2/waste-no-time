@@ -24,6 +24,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+- `/tz <zone>` command to set per-user timezone (stored in `KeyValuePair` with key `tz`, defaults to `UTC`).
+- Timezone picker buttons in `/settings` inline keyboard (UTC, Pacific/Auckland, America/New_York, Europe/London, Asia/Tokyo, Australia/Sydney).
+- `_format_time()` helper that converts UTC datetimes to the user's timezone and formats with the abbreviation (e.g. `14:30 NZST`).
+
+### Changed
+- `/now`, `/status`, and `/last` commands now display times in the user's configured timezone with abbreviation.
+- `/top` chart label includes the user's timezone abbreviation (e.g. `last 24h (NZST)`).
+- `/settings` now shows the current timezone in the summary.
+- `/help` lists the new `/tz` command.
+
 ### Fixed
 - Rate limit on `/now` now checks the last Activity's `start_time` in the database instead of the `last_called` KV (which the bot's own periodic check was also writing to, causing false rejections).
 - Duration recalculation on activity merge: `save(update_fields=['end_time'])` skipped the model's custom `save()` so `duration` never updated; now uses full `save()`.
