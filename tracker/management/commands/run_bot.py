@@ -246,10 +246,10 @@ class Command(BaseCommand):
         now_ts = timezone.now().timestamp()
         if last_activity and last_activity.start_time and (now_ts - last_activity.start_time.timestamp()) < 10:
             msg = "Please wait at least 10 seconds between entries."
-            if hasattr(update_or_query, 'message'):
-                await update_or_query.message.reply_text(msg)
-            else:
+            if hasattr(update_or_query, 'answer'):
                 await update_or_query.answer(msg, show_alert=True)
+            else:
+                await update_or_query.message.reply_text(msg)
             return
 
         activity = await asyncio.to_thread(log_activity_gap_filled, chat_id, tag, notes)
@@ -262,11 +262,8 @@ class Command(BaseCommand):
                 f"Today's total: {today_total}\n\n"
                 "In the present moment, there are no problems.")
         
-        # For button callbacks: edit the original prompt in-place
-        if hasattr(update_or_query, 'edit_message_text'):
-            await update_or_query.edit_message_text(text)
-        # For direct text commands: reply cleanly without re-showing the activity keyboard
-        elif hasattr(update_or_query, 'message') and update_or_query.message:
+        # Reply cleanly without re-showing the activity keyboard, keeping the original prompt intact
+        if hasattr(update_or_query, 'message') and update_or_query.message:
             await update_or_query.message.reply_text(text)
 
     async def status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
