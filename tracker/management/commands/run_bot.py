@@ -46,6 +46,7 @@ class Command(BaseCommand):
 
         # Add handlers
         application.add_handler(CommandHandler("start", self.start))
+        application.add_handler(CommandHandler("help", self.help_command))
         application.add_handler(CommandHandler("now", self.now))
         application.add_handler(CommandHandler("stop", self.stop))
         application.add_handler(CommandHandler("status", self.status))
@@ -92,7 +93,25 @@ class Command(BaseCommand):
         await update.message.reply_text(
             f"Welcome to Waste No Time! Your Chat ID is {chat_id}.\n"
             "Default categories have been initialized.\n"
-            "Use /now <tag> to start an activity."
+            "Use /now <tag> to start an activity.\n"
+            "Type /help to see all commands."
+        )
+
+    async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        await update.message.reply_text(
+            "🧭 *Waste No Time Commands*\n\n"
+            "/start - Initialize your account\n"
+            "/now <tag>[, notes] - Start a new activity\n"
+            "/stop - Stop current activity\n"
+            "/last - Show recent activities\n"
+            "/status - Show current activity status\n"
+            "/top - Show top activities today\n"
+            "/budget - Show time budgets vs actual\n"
+            "/trajectory - Show trajectory forecast\n"
+            "/undo - Undo last activity\n"
+            "/help - Show this message\n\n"
+            "Just type an activity name to start tracking it.",
+            parse_mode='Markdown'
         )
 
     def seed_defaults(self, chat_id):
