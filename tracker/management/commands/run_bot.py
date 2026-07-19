@@ -134,19 +134,19 @@ class Command(BaseCommand):
         try:
             ci = await asyncio.to_thread(self.get_kv, chat_id, "ci") or "600"
             mt = await asyncio.to_thread(self.get_kv, chat_id, "mt") or "on"
-        status_icon = "✅ ON" if mt == "on" else "❌ OFF"
-        keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton(f"Check interval: {ci}s", callback_data="noop")],
-            [
-                InlineKeyboardButton(f"10min", callback_data="key:ci:600"),
-                InlineKeyboardButton(f"15min", callback_data="key:ci:900"),
-                InlineKeyboardButton(f"30min", callback_data="key:ci:1800"),
-            ],
-            [
-                InlineKeyboardButton(f"⏸ Pause" if mt == "on" else "▶ Resume",
-                                     callback_data="toggle:mt"),
-            ],
-        ])
+            status_icon = "✅ ON" if mt == "on" else "❌ OFF"
+            keyboard = InlineKeyboardMarkup([
+                [InlineKeyboardButton(f"Check interval: {ci}s", callback_data="noop")],
+                [
+                    InlineKeyboardButton(f"10min", callback_data="key:ci:600"),
+                    InlineKeyboardButton(f"15min", callback_data="key:ci:900"),
+                    InlineKeyboardButton(f"30min", callback_data="key:ci:1800"),
+                ],
+                [
+                    InlineKeyboardButton(f"⏸ Pause" if mt == "on" else "▶ Resume",
+                                         callback_data="toggle:mt"),
+                ],
+            ])
             await update.message.reply_text(
                 f"⚙️ *Settings*\n"
                 f"Check interval: `{ci}s`\n"
