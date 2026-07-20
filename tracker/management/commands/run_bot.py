@@ -12,7 +12,6 @@ from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
     ContextTypes,
-    MessageHandler,
     CallbackQueryHandler,
     filters,
 )
@@ -76,8 +75,6 @@ class Command(BaseCommand):
         application.add_handler(CommandHandler("tz", self.tz_command))
         application.add_handler(CommandHandler("key", self.key_command))
         
-        # Handler for text messages (treating them as /now or notes)
-        application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), self.handle_message))
         application.add_handler(CallbackQueryHandler(self.button_callback))
 
         # Background job for periodic checks
@@ -132,8 +129,7 @@ class Command(BaseCommand):
             "/settings - Configure check interval and timezone\n"
             "/tz <zone> - Set your timezone (e.g. Pacific/Auckland)\n"
             "/key <key>, <value> - Set a key-value pair (ci: 15–600s)\n"
-            "/help - Show this message\n\n"
-            "Just type an activity name to start tracking it.",
+            "/help - Show this message",
             parse_mode='Markdown'
         )
 
@@ -504,11 +500,6 @@ class Command(BaseCommand):
                 f"Status: {traj['status']}")
         
         await update.message.reply_text(text, parse_mode='Markdown')
-
-    async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        # Treat plain text as /now command
-        context.args = update.message.text.split()
-        await self.now(update, context)
 
     async def button_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         query = update.callback_query
