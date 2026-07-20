@@ -22,7 +22,8 @@
 ## Phase 4: Web Views & React Frontend
 - [x] Implement plain Django `JsonResponse` + HTML views in `tracker/views.py`
 - [x] Set up minimal Vite/React app in `frontend/` (served at `/`)
-- [ ] Add basic dashboard showing recent activities and trajectory summary
+- [x] Add basic dashboard showing recent activities and trajectory summary
+- [x] Merge dash.lak.nz React dashboard into Django (Vite build, /api/activities, actapi decommissioned)
 
 ## Phase 5: Testing & Verification
 - [x] Create `tracker/tests/` with Django `TestCase` suite

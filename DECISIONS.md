@@ -73,3 +73,11 @@
 - AI agents **must** run `npx repomix` before starting work.
 - No code changes until explicit user approval to begin Phase 1.
 - Single consolidated `db.sqlite3` only.
+
+### 16. Dashboard Merge (2026-07-20)
+- **Migrated from CRA to Vite**: The existing dash.lak.nz dashboard used Create React App; renamed all JSX-containing `.js` files to `.jsx` and configured Vite with `@vitejs/plugin-react`.
+- **API consolidation**: Dashboard now fetches from Django's `/api/activities?chat_id=1040271347` instead of the separate actapi.lak.nz service.
+- **Response adaptation**: A `transformData()` function in `App.jsx` maps Django's flat array (`name`, `start_time`, `end_time`) to the dashboard's expected shape (`displayName`, `startTime`, `endTime`), avoiding the need for a new Django endpoint or changes to the existing API.
+- **Multi-stage Docker build**: Stage 1 (node:22-slim) builds the frontend; Stage 2 (python:3.11-slim) copies the built `dist/` and runs Django + bot.
+- **Static file alignment**: Vite `base: '/static/'` with `assetsDir: ''` matches Django's `STATIC_URL = '/static/'` and `STATICFILES_DIRS = [frontend/dist]`, serving everything cleanly from one directory.
+- The `docker-compose.yml` volume mount removed (`.:/app`) to prevent overriding the Dockerfile's built `dist/`; database persisted via `./db.sqlite3:/app/db.sqlite3`.

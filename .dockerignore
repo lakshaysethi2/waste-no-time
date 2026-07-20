@@ -7,3 +7,5 @@ __pycache__/
 .vscode/
 sa.json
 .git/
+frontend/node_modules/
+frontend/dist/
