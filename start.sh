@@ -4,6 +4,10 @@
 echo "Running migrations..."
 python manage.py migrate --noinput
 
+# Collect static files
+echo "Collecting static files..."
+python manage.py collectstatic --noinput
+
 # Start Django web server in the background
 echo "Starting Django server..."
 gunicorn waste_no_time.wsgi:application --bind 0.0.0.0:8000 &
