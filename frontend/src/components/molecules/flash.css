@@ -1,0 +1,12 @@
+.flash {
+    animation: flash 1s linear infinite;
+  }
+  
+  @keyframes flash {
+    0% {
+      color: red;
+    }
+    100% {
+      color: rgb(236, 253, 1);
+    }
+  }
