@@ -59,6 +59,16 @@ python manage.py runserver
 python manage.py run_bot
 ```
 
+## Deployment Architecture
+
+- **Dashboard** (`dash.lak.nz`) — served by the waste-no-time Django app on port 8549, routed through a Cloudflare tunnel. No separate frontend server.
+- **Static files** — served via Whitenoise. Requires `collectstatic --noinput` at startup when `DEBUG=False` (the app uses `WHITENOISE_USE_FINDERS = True` but that alone does not serve files in production). The `start.sh` script must include:
+  ```bash
+  python manage.py collectstatic --noinput
+  ```
+- **Consolidated stack** — the old actapi container and nginx dashboard container are retired. Everything (Django web + Telegram bot + admin/dashboard UI) runs in the single waste-no-time container.
+- **Cloudflare tunnel** — connects `dash.lak.nz` to the local waste-no-time container on port 8549. The tunnel is configured externally, not in this repo.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
