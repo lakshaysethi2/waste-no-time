@@ -1,6 +1,6 @@
 import "./App.css";
 import axios from "axios";
-import { BrowserRouter as Router, Route,Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route,Routes, Navigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import Number from "./components/Number";
 import Login from "./components/molecules/Login";
@@ -151,7 +151,7 @@ function App() {
       <Route path="/top/336" element={!userLoggedIn ? theLogin : topActs([336],jsonData)} />
       <Route path="/top/720" element={!userLoggedIn ? theLogin : topActs([720],jsonData)} />
       <Route path="/top/2160" element={topActs([2160],jsonData)} />
-      {<Route path="/login" element={theLogin} /> }
+      {<Route path="/login" element={userLoggedIn ? <Navigate to="/" replace /> : theLogin} /> }
       {<Route path="/RLNS" element={<CustomTagsView data={jsonData}  tagsArray={['ss','reading',"writing"]} />} /> }
       {<Route path="/WRK" element={<CustomTagsView data={jsonData} tagsArray={['job','programming',"writing", "linux"]} />} /> }
       {<Route path="/RMB" element={<CustomTagsView data={jsonData} tagsArray={['goal setting',"writing",'money','reading','job apply','udemy', "programming", "linux"]} />} /> }
