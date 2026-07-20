@@ -423,13 +423,8 @@ class Command(BaseCommand):
         
         sorted_totals = sorted(totals.items(), key=lambda x: x[1], reverse=True)
         
-        tz_name = await asyncio.to_thread(self.get_kv, chat_id, "tz") or "UTC"
-        try:
-            tz_label = pytz.timezone(tz_name).localize(timezone.now()).strftime('%Z')
-        except Exception:
-            tz_label = "UTC"
         hours_display = f"{int(hours)}h" if hours == int(hours) else f"{hours}h"
-        days_label = f"last {hours_display} ({tz_label})"
+        days_label = f"last {hours_display}"
         text = f"Top activities ({days_label}):\n"
         for tag, dur in sorted_totals:
             hours = dur.total_seconds() // 3600
