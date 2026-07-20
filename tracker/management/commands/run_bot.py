@@ -423,16 +423,27 @@ class Command(BaseCommand):
         
         sorted_totals = sorted(totals.items(), key=lambda x: x[1], reverse=True)
         
+        # Split: main activities (>= 5 min) vs minor (< 5 min)
+        main = [(t, d) for t, d in sorted_totals if d >= timedelta(minutes=5)]
+        minor = [(t, d) for t, d in sorted_totals if d < timedelta(minutes=5)]
+        
         hours_display = f"{int(hours)}h" if hours == int(hours) else f"{hours}h"
         days_label = f"last {hours_display}"
         text = f"Top activities ({days_label}):\n"
-        for tag, dur in sorted_totals:
-            hours = dur.total_seconds() // 3600
-            minutes = (dur.total_seconds() % 3600) // 60
-            text += f"{tag}: {int(hours)}h {int(minutes)}m\n"
+        for tag, dur in main:
+            h = dur.total_seconds() // 3600
+            m = (dur.total_seconds() % 3600) // 60
+            text += f"{tag}: {int(h)}h {int(m)}m\n"
+        if minor:
+            text += f"\nLess than 5 min:\n"
+            for tag, dur in minor:
+                mins = dur.total_seconds() // 60
+                secs = int(dur.total_seconds() % 60)
+                text += f"{tag}: {int(mins)}m {secs}s\n"
         
         # Generate and send doughnut chart
-        buf = await asyncio.to_thread(self._make_donut_chart, sorted_totals, days_label)
+        chart_data = sorted_totals
+        buf = await asyncio.to_thread(self._make_donut_chart, chart_data, days_label)
         if buf:
             await update.message.reply_photo(photo=buf, caption=text)
         else:
