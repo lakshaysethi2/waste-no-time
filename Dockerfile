@@ -1,3 +1,12 @@
+# Stage 1: Build frontend with Node
+FROM node:22-slim AS frontend-build
+WORKDIR /app/frontend
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Python app
 FROM python:3.11-slim
 
 ENV PYTHONUNBUFFERED 1
@@ -16,8 +25,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy project
+# Copy project (except frontend src which is already built)
 COPY . /app/
+
+# Copy built frontend from stage 1
+COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 
 # Make start.sh executable
 RUN chmod +x /app/start.sh

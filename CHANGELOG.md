@@ -25,6 +25,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ## [Unreleased]
 
 ### Added
+- Merged dash.lak.nz React dashboard into Django project: single-container serves both API and frontend.
+- Multi-stage Dockerfile builds Vite/React frontend before Python stage; `docker compose up --build` provides end-to-end service.
+- Dashboard fetches from `/api/activities?chat_id=1040271347` (Django ORM), replacing the legacy actapi.lak.nz backend.
+- Response transformation maps Django flat array (`name`, `start_time`, `end_time`) to dashboard's expected shape (`displayName`, `startTime`, `endTime`).
+
+## [Unreleased]
+
+### Added (earlier)
 - `/tz <zone>` command to set per-user timezone (stored in `KeyValuePair` with key `tz`, defaults to `UTC`).
 - Timezone picker buttons in `/settings` inline keyboard (UTC, Pacific/Auckland, America/New_York, Europe/London, Asia/Tokyo, Australia/Sydney).
 - `_format_time()` helper that converts UTC datetimes to the user's timezone and formats with the abbreviation (e.g. `14:30 NZST`).
