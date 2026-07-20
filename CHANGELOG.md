@@ -42,6 +42,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Changed
 - `/now` response cleaned up: no more activity keyboard after a successful log, keeping the original check prompt intact on button presses.
 - Rate limit errors on inline button presses now show a temporary popup (`show_alert=True`) instead of a new chat message.
+- `/top` argument now interpreted as hours instead of days (e.g. `/top 0.5` = last 30 min, `/top 2` = last 2h, default 1h). Accepts float values.
 - `/top` now sends an inline doughnut chart (matplotlib) with the text summary. Accepts optional day count e.g. `/top 7`.
 - Activity selection keyboard is now paginated: 6 per page with `<` / `>` navigation and page counter.
 - `Activity.duration` is now a computed `@property` instead of a stored DB column — eliminates stale-data vectors (migration `0002_remove_activity_duration`).

@@ -400,14 +400,17 @@ class Command(BaseCommand):
 
     async def top(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
-        # Determine time range from args (default 24h)
+        # Determine time range from args (default 1h)
         args = context.args
-        if args and args[0].isdigit():
-            days = int(args[0])
+        if args:
+            try:
+                hours = float(args[0])
+            except ValueError:
+                hours = 1.0
         else:
-            days = 1
+            hours = 1.0
         now = timezone.now()
-        since = now - timedelta(days=days)
+        since = now - timedelta(hours=hours)
         
         activities = await asyncio.to_thread(
             lambda: list(Activity.objects.filter(telegram_chat_id=chat_id, start_time__gte=since))
@@ -425,7 +428,8 @@ class Command(BaseCommand):
             tz_label = pytz.timezone(tz_name).localize(timezone.now()).strftime('%Z')
         except Exception:
             tz_label = "UTC"
-        days_label = f"last {days}d ({tz_label})" if days > 1 else f"last 24h ({tz_label})"
+        hours_display = f"{int(hours)}h" if hours == int(hours) else f"{hours}h"
+        days_label = f"last {hours_display} ({tz_label})"
         text = f"Top activities ({days_label}):\n"
         for tag, dur in sorted_totals:
             hours = dur.total_seconds() // 3600
