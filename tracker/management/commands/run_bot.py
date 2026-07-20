@@ -320,7 +320,7 @@ class Command(BaseCommand):
         
         today_total = await asyncio.to_thread(self.get_today_total, chat_id, tag)
         
-        start_str = self._format_time(activity.start_time, chat_id)
+        start_str = await self._format_time(activity.start_time, chat_id)
         text = (f"✅ Started: {tag}\n"
                 f"Start time: {start_str}\n"
                 f"Today's total: {today_total}\n\n"
@@ -339,7 +339,7 @@ class Command(BaseCommand):
             await update.message.reply_text("No activities recorded yet.")
             return
 
-        finished_str = self._format_time(last_activity.end_time, chat_id)
+        finished_str = await self._format_time(last_activity.end_time, chat_id)
         await update.message.reply_text(
             f"Last activity: {last_activity.name}\n"
             f"Finished at: {finished_str}\n"
@@ -369,8 +369,8 @@ class Command(BaseCommand):
         
         text = "Last 10 activities:\n"
         for act in activities:
-            start_str = self._format_time(act.start_time, chat_id)
-            end_str = self._format_time(act.end_time, chat_id)
+            start_str = await self._format_time(act.start_time, chat_id)
+            end_str = await self._format_time(act.end_time, chat_id)
             text += f"{start_str} - {end_str} : {act.name}\n"
         await update.message.reply_text(text)
 
@@ -618,14 +618,14 @@ class Command(BaseCommand):
                 except Exception as e:
                     logger.error(f"Failed to send periodic check to {chat_id}: {e}")
 
-    def _format_time(self, dt, chat_id):
+    async def _format_time(self, dt, chat_id):
         """Convert a UTC datetime to the user's timezone and format with abbreviation.
 
         Returns a string like "14:30 NZST" or "02:15 UTC".
         """
         if dt is None:
             return None
-        tz_name = self.get_kv(chat_id, "tz") or "UTC"
+        tz_name = await asyncio.to_thread(self.get_kv, chat_id, "tz") or "UTC"
         try:
             tz = pytz.timezone(tz_name)
         except Exception:
