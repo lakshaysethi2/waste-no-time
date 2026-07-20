@@ -451,7 +451,7 @@ class Command(BaseCommand):
         now = timezone.now()
         last_week = now - timedelta(days=7)
         week_activities = await asyncio.to_thread(
-            lambda: list(Activity.objects.filter(telegram_chat_id=chat_id, name=tag, start_time__gte=last_week))
+            lambda: list(Activity.objects.filter(telegram_chat_id=chat_id, name__iexact=tag, start_time__gte=last_week))
         )
         week_dur = timedelta()
         for act in week_activities:
@@ -634,7 +634,7 @@ class Command(BaseCommand):
         start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
         activities = Activity.objects.filter(
             telegram_chat_id=chat_id,
-            name=tag,
+            name__iexact=tag,
             start_time__gte=start_of_day
         )
         total_duration = timedelta()
