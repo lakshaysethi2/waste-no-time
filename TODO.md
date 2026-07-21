@@ -22,7 +22,7 @@
 ## Phase 4: Web Views & React Frontend
 - [x] Implement plain Django `JsonResponse` + HTML views in `tracker/views.py`
 - [x] Set up minimal Vite/React app in `frontend/` (served at `/`)
-- [ ] Add basic dashboard showing recent activities and trajectory summary
+- [x] Add basic dashboard showing recent activities and trajectory summary
 
 ## Phase 5: Testing & Verification
 - [x] Create `tracker/tests/` with Django `TestCase` suite
@@ -33,7 +33,7 @@
 ## Documentation & Workflow
 - [x] Create `AGENTS.md`, `DECISIONS.md`, `CHANGELOG.md`, `PLAN.md`, `TODO.md`
 - [x] Run `npx repomix` and store output
-- [ ] Keep all docs in sync on every change
+- [x] Keep all docs in sync on every change
 - [ ] Archive legacy files instead of deleting them
 
-**Current Status**: Still in planning phase. No code changes yet.
+**Current Status**: Dashboard authentication and deployment hardening are ready for code review and environment-based testing.

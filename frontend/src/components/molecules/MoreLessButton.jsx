@@ -3,13 +3,11 @@ import "./flash.css"
 function MoreLessButton(props) {
   const { onClick, actualDur, minDur, maxDur, tagName,showMinMax } = props;
   let color = "bg-warning";
-  actualDur <= minDur && minDur !== 0
-    ? (color = "bg-warning")
-    : actualDur >= maxDur && maxDur !== 0
-    ? (color = "bg-danger")
-    : maxDur === undefined
-    ? (color = "bg-warning")
-    : (color = "bg-success");
+  if (actualDur >= maxDur && maxDur !== 0) {
+    color = "bg-danger";
+  } else if (maxDur !== undefined && minDur !== 0) {
+    color = "bg-success";
+  }
 
   return (
     <div

@@ -107,14 +107,14 @@ function Home ({data}){
 
 function App() {
   const [userLoggedIn,setUserLoggedIn] = useState(false)
-  const [authData,setAuthData] = useState({})
+  const [, setAuthData] = useState({})
   const [jsonData,setJSONData] = useState({"activities":[]})
   const [information,setInformation] = useState("started")
   const [lastDataFetched, setLastDataFetched] = useState(`${(new Date()).getHours()}:${(new Date()).getMinutes()}`)
   
   const getData = () => {
     setInformation(<><br/><br/><Spinner animation="border" /> {"Loading..."}</>)
-    axios("/api/activities?chat_id=1040271347")
+    axios("/api/activities")
     .then((result)=>{
         const transformed = transformData(result.data);
         setJSONData(transformed)
@@ -125,12 +125,12 @@ function App() {
     })
   }
 
-  useEffect(()=>{
-    if (authData.id !== undefined){
-      getData()
-      setInterval(getData,1000*60*60)
-    }
-  },[userLoggedIn])
+  useEffect(() => {
+    if (!userLoggedIn) return undefined;
+    getData();
+    const intervalId = window.setInterval(getData, 1000 * 60 * 60);
+    return () => window.clearInterval(intervalId);
+  }, [userLoggedIn]);
   const sideBySide = (arr,jsonData) => {
     return (
       <div className="row">
@@ -185,4 +185,3 @@ function App() {
 }
 
 export default App;
-export { tagsArr };

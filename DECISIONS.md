@@ -73,3 +73,7 @@
 - AI agents **must** run `npx repomix` before starting work.
 - No code changes until explicit user approval to begin Phase 1.
 - Single consolidated `db.sqlite3` only.
+
+### 16. Dashboard Authentication (2026-07-21)
+- The dashboard uses Telegram Login Widget only as an identity assertion. Django verifies the Telegram HMAC server-side using `TELEGRAM_BOT_API_KEY`, checks the assertion age, rotates the session ID, and stores the authenticated Telegram user ID in the session.
+- Dashboard APIs derive tenant scope only from that session; they must never accept a user/chat identifier as an authorization input.
