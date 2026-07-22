@@ -81,3 +81,23 @@
 - **Multi-stage Docker build**: Stage 1 (node:22-slim) builds the frontend; Stage 2 (python:3.11-slim) copies the built `dist/` and runs Django + bot.
 - **Static file alignment**: Vite `base: '/static/'` with `assetsDir: ''` matches Django's `STATIC_URL = '/static/'` and `STATICFILES_DIRS = [frontend/dist]`, serving everything cleanly from one directory.
 - The `docker-compose.yml` volume mount removed (`.:/app`) to prevent overriding the Dockerfile's built `dist/`; database persisted via `./db.sqlite3:/app/db.sqlite3`.
+
+### 17. Dashboard Authentication (2026-07-21)
+- The dashboard uses Telegram Login Widget only as an identity assertion. Django verifies the Telegram HMAC server-side using `TELEGRAM_BOT_API_KEY`, checks the assertion age, rotates the session ID, and stores the authenticated Telegram user ID in the session.
+- Dashboard APIs derive tenant scope only from that session; they must never accept a user/chat identifier as an authorization input.
+
+### 18. Trajectory Timezone Awareness (2026-07-22)
+- Trajectory period boundaries (day/week/month) are computed in the user's local timezone (from `KeyValuePair tz`), then converted to UTC for DB queries. This fixes the issue where a user in `Pacific/Auckland` logging 23:00 NZST would see that activity counted in the previous UTC day.
+- Recent daily pace buckets also use the user's local calendar day, so the 28-day EWMA reflects the user's lived days, not UTC days.
+- Added `legacy/README.md` warning to prevent AI agents from importing legacy code.
+
+### 19. Bot Runtime Simplification (2026-07-22)
+- `run_bot.py` now uses `Application.run_polling()` instead of hand-rolled `initialize/start/updater.start_polling` with manual SIGTERM handling. The library's documented pattern is simpler and less error-prone.
+- Centralized magic numbers into named constants: `DEFAULT_CHECK_INTERVAL_SECONDS`, `MIN/MAX_CHECK_INTERVAL_SECONDS`, `CHECK_JOB_INTERVAL_SECONDS`, `ACTIVITY_KEYBOARD_PAGE_SIZE`, `RATE_LIMIT_SECONDS`.
+- Donut chart legend moved to `center left` with `bbox_to_anchor=(1,0.5)` and `bbox_inches='tight'` to prevent clipping.
+
+### 20. Frontend Quality (2026-07-22)
+- `Number.jsx` magic index `which_to_show=3` replaced with `DEFAULT_PERIOD_INDEX` and `PERIOD_LABELS`.
+- Removed unused `Minnion.jsx` stub (not imported anywhere).
+- `App.jsx` uses `useCallback` for `getData` and correctly declares effect deps, fixing React lint warnings.
+- `LastUpdated.jsx` simplified — removed theme toggle buttons that mutated parent background color.

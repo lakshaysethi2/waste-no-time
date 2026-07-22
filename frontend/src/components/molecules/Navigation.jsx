@@ -18,7 +18,9 @@ function Navigation({userLoggedIn,getData}) {
       {userLoggedIn && <Link className="button-style" to="/WRK">WRK</Link>}
       {userLoggedIn && <Link className="button-style" to="/RMB">RMB</Link>}
       {userLoggedIn && <Link className="button-style" to="/HLTH">HLTH</Link>}
+      {userLoggedIn && <Link className="button-style" to="/today">Today</Link>}
       {userLoggedIn && <Link className="button-style" to="/top/24">Last 24 hours</Link>}
+      {userLoggedIn && <Link className="button-style" to="/top/12">Last 12 hours</Link>}
       {userLoggedIn && <Link className="button-style" to="/top/48">Last 48 hours</Link>}
       {userLoggedIn && <Link className="button-style" to="/top/72">Last 72 hours</Link>}
       {userLoggedIn && <Link className="button-style" to="/top/120">Last 5 days </Link>}

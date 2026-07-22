@@ -1,8 +1,9 @@
-import {tagsArr} from './App'
+import tagsArr from './variables'
 const millisec_in_one_hour = 1000 * 60 * 60;
 const millisec_in_one_day = 24 * millisec_in_one_hour
 const NUMBER_OF_HOURS_BACK = 1
-const NUMBER_OF_DURPAIRS_TO_DISPLAY=10
+const NUMBER_OF_DURPAIRS_TO_DISPLAY=15
+const number_of_days_for_chart=90
 function realityExpectationGap(a) {
   // idealy try to give a positive number
   let reality = a.props.yData[2];
@@ -167,14 +168,17 @@ function getIdealTopActData() {
   main_arr.push(["ideal 24",[
     ['sleep',7,6.5,7.5],
     ['programming',3,1,0],
-    ['udemy',1.1,1,0],
-    ['job',2,1,0],
     ['linux',2,1,0],
-    ['gamming',2,1,0],
+    ['reading',1.5,1,0],
+    ['writing',1.5,1,0],
+    ['udemy',1.2,1,0],
+    ['ss',1,0.5,0],
     ['exercise',.51,.49,0],
-    ['reading',1.1,1,0],
-    ['writing',1.1,1,0],
-    ['ecl',1,0.01,1.2],
+    ['ecl',0.5,0.01,1.2],
+    ['goal setting',0.5,0.01,1.2],
+    ['being',0.5,0.01,1.2],
+    ['walking',0.5,0.01,1.2],
+    
   ]])
   return main_arr;
 }
@@ -196,7 +200,7 @@ function trendDataGenerator(data,list_of_tags) {
   let chart_data = [
     ['now-xDays', ...list_of_tags],
   ];
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < number_of_days_for_chart; i++) {
     let row = [i]
     for (let j = 0; j < list_of_tags.length; j++) {
       row.push(get_total_hours_last_x_day(list_of_tags[j],i,data))
