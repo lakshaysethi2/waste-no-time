@@ -275,3 +275,10 @@ def test_top_2_reply_markup_are_mt_on_off_and_ci_seters():
     assert test_reply_markup_now["keyboard"][first+0] != ['/now linux,hi']
     assert test_reply_markup_now["keyboard"][first+1] == ['/now programming']
     assert test_reply_markup_now["keyboard"][first+1] != ['/now programming,hi']
+
+
+def test_dellast_rate_limit_and_kv():
+    set_value("last_deleted", "0")
+    message = create_message_obj()
+    message.text = "/dellast"
+    assert get_value("last_deleted") is not None
