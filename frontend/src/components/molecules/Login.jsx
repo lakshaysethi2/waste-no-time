@@ -1,30 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import TelegramLoginButton from 'react-telegram-login';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ setAuthData, setUserLoggedIn }) {
   const [text, setText] = useState('Please log in to continue');
+  const containerRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleTelegramResponse = async (response) => {
-    try {
-      // Telegram's browser callback is not trusted until Django verifies its hash.
-      const result = await axios.post('/api/auth/telegram', response);
-      setAuthData(result.data);
-      setUserLoggedIn(true);
-    } catch {
-      setText('Login could not be verified. Please try again.');
+  useEffect(() => {
+    if (!containerRef.current || containerRef.current.querySelector('script')) return;
+
+    window.TelegramLoginWidget = {
+      dataOnauth: async (user) => {
+        try {
+          // Server-side HMAC verification
+          const result = await axios.post('/api/auth/telegram', user);
+          setAuthData(result.data);
+          setUserLoggedIn(true);
+          navigate('/');
+        } catch {
+          setText('Login could not be verified. Please try again.');
+        }
+      }
+    };
+
+    const botName = import.meta.env.VITE_TELEGRAM_BOT_USERNAME;
+    if (!botName) {
+      setText('Dashboard login is not configured.');
+      return;
     }
-  };
 
-  const botName = import.meta.env.VITE_TELEGRAM_BOT_USERNAME;
-  if (!botName) {
-    return <p>Dashboard login is not configured.</p>;
-  }
+    const script = document.createElement('script');
+    script.src = 'https://telegram.org/js/telegram-widget.js?22';
+    script.setAttribute('data-telegram-login', botName);
+    script.setAttribute('data-size', 'large');
+    script.setAttribute('data-onauth', 'TelegramLoginWidget.dataOnauth(user)');
+    script.setAttribute('data-request-access', 'write');
+    script.async = true;
+    containerRef.current.appendChild(script);
+  }, [setAuthData, setUserLoggedIn, navigate]);
 
   return (
     <div>
       <p>{text}</p>
-      <TelegramLoginButton dataOnauth={handleTelegramResponse} botName={botName} />
+      <div ref={containerRef}></div>
     </div>
   );
 }
