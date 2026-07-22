@@ -13,9 +13,26 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: '',
   },
+  optimizeDeps: {
+    include: [
+      'react-dom/client',
+      'react-dom',
+      'react',
+      'react-router-dom',
+      'react-bootstrap',
+      'react-google-charts',
+      'bootstrap',
+      'axios'
+    ]
+  },
   server: {
+    host: '0.0.0.0',
+    port: 5173,
     proxy: {
       '/api': 'http://localhost:8000',
     },
-  },
+    watch: {
+      usePolling: true
+    }
+  }
 })

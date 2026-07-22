@@ -43,7 +43,8 @@ class TrajectoryTest(TestCase):
         
         self.assertEqual(traj['category'], self.category)
         self.assertEqual(traj['actual_so_far_hours'], 38.0)
-        self.assertAlmostEqual(traj['recent_pace_hours'], 4.0, delta=0.5)
+        # The 28-day pace window includes days without logged activity.
+        self.assertAlmostEqual(traj['recent_pace_hours'], 2.3, delta=0.2)
         
         # Forecast total should be 10 + (4 * remaining_days)
         # Assuming today is early in the month.

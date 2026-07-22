@@ -24,6 +24,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+- Dashboard API endpoints now require a server-side session established by a verified Telegram Login Widget payload. Query-string `chat_id` values no longer select tenant data.
+- Removed the hard-coded dashboard chat ID and browser-only username allow-list.
+- Production settings now require `DJANGO_SECRET_KEY`, default `DJANGO_DEBUG` to `False`, and enable secure-cookie, HSTS, MIME-sniffing, and clickjacking protections.
+
+### Changed
+- Docker now builds the Vite dashboard in a multi-stage image build; `start.sh` collects static files and exits if either Gunicorn or the bot exits.
+- Dashboard activity responses use the camel-case client contract (`displayName`, `startTime`, `endTime`) and are covered by API authentication/isolation tests.
+- Added the required `VITE_TELEGRAM_BOT_USERNAME` deployment setting.
+
 ### Added
 - Merged dash.lak.nz React dashboard into Django project: single-container serves both API and frontend.
 - Multi-stage Dockerfile builds Vite/React frontend before Python stage; `docker compose up --build` provides end-to-end service.

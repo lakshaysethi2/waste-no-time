@@ -81,3 +81,7 @@
 - **Multi-stage Docker build**: Stage 1 (node:22-slim) builds the frontend; Stage 2 (python:3.11-slim) copies the built `dist/` and runs Django + bot.
 - **Static file alignment**: Vite `base: '/static/'` with `assetsDir: ''` matches Django's `STATIC_URL = '/static/'` and `STATICFILES_DIRS = [frontend/dist]`, serving everything cleanly from one directory.
 - The `docker-compose.yml` volume mount removed (`.:/app`) to prevent overriding the Dockerfile's built `dist/`; database persisted via `./db.sqlite3:/app/db.sqlite3`.
+
+### 17. Dashboard Authentication (2026-07-21)
+- The dashboard uses Telegram Login Widget only as an identity assertion. Django verifies the Telegram HMAC server-side using `TELEGRAM_BOT_API_KEY`, checks the assertion age, rotates the session ID, and stores the authenticated Telegram user ID in the session.
+- Dashboard APIs derive tenant scope only from that session; they must never accept a user/chat identifier as an authorization input.

@@ -1,41 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import axios from 'axios';
+import TelegramLoginButton from 'react-telegram-login';
 
-function Login({ setUserLoggedIn }) {
-  const [text, setText] = useState("Please Login to continue");
-  const containerRef = useRef(null);
-  const navigate = useNavigate();
+function Login({ setAuthData, setUserLoggedIn }) {
+  const [text, setText] = useState('Please log in to continue');
 
-  useEffect(() => {
-    if (!containerRef.current || containerRef.current.querySelector('script')) return;
+  const handleTelegramResponse = async (response) => {
+    try {
+      // Telegram's browser callback is not trusted until Django verifies its hash.
+      const result = await axios.post('/api/auth/telegram', response);
+      setAuthData(result.data);
+      setUserLoggedIn(true);
+    } catch {
+      setText('Login could not be verified. Please try again.');
+    }
+  };
 
-    window.TelegramLoginWidget = {
-      dataOnauth: (user) => {
-        if (user.username === "lakshaynz") {
-          setUserLoggedIn(true);
-          navigate('/');
-        } else {
-          setText("Unauthorized, Please contact Lakshay");
-        }
-      }
-    };
-    const script = document.createElement('script');
-    script.src = 'https://telegram.org/js/telegram-widget.js?22';
-    script.setAttribute('data-telegram-login', 'dash_lak_nz_bot');
-    script.setAttribute('data-size', 'large');
-    script.setAttribute('data-onauth', 'TelegramLoginWidget.dataOnauth(user)');
-    script.setAttribute('data-request-access', 'write');
-    script.async = true;
-    containerRef.current.appendChild(script);
-  }, [setUserLoggedIn, navigate]);
+  const botName = import.meta.env.VITE_TELEGRAM_BOT_USERNAME;
+  if (!botName) {
+    return <p>Dashboard login is not configured.</p>;
+  }
 
   return (
     <div>
       <p>{text}</p>
-      <div ref={containerRef}></div>
+      <TelegramLoginButton dataOnauth={handleTelegramResponse} botName={botName} />
     </div>
   );
 }
 
 export default Login;
- 

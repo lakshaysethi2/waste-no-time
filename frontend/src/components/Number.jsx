@@ -20,7 +20,8 @@ function Number({ tagName, yData, minDur, maxDur }) {
       </div>
     );
   });
-
+  const showfalse = () => {setShow(false)}
+  const showTrue = () =>{ setShow(true)}
   return (
     <div style={{paddingRight:"0",paddingLeft:"0"}} 
       className="col-xs-4 col-md-6 col-xl-2"
@@ -31,7 +32,7 @@ function Number({ tagName, yData, minDur, maxDur }) {
             {theNumbers}
             <div className="d-flex justify-content-end">
                 <MoreLessButton
-                  onClick={() => {setShow(false)}}
+                  onClick={showfalse}
                   actualDur={yData[which_to_show]}
                   minDur={minDur}
                   maxDur={maxDur}
@@ -42,7 +43,7 @@ function Number({ tagName, yData, minDur, maxDur }) {
 
           {!show && (
               <MoreLessButton
-                onClick={() =>{ setShow(true)}}
+                onClick={showTrue}
                 actualDur={yData[which_to_show]}
                 minDur={minDur}
                 maxDur={maxDur}
