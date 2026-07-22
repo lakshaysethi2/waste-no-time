@@ -1,15 +1,15 @@
+import functools
 import hashlib
 import hmac
 import json
-from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
-from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
 
 from .models import Activity
 from .trajectory import get_trajectory
@@ -25,6 +25,7 @@ def _session_chat_id(request):
 
 
 def _require_telegram_session(view):
+    @functools.wraps(view)
     def wrapped(request, *args, **kwargs):
         if _session_chat_id(request) is None:
             return JsonResponse({'error': 'authentication required'}, status=401)
@@ -73,6 +74,7 @@ def api_telegram_login(request):
     return JsonResponse({'chat_id': int(payload['id'])})
 
 
+@csrf_exempt
 @require_POST
 def api_logout(request):
     logout(request)

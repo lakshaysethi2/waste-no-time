@@ -28,7 +28,20 @@ if not SECRET_KEY:
 # Set DJANGO_DEBUG=False in production.
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if host.strip()]
+raw_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
+if not raw_hosts:
+    raw_hosts = 'localhost,127.0.0.1'
+ALLOWED_HOSTS = [host.strip() for host in raw_hosts.split(',') if host.strip()]
+
+# In production we must not silently fall back to localhost-only, otherwise Cloudflare tunnels 400.
+if not DEBUG and not os.environ.get('DJANGO_ALLOWED_HOSTS'):
+    # Fail fast in production if the operator forgot to set allowed hosts — avoids 400s behind Cloudflare.
+    import logging as _logging
+
+    _logging.getLogger(__name__).warning(
+        "DJANGO_ALLOWED_HOSTS not set; defaulting to %s. Set it to your tunnel/domain hosts in production.",
+        ALLOWED_HOSTS,
+    )
 
 # Used exclusively to verify Telegram Login Widget payloads server-side.
 TELEGRAM_BOT_API_KEY = os.environ.get('TELEGRAM_BOT_API_KEY', '')

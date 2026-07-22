@@ -29,12 +29,25 @@
 - [x] Create `tracker/tests/` with Django `TestCase` suite
 - [x] Add tests for gap-filling, multi-user isolation, rate limits, strict notes
 - [x] Verify `make test` runs cleanly (offline part)
+- [x] Fix brittle trajectory test with frozen time and add timezone-aware test
+- [x] Add `legacy/README.md` warning not to import from legacy
 - [ ] Verify `make up` launches web server + bot successfully (requires valid bot token)
+
+## Phase 6: Security & Quality Hardening (Review #22 follow-ups)
+- [x] Harden dashboard auth: server-side Telegram HMAC verification, session binding, no query-string chat_id
+- [x] Remove hard-coded chat_id 1040271347 and client-side username allow-list
+- [x] Make trajectory timezone-aware (user's `tz` from KeyValuePair, period boundaries in local calendar)
+- [x] Refactor `run_bot` to use `run_polling()` and named constants for intervals
+- [x] Replace magic index in `Number.jsx` with named constant `DEFAULT_PERIOD_INDEX`
+- [x] Remove unused `Minnion.jsx` stub
+- [x] Fix donut chart legend clipping (center-left anchor, tight bbox)
+- [x] Add frontend `useCallback` for `getData` and clean `useEffect` deps
+- [x] Warn when `DJANGO_ALLOWED_HOSTS` not set in production
 
 ## Documentation & Workflow
 - [x] Create `AGENTS.md`, `DECISIONS.md`, `CHANGELOG.md`, `PLAN.md`, `TODO.md`
 - [x] Run `npx repomix` and store output
 - [x] Keep all docs in sync on every change
-- [ ] Archive legacy files instead of deleting them
+- [x] Archive legacy files instead of deleting them
 
-**Current Status**: Dashboard authentication and deployment hardening are ready for code review and environment-based testing.
+**Current Status**: All 16 Django tests pass. Auth hardening, timezone-aware trajectory, and frontend/backend cleanups completed. Ready for final review.
